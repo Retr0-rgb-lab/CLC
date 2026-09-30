@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<!--
+THESIS — 「不過就不讓你往下走」。這一頁拒絕的類別預設，是把三個功能截圖平鋪成三張等大卡片；改為三支同寬的實機比例直屏，讓門檻（屏 2）成為視覺重心。
+OWN-WORLD — 白紙為地、墨黑為字、單一藍 #1D4ED8 為唯一強調；1px 墨線分隔、不用陰影層級、不用漸變；微軟正黑體為介面字，楷體只用於白板手寫感。
+STORY — 學生上載講義 → AI 生成一門課 → 每個知識點有驗收門檻；我們用行為／成果／延遲三層證據證明它有效。
+FIRST VIEWPORT — 448×971 直屏 ×3，間距 52，外框留白 88；屏 2 的深色主按鈕與「已鎖定」橫條是全圖唯一深色塊。
+FORM — 結構來自驗收式直屏（門檻流程需要固定閱讀序：題 → 作答 → 判定 → 補救）；brief 已釘選視覺世界，故不跑 concept roll。
+SEED — brief-pinned direction（操作模式 / Restrained 配色 / 淺色，因投影與日間桌面）。
+-->
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<title>Veridex 維學 · 產品原型</title>
+<style>
+  :root{
+    --ink:#111418;
+    --ink-2:#414A57;
+    --ink-3:#626B77;
+    --line:#DDE2EA;
+    --line-2:#EDF0F4;
+    --paper:#FFFFFF;
+    --field:#F6F8FB;
+    --accent:#1D4ED8;
+    --accent-soft:#EAF0FE;
+    --ui:"Microsoft JhengHei","微軟正黑體","PingFang TC","Noto Sans TC","Heiti TC",system-ui,"Segoe UI",sans-serif;
+    --hand:"KaiTi","楷体","DFKai-SB","BiauKai","STKaiti",serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{background:#E9ECF1;}
+  body{
+    font-family:var(--ui);
+    background:#E9ECF1;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    text-align:left;
+  }
+  .plate{
+    width:1624px;
+    padding:88px 88px 68px;
+    display:flex;
+    gap:52px;
+    align-items:flex-start;
+    background:#FFFFFF;
+  }
+  .shot{width:448px;}
+  .shot figcaption{
+    margin-top:20px;
+    font-size:19px;
+    letter-spacing:.02em;
+    color:var(--ink-3);
+    line-height:1.4;
+  }
+  .shot figcaption b{color:var(--ink-2);font-weight:700;}
+
+  /* ---------- 手機殼 ---------- */
+  .phone{
+    width:448px;height:971px;
+    border:1px solid #C9D0DA;
+    border-radius:28px;
+    background:var(--paper);
+    overflow:hidden;
+    display:flex;flex-direction:column;
+    position:relative;
+  }
+  .statusbar{
+    height:44px;flex:0 0 44px;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 24px;
+    font-size:15px;font-weight:600;color:var(--ink);
+    letter-spacing:.01em;
+  }
+  .statusbar .sig{display:flex;gap:5px;align-items:flex-end;}
+  .statusbar .sig i{display:block;width:3px;background:var(--ink);border-radius:1px;}
+  .navbar{
+    flex:0 0 auto;
+    padding:6px 24px 14px;
+    display:flex;align-items:center;gap:14px;
+    border-bottom:1px solid var(--line-2);
+  }
+  .back{display:flex;align-items:center;gap:7px;font-size:16px;color:var(--ink-2);font-weight:600;}
+  .navtitle{font-size:21px;font-weight:700;letter-spacing:-.01em;line-height:1.35;}
+  .navmeta{font-size:13px;color:var(--ink-3);margin-top:3px;line-height:1.4;}
+  .screenbody{flex:1 1 auto;padding:18px 24px 16px;display:flex;flex-direction:column;overflow:hidden;}
+
+  .kicker{
+    font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--ink-3);
+    line-height:1.4;margin-bottom:10px;
+  }
+  .card{border:1px solid var(--line);border-radius:14px;padding:16px 18px 16px;background:var(--paper);}
+  .card.tint{background:var(--field);}
+  .rule{height:1px;background:var(--line-2);}
+  .tight{line-height:1.5;}
+  .lead{line-height:1.55;text-wrap:pretty;}
+
+  /* ---------- 屏 1：語音講解 ---------- */
+  .player{display:flex;align-items:center;gap:16px;}
+  .playbtn{
+    width:56px;height:56px;flex:0 0 56px;border-radius:50%;
+    background:var(--accent);display:flex;align-items:center;justify-content:center;
+  }
+  .badge-live{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:14px;font-weight:700;color:var(--accent);
+  }
+  .badge-live .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);}
+  .wave{display:flex;align-items:flex-end;gap:4px;height:30px;margin:14px 0 9px;}
+  .wave i{flex:1;background:#C8D2E4;border-radius:2px;}
+  .wave i.on{background:var(--accent);}
+  .times{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-3);line-height:1.4;}
+  .times b{color:var(--ink-2);font-weight:700;}
+
+  /* ---------- 屏 1：白板 ---------- */
+  .board{
+    margin-top:14px;border:1px solid var(--line);border-radius:14px;
+    background:#FBFCFD;padding:13px 18px 11px;
+  }
+  .board .tag{
+    display:inline-block;font-size:12px;font-weight:700;color:var(--ink-3);
+    letter-spacing:.08em;margin-bottom:4px;
+  }
+  .board .caption{font-family:var(--hand);font-size:21px;line-height:1.5;color:var(--ink);}
+  .board svg{display:block;width:100%;height:auto;}
+  .board text{font-family:var(--hand);fill:var(--ink);}
+
+  /* ---------- 屏 1：大綱 ---------- */
+  .outline{margin-top:14px;display:flex;flex-direction:column;}
+  .row{
+    display:flex;align-items:flex-start;gap:14px;
+    padding:9px 12px;border-radius:12px;
+  }
+  .row + .row{margin-top:2px;}
+  .row.now{background:var(--accent-soft);}
+  .mark{
+    flex:0 0 22px;width:22px;height:22px;border-radius:50%;margin-top:2px;
+    border:1.5px solid #B6BFCC;display:flex;align-items:center;justify-content:center;
+  }
+  .mark.done{border-color:var(--accent);background:var(--accent);}
+  .mark svg{display:block;}
+  .row.now .mark{border-color:var(--accent);border-width:2px;}
+  .row .idx{font-size:13px;color:var(--ink-3);font-weight:700;line-height:1.5;}
+  .row .ttl{font-size:16px;font-weight:600;line-height:1.45;letter-spacing:-.005em;}
+  .row.now .ttl{color:var(--accent);font-weight:700;}
+  .row .st{font-size:13px;color:var(--ink-3);line-height:1.45;margin-top:3px;}
+  .row.lock .ttl{color:var(--ink-3);}
+
+  /* ---------- 屏 2：驗收 ---------- */
+  .gate{
+    border:2px solid var(--ink);border-radius:14px;
+    padding:14px 16px 15px;background:var(--paper);
+  }
+  .gate .g-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .gate .g-num{font-size:29px;font-weight:800;letter-spacing:-.02em;line-height:1.2;}
+  .gate .g-state{
+    font-size:16px;font-weight:800;color:var(--paper);background:var(--ink);
+    padding:5px 12px;border-radius:6px;letter-spacing:.02em;
+  }
+  .gate .g-sub{font-size:14px;color:var(--ink-2);line-height:1.5;margin-top:8px;}
+  .gatebar{display:flex;gap:6px;margin-top:11px;}
+  .gatebar i{flex:1;height:6px;border-radius:3px;background:#DCE2EB;}
+  .gatebar i.done{background:var(--accent);}
+  .gatebar i.cur{background:var(--ink);}
+  .qcard{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
+  .qhead{font-size:13px;font-weight:700;letter-spacing:.04em;color:var(--ink-3);line-height:1.4;}
+  .qtext{font-size:17px;line-height:1.5;margin-top:8px;text-wrap:pretty;}
+  .answerbox{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:13px 16px;background:var(--field);}
+  .answerbox .lab{font-size:13px;font-weight:700;color:var(--ink-3);line-height:1.4;}
+  .answerbox .ans{font-size:16px;line-height:1.5;margin-top:6px;}
+  .verdict{display:flex;align-items:center;gap:10px;margin-top:12px;}
+  .verdict .flag{
+    font-size:15px;font-weight:800;color:var(--paper);background:var(--ink);
+    padding:6px 12px;border-radius:6px;letter-spacing:.02em;
+  }
+  .verdict .why{font-size:14px;color:var(--ink-2);line-height:1.45;}
+  .fb{margin-top:10px;border-top:1px solid var(--line-2);padding-top:12px;}
+  .fb h4{font-size:15px;font-weight:800;letter-spacing:-.005em;line-height:1.5;margin-bottom:8px;}
+  .fb p{font-size:15px;line-height:1.5;color:var(--ink-2);text-wrap:pretty;}
+  .fb p + p{margin-top:8px;}
+  .fb .li{display:flex;gap:9px;align-items:flex-start;}
+  .fb .marknum{
+    flex:0 0 20px;
+    display:inline-flex;align-items:center;justify-content:center;
+    width:20px;height:20px;border-radius:50%;border:1.5px solid var(--ink);
+    font-size:12px;font-weight:800;margin-top:2px;color:var(--ink);
+  }
+  .fixline{margin-top:11px;padding:12px 15px;background:var(--accent-soft);border-radius:12px;}
+  .fixline .lab{font-size:13px;font-weight:800;color:var(--accent);line-height:1.4;letter-spacing:.04em;}
+  .fixline p{font-size:15px;line-height:1.5;margin-top:6px;color:var(--ink);}
+  .lockbar{
+    margin-top:12px;border:1px dashed #C3CAD6;border-radius:12px;
+    padding:11px 15px;display:flex;align-items:center;gap:12px;
+  }
+  .lockbar .t{font-size:14px;font-weight:700;color:var(--ink-3);line-height:1.45;}
+  .lockbar .s{font-size:13px;color:var(--ink-3);line-height:1.45;margin-top:2px;}
+  .actions{margin-top:auto;padding-top:12px;display:flex;flex-direction:column;gap:9px;}
+  .btn{
+    height:50px;border-radius:12px;font-size:17px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:-.005em;
+  }
+  .btn-primary{background:var(--ink);color:var(--paper);}
+  .btn-ghost{border:1.5px solid var(--line);color:var(--ink-2);background:var(--paper);}
+
+  /* ---------- 屏 3：進度 ---------- */
+  .evid{margin-top:18px;flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-between;gap:18px;}
+  .evid h3{font-size:17px;font-weight:800;letter-spacing:-.01em;line-height:1.4;}
+  .evid h3 .num{color:var(--accent);}
+  .evid .desc{font-size:13px;color:var(--ink-3);line-height:1.5;margin-top:5px;}
+  .metric{display:flex;align-items:flex-end;gap:12px;margin-top:14px;}
+  .metric .big{font-size:50px;font-weight:800;letter-spacing:-.03em;line-height:1;}
+  .metric .unit{font-size:16px;font-weight:700;color:var(--ink-2);line-height:1.5;padding-bottom:6px;}
+  .ring{margin-top:16px;display:flex;align-items:center;gap:22px;}
+  .ring svg{display:block;flex:0 0 126px;}
+  .ring .side{flex:1 1 auto;}
+  .bar{height:14px;border-radius:7px;background:#E4E8EF;overflow:hidden;}
+  .bar i{display:block;height:100%;background:var(--accent);}
+  .bar.ghost i{background:#AEB9C9;}
+  .barrow{margin-top:12px;}
+  .barrow .cap{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);line-height:1.45;margin-bottom:7px;}
+  .barrow .cap b{font-weight:700;}
+  .delta{
+    display:inline-block;margin-top:14px;font-size:14px;font-weight:800;color:var(--accent);
+    border:1px solid #B9CBF6;border-radius:8px;padding:6px 10px;line-height:1.4;
+  }
+  .promise{
+    margin-top:auto;border-top:2px solid var(--ink);padding-top:16px;
+    font-size:15px;line-height:1.6;color:var(--ink);text-wrap:pretty;font-weight:600;
+  }
+  .promise .sig{display:block;font-size:13px;color:var(--ink-3);font-weight:400;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="plate">
+
+  <!-- ============ 屏 1 · 課程頁 ============ -->
+  <figure class="shot">
+    <div class="phone">
+      <div class="statusbar">
+        <span>9:41</span>
+        <span class="sig"><i style="height:6px"></i><i style="height:9px"></i><i style="height:12px"></i><i style="height:15px"></i></span>
+      </div>
+      <div class="navbar">
+        <span class="back">
+          <svg width="11" height="19" viewBox="0 0 11 19" aria-hidden="true"><path d="M9.5 1.5 1.5 9.5l8 8" fill="none" stroke="#414A57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          返回
+        </span>
+        <div>
+          <div class="navtitle">STAT2003 機率與統計</div>
+          <div class="navmeta">由你的講義 PDF 生成 · 共 5 章 12 個知識點</div>
+        </div>
+      </div>
+      <div class="screenbody">
+
+        <div class="card">
+          <div class="player">
+            <span class="playbtn" aria-hidden="true">
+              <svg width="18" height="20" viewBox="0 0 18 20"><path d="M1.5 1.2 16.5 10 1.5 18.8Z" fill="#FFFFFF"/></svg>
+            </span>
+            <div>
+              <span class="badge-live"><span class="dot"></span>AI 講解中</span>
+              <div class="navmeta" style="margin-top:4px">第 3 章 · 中央極限定理（2／4 段）</div>
+            </div>
+          </div>
+          <div class="wave" aria-hidden="true">
+            <i class="on" style="height:12px"></i><i class="on" style="height:22px"></i><i class="on" style="height:30px"></i><i class="on" style="height:17px"></i><i class="on" style="height:25px"></i><i class="on" style="height:33px"></i><i class="on" style="height:14px"></i><i class="on" style="height:27px"></i><i class="on" style="height:20px"></i><i class="on" style="height:31px"></i><i class="on" style="height:24px"></i><i class="on" style="height:15px"></i><i class="on" style="height:28px"></i><i class="on" style="height:11px"></i><i class="on" style="height:19px"></i><i style="height:26px"></i><i style="height:33px"></i><i style="height:16px"></i><i style="height:29px"></i><i style="height:21px"></i><i style="height:13px"></i><i style="height:25px"></i><i style="height:32px"></i><i style="height:18px"></i><i style="height:27px"></i><i style="height:14px"></i><i style="height:23px"></i>
+          </div>
+          <div class="times"><span><b>3:24</b> / 6:10</span><span>語速 1.0× · 可要求重講</span></div>
+        </div>
+
+        <div class="board">
+          <span class="tag">白板板書</span>
+          <div class="caption">當 n 夠大，樣本平均會變短</div>
+          <svg viewBox="0 0 330 88" role="img" aria-label="中央極限定理公式">
+            <text x="4" y="42" font-size="27">X</text>
+            <path d="M3 23.5 L26 23.5" stroke="#111418" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <text x="32" y="42" font-size="27">− μ</text>
+            <path d="M2 50 L74 50" stroke="#111418" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <text x="38" y="74" font-size="24" text-anchor="middle">s / √n</text>
+            <text x="92" y="43" font-size="26">→</text>
+            <text x="126" y="42" font-size="27">N(0, 1)</text>
+            <text x="238" y="34" font-size="17" fill="#6B7480">n 越大</text>
+            <text x="238" y="58" font-size="17" fill="#6B7480">分佈越窄</text>
+          </svg>
+          <svg viewBox="0 0 330 70" role="img" aria-label="樣本分佈隨 n 增大而收窄的鐘形曲線">
+            <path d="M4 58 C 72 57 120 54 144 46 C 156 41 160 32 165 32 C 170 32 174 41 186 46 C 210 54 258 57 326 58" fill="none" stroke="#111418" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M4 58 C 98 57 124 55 139 45 C 150 38 157 12 165 12 C 173 12 180 38 191 45 C 206 55 232 57 326 58" fill="none" stroke="#1D4ED8" stroke-width="2.6" stroke-linecap="round"/>
+            <path d="M165 12 V60" stroke="#AEB9C9" stroke-width="1.6" stroke-dasharray="4 4"/>
+            <path d="M2 60 H328" stroke="#111418" stroke-width="2" stroke-linecap="round"/>
+            <text x="165" y="9" font-size="13" text-anchor="middle" fill="#6B7480">μ</text>
+            <text x="204" y="28" font-size="16" fill="#1D4ED8">n 較大</text>
+            <text x="30" y="40" font-size="16" fill="#6B7480">n 較小</text>
+          </svg>
+        </div>
+
+        <div class="outline">
+          <div class="row done">
+            <span class="mark done"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4 3.7 6.7 9 1.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div><div class="idx">01 · 已驗收</div><div class="ttl">描述統計與集中趨勢</div></div>
+          </div>
+          <div class="row done">
+            <span class="mark done"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4 3.7 6.7 9 1.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div><div class="idx">02 · 已驗收</div><div class="ttl">隨機變數與機率密度</div></div>
+          </div>
+          <div class="row now">
+            <span class="mark"><span style="width:9px;height:9px;border-radius:50%;background:#1D4ED8;display:block"></span></span>
+            <div><div class="idx">03 · 進行中</div><div class="ttl">中央極限定理</div><div class="st">知識點 3／4 驗收中</div></div>
+          </div>
+          <div class="row lock">
+            <span class="mark"></span>
+            <div><div class="idx">04</div><div class="ttl">抽樣分佈與區間估計</div><div class="st">完成第 03 章後解鎖</div></div>
+          </div>
+        </div>
+
+        <div style="margin-top:auto;padding-top:14px;border-top:1px solid var(--line-2)">
+          <div style="display:flex;justify-content:space-between;font-size:14px;line-height:1.45">
+            <span style="color:var(--ink-3)">課程整體進度</span>
+            <b style="font-weight:800">9／12 知識點已驗收</b>
+          </div>
+          <div class="bar" style="margin-top:10px"><i style="width:75%"></i></div>
+        </div>
+      </div>
+    </div>
+    <figcaption><b>屏 1 · 課程頁</b>　AI 語音講解與白板板書同步，章節由驗收結果決定解鎖</figcaption>
+  </figure>
+
+  <!-- ============ 屏 2 · 驗收頁 ============ -->
+  <figure class="shot">
+    <div class="phone">
+      <div class="statusbar">
+        <span>9:41</span>
+        <span class="sig"><i style="height:6px"></i><i style="height:9px"></i><i style="height:12px"></i><i style="height:15px"></i></span>
+      </div>
+      <div class="navbar">
+        <span class="back">
+          <svg width="11" height="19" viewBox="0 0 11 19" aria-hidden="true"><path d="M9.5 1.5 1.5 9.5l8 8" fill="none" stroke="#414A57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          返回
+        </span>
+        <div>
+          <div class="navtitle">知識點驗收</div>
+          <div class="navmeta">STAT2003 · 第 3 章 中央極限定理</div>
+        </div>
+      </div>
+      <div class="screenbody">
+
+        <div class="gate">
+          <div class="g-top">
+            <span class="g-num">知識點 3／12</span>
+            <span class="g-state">尚未通過</span>
+          </div>
+          <div class="g-sub">未通過之前，第 4 章與其後的知識點不會開放。</div>
+          <div class="gatebar" aria-hidden="true">
+            <i class="done"></i><i class="done"></i><i class="cur"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+        </div>
+
+        <div class="qcard">
+          <div class="qhead">題目 3／3 · 單側假設檢定</div>
+          <p class="qtext">某班 30 位學生每晚平均溫習 2.4 小時，樣本標準差 0.6 小時。以 5% 顯著水平，檢驗全班平均是否多於 2 小時。</p>
+        </div>
+
+        <div class="answerbox">
+          <div class="lab">你的作答</div>
+          <p class="ans">H₀：μ = 2　　H₁：μ &lt; 2<br>採用雙側檢驗，t = (2.4 − 2) ÷ (0.6 ÷ √30) = 2.68</p>
+        </div>
+
+        <div class="verdict">
+          <span class="flag">未通過</span>
+          <span class="why">判定錯誤 · 2 處需要修正</span>
+        </div>
+
+        <div class="fb">
+          <h4>為什麼錯</h4>
+          <p class="li"><span class="marknum">1</span><span>備擇假設方向寫反了，應為 H₁：μ &gt; 2。</span></p>
+          <p class="li"><span class="marknum">2</span><span>方向錯了仍用雙側檢驗，5% 的水準平均分給兩邊，臨界值升到 2.045，顯著結果反而判為不顯著。</span></p>
+          <div class="fixline">
+            <div class="lab">正確思路</div>
+            <p>改為單側檢驗：H₀：μ ≤ 2 對 H₁：μ &gt; 2。自由度 29，臨界值 t<sub>0.05</sub> = 1.699。t = 2.68 &gt; 1.699，拒絕 H₀。</p>
+          </div>
+        </div>
+
+        <div class="lockbar">
+          <svg width="19" height="22" viewBox="0 0 19 22" aria-hidden="true"><rect x="1" y="9" width="17" height="12" rx="2.5" fill="none" stroke="#6B7480" stroke-width="2"/><path d="M4.5 9V6.2a5 5 0 0 1 10 0V9" fill="none" stroke="#6B7480" stroke-width="2"/></svg>
+          <div class="t">第 04 章 · 抽樣分佈　已鎖定，通過知識點 3 後解鎖</div>
+        </div>
+
+        <div class="actions">
+          <span class="btn btn-primary">
+            <svg width="17" height="18" viewBox="0 0 17 18" aria-hidden="true"><path d="M1.4 8.2 5.6 3 9.2 8.2H15.6v7.3H1.4Z" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            未通過 · 補教一次
+          </span>
+          <span class="btn btn-ghost">通過</span>
+        </div>
+      </div>
+    </div>
+    <figcaption><b>屏 2 · 驗收頁</b>　門檻式驗收：判定、原因、正確思路與鎖定狀態一次講清楚</figcaption>
+  </figure>
+
+  <!-- ============ 屏 3 · 進度頁 ============ -->
+  <figure class="shot">
+    <div class="phone">
+      <div class="statusbar">
+        <span>9:41</span>
+        <span class="sig"><i style="height:6px"></i><i style="height:9px"></i><i style="height:12px"></i><i style="height:15px"></i></span>
+      </div>
+      <div class="navbar">
+        <span class="back">
+          <svg width="11" height="19" viewBox="0 0 11 19" aria-hidden="true"><path d="M9.5 1.5 1.5 9.5l8 8" fill="none" stroke="#414A57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          返回
+        </span>
+        <div>
+          <div class="navtitle">學習證據</div>
+          <div class="navmeta">示例數據 · 原型展示用，非實測結果</div>
+        </div>
+      </div>
+      <div class="screenbody">
+
+        <div class="evid">
+          <section>
+            <h3><span class="num">行為</span>　14 天任務完成率</h3>
+            <p class="desc">你實際做過什麼：任務按時完成的比例。</p>
+            <div class="ring">
+              <svg viewBox="0 0 126 126" role="img" aria-label="任務完成率 82%">
+                <circle cx="63" cy="63" r="52" fill="none" stroke="#E4E8EF" stroke-width="16"/>
+                <circle cx="63" cy="63" r="52" fill="none" stroke="#1D4ED8" stroke-width="16" stroke-linecap="round"
+                        stroke-dasharray="268 327" transform="rotate(-90 63 63)"/>
+              </svg>
+              <div class="side">
+                <div class="metric">
+                  <span class="big">82%</span>
+                  <span class="unit">41／50 項任務</span>
+                </div>
+                <div class="bar" style="margin-top:16px"><i style="width:82%"></i></div>
+                <p class="desc" style="margin-top:10px">連續 11 天有完成，最長連續紀錄 14 天</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h3><span class="num">成果</span>　前測後測差異</h3>
+            <p class="desc">同一批學生在同一份題目上的前後差距。</p>
+            <div class="barrow">
+              <div class="cap"><span>前測（第 1 天）</span><b>32%</b></div>
+              <div class="bar ghost"><i style="width:32%"></i></div>
+            </div>
+            <div class="barrow">
+              <div class="cap"><span>後測（第 14 天）</span><b>78%</b></div>
+              <div class="bar"><i style="width:78%"></i></div>
+            </div>
+            <span class="delta">+46 百分點 · 128 位學生</span>
+          </section>
+
+          <section>
+            <h3><span class="num">延遲</span>　30 天後回訪正確率</h3>
+            <p class="desc">過了一段時間還記得多少：30 天後重新測驗。</p>
+            <div class="metric">
+              <span class="big">61%</span>
+              <span class="unit">116／190 份答對</span>
+            </div>
+            <div class="bar" style="margin-top:16px"><i style="width:61%"></i></div>
+            <p class="desc" style="margin-top:10px">回訪率 74%（190／256 份），未回訪者不計入分母</p>
+          </section>
+        </div>
+
+        <p class="promise">
+          這三個數字是我們對自己課堂的承諾，也是我們唯一會向評委匯報的東西。
+          <span class="sig">行為看學生做不做，成果看學得沒有，延遲看留不留得住。</span>
+        </p>
+      </div>
+    </div>
+    <figcaption><b>屏 3 · 進度頁</b>　三層證據：行為、成果、延遲，三個數字都對外公開</figcaption>
+  </figure>
+
+</div>
+</body>
+</html>
