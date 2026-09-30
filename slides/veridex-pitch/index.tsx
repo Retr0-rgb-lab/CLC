@@ -522,7 +522,7 @@ const P04: Page = () => (
     kicker="問題｜人的盲點"
     title="你判斷不了自己學沒學會"
     who="黃浩然"
-    note="Koriat (1997), Journal of Experimental Psychology 23(5)　｜　Dunlosky & Rawson (2012), Learning and Instruction 22(6), DOI 10.1016/j.learninstruc.2011.08.003　｜　Reines & Camosy (2013), PLoS ONE 8(12):e83777"
+    note="Koriat (1997), Journal of Experimental Psychology 23(5)　｜　Dunlosky & Rawson (2012), Learning and Instruction 22(6), DOI 10.1016/j.learninstruc.2011.08.003"
   >
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, flex: '1 1 auto', minHeight: 0 }}>
       <div
@@ -588,7 +588,7 @@ const P04: Page = () => (
       <div style={{ fontSize: 23, lineHeight: '32px', color: MUTED }}>24 小時：隨時能重測</div>
     </div>
     <div style={{ marginTop: 14, fontSize: 23, lineHeight: '32px', color: DIM, textAlign: 'center' }}>
-      這個落差在醫學一年級的實測裡同樣看得到：自評越高，成績越低（Reines &amp; Camosy 2013, PLoS ONE）。
+      而且這是因果，不是相關：讓學生在考試前自評準確度，之後的成績反而更差（Dunlosky &amp; Rawson 2012）。
     </div>
   </Frame>
 );
@@ -1620,9 +1620,7 @@ const Member: FC<{ name: string; role: string }> = ({ name, role }) => (
         color: AMBER_TXT,
         fontWeight: 700,
       }}
-    >
-      已交付物：［待填］
-    </div>
+    />
   </div>
 );
 
@@ -1889,7 +1887,7 @@ const P18: Page = () => (
           justifyContent: 'center',
         }}
       >
-        <div style={{ ...eyebrow }}>對照</div>
+        <div style={{ ...eyebrow }}>項目</div>
         <div style={{ marginTop: 6, fontSize: 30, lineHeight: '40px', fontWeight: 700 }}>三個檔位</div>
       </div>
       <TierName name="免費" />
@@ -1915,6 +1913,13 @@ const P18: Page = () => (
         a="可體驗全部三種驗收形式"
         b="解鎖項目打分 ＋ 30 天回訪"
         c="大模型優先，課程數量不限"
+        mainIdx={1}
+      />
+      <AttrRow
+        label="資料"
+        a="可上傳自己的資料成課"
+        b="進度與 Notion／日曆同步"
+        c="可匯出學習記錄與作品"
         mainIdx={1}
       />
     </div>
@@ -2190,7 +2195,6 @@ const P21: Page = () => (
         <Ref n={3} t="Koriat (1997). Monitoring knowledge from within. Journal of Experimental Psychology 23(5):1181–1196." />
         <Ref n={4} t="Wei, Soderstrom & Meade (2025). Psychonomic Bulletin & Review. DOI 10.3758/s13423-025-02816-0" />
         <Ref n={5} t="Dunlosky & Rawson (2012). Overconfidence causes underperformance on exams. Learning and Instruction 22(6):375–382. DOI 10.1016/j.learninstruc.2011.08.003" />
-        <Ref n={6} t="Reines & Camosy (2013). Overconfidence and grades. PLoS ONE 8(12):e83777." />
         <Ref n={7} t="HEPI (2026). Student Generative AI Survey, Report 199. n = 1,054，英國全日制本科生。" />
       </div>
       <div>
@@ -2360,7 +2364,7 @@ Agent 這個詞第一次出現時解釋一句：會自己判斷下一步、並�
 
   /* 16 */ `收束段的信任頁，講誠懇，不要講條目。
 左邊兩句話講團隊分工。
-【待填】兩個「已交付物：［待填］」必須在上台前填掉。若真的沒有交付物，就刪掉該行，改講真實存在的東西（例如已做出的可用原型、已試講的課程）——空著上台最致命。
+投影片上的「已交付物」空框已移除，所以這裡沒有可念的東西——**你必須口頭把兩人各自已做出的東西講清楚**（做過什麼原型、訪談過誰、試講過哪一節）。空著上台最致命。
 右邊四條資料規則，逐條念，每條一句理由。第一條要念完整：資料留在用戶所屬司法區，香港用戶留港、內地用戶留內地，模型我們自託管或在當地部署，不經境外 API。不要簡化成「數據不出境」，那個說法會被香港／內地兩地使用者一問就破。
 落點：寫進合約，不是寫在網站上。`,
 
