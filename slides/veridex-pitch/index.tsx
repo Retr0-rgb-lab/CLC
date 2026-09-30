@@ -37,13 +37,14 @@ export const design: DesignSystem = {
 
 const CANVAS = '#0B0F1A'; // dark page ground
 const INK = '#0F172A';
+const ACCENT = 'var(--osd-accent)'; // design token — keep in sync with design.palette.accent
 const BLUE = '#2F6BFF';
 const BLUE_SOFT = 'rgba(47,107,255,0.10)';
 const BLUE_LINE = 'rgba(47,107,255,0.32)';
 const AMBER = '#C87F1A'; // status only: 未通过 / 待补教 / 要重讲
 const AMBER_SOFT = 'rgba(200,127,26,0.12)';
 const MUTED = '#5A6675';
-const DIM = '#8A94A3';
+const DIM = '#6B7684'; // 4.6:1 on --osd-bg (was 2.9:1 — too faint for a projector)
 const RULE = '#DFE3E9';
 const HAIR = '#EAEDF1';
 const PANEL = '#FFFFFF';
@@ -153,7 +154,7 @@ const Frame: FC<{
           fontWeight: 600,
         }}
       >
-        <span style={{ color: BLUE, letterSpacing: '0.22em' }}>{kicker}</span>
+        <span style={{ color: ACCENT, letterSpacing: '0.22em' }}>{kicker}</span>
         <span style={{ letterSpacing: '0.04em' }}>{who}</span>
       </div>
 
@@ -175,7 +176,7 @@ const Frame: FC<{
         <p
           style={{
             margin: '18px 0 0',
-            fontSize: 33,
+            fontSize: 'var(--osd-size-body)',
             lineHeight: 1.5,
             color: dark ? ON_DARK_MUTED : MUTED,
             maxWidth: 1340,
@@ -330,7 +331,7 @@ const P01: Page = () => (
           fontSize: 40,
           fontWeight: 800,
           letterSpacing: '0.16em',
-          color: BLUE,
+          color: ACCENT,
         }}
       >
         VERIDEX
@@ -387,7 +388,6 @@ const P02: Page = () => (
     kicker="開場"
     title="那天晚上的空白"
     who="黃浩然"
-    note="開場不投影片內容，讓他們想。三秒之後那句「不是你笨」要說得平，不要用力。"
   >
     <div style={{ maxWidth: 1560, display: 'flex', flexDirection: 'column', gap: 40 }}>
       <Steps>
@@ -400,7 +400,7 @@ const P02: Page = () => (
           <p style={{ margin: 0, fontSize: 52, lineHeight: 1.4, fontWeight: 600, letterSpacing: '-0.01em' }}>
             各位脸上那一秒的空白，
             <br />
-            <span style={{ color: BLUE }}>不是你笨</span>，是从来没有人检查过你到底会不会。
+            <span style={{ color: ACCENT }}>不是你笨</span>，是从来没有人检查过你到底会不会。
           </p>
         </Step>
         <Step>
@@ -482,7 +482,7 @@ const P03: Page = () => (
     <div style={{ display: 'flex', gap: 24, marginBottom: 14 }}>
       <span style={{ width: 210, fontSize: 23, color: DIM, fontWeight: 600 }}> </span>
       <span style={{ width: 640, fontSize: 23, color: DIM, fontWeight: 600 }}>传统课堂</span>
-      <span style={{ flex: 1, fontSize: 23, color: BLUE, fontWeight: 700 }}>AI 一对一</span>
+      <span style={{ flex: 1, fontSize: 23, color: ACCENT, fontWeight: 700 }}>AI 一对一</span>
     </div>
 
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -579,7 +579,7 @@ const P04: Page = () => (
       </svg>
 
       <div style={{ display: 'flex', gap: 90, alignItems: 'stretch' }}>
-        <Card w={500} h={520} tone="dark" accent={BLUE} eyebrow="第一段">
+        <Card w={500} h={520} tone="dark" accent={ACCENT} eyebrow="第一段">
           <span style={{ fontSize: 50, fontWeight: 800, letterSpacing: '-0.01em' }}>找到</span>
           <span style={{ fontSize: 29, lineHeight: 1.55, color: ON_DARK_MUTED }}>
             在一大堆东西里，挑出你现在该学的那一部分。
@@ -588,7 +588,7 @@ const P04: Page = () => (
             style={{
               marginTop: 'auto',
               fontSize: 25,
-              color: BLUE,
+              color: ACCENT,
               fontWeight: 600,
               borderTop: '1px solid rgba(255,255,255,0.10)',
               paddingTop: 20,
@@ -598,7 +598,7 @@ const P04: Page = () => (
           </span>
         </Card>
 
-        <Card w={500} h={520} tone="dark" accent={BLUE} eyebrow="第二段">
+        <Card w={500} h={520} tone="dark" accent={ACCENT} eyebrow="第二段">
           <span style={{ fontSize: 50, fontWeight: 800, letterSpacing: '-0.01em' }}>学会</span>
           <span style={{ fontSize: 29, lineHeight: 1.55, color: ON_DARK_MUTED }}>
             从「看过了」，变成「这是我的，随时调得出来」。
@@ -607,7 +607,7 @@ const P04: Page = () => (
             style={{
               marginTop: 'auto',
               fontSize: 25,
-              color: BLUE,
+              color: ACCENT,
               fontWeight: 600,
               borderTop: '1px solid rgba(255,255,255,0.10)',
               paddingTop: 20,
@@ -655,17 +655,17 @@ const P05: Page = () => (
     <Steps>
       <Step>
         <div style={{ display: 'flex', gap: 22 }}>
-          <Card w={408} h={214} accent={BLUE} eyebrow="01 · 输入">
+          <Card w={408} h={214} accent={ACCENT} eyebrow="01 · 输入">
             <span style={{ fontSize: 30, fontWeight: 700, lineHeight: 1.35 }}>资料进来了吗</span>
             <span style={{ fontSize: 24, lineHeight: 1.5, color: MUTED }}>感觉记忆 → 工作记忆</span>
           </Card>
-          <Card w={408} h={214} accent={BLUE} eyebrow="02 · 处理">
+          <Card w={408} h={214} accent={ACCENT} eyebrow="02 · 处理">
             <span style={{ fontSize: 30, fontWeight: 700, lineHeight: 1.35 }}>理解到什么程度</span>
             <span style={{ fontSize: 24, lineHeight: 1.5, color: MUTED }}>
               一次大约只能同时处理四五块
             </span>
           </Card>
-          <Card w={408} h={214} accent={BLUE} eyebrow="03 · 提取">
+          <Card w={408} h={214} accent={ACCENT} eyebrow="03 · 提取">
             <span style={{ fontSize: 30, fontWeight: 700, lineHeight: 1.35 }}>能从记忆里取出来吗</span>
             <span style={{ fontSize: 24, lineHeight: 1.5, color: MUTED }}>合上书，还记得多少</span>
           </Card>
@@ -821,7 +821,7 @@ const P08: Page = () => (
         <Steps>
           <Step>
             <div style={{ display: 'flex', gap: 18 }}>
-              <span style={{ fontFamily: NUM, fontSize: 26, color: BLUE, fontWeight: 700, paddingTop: 6 }}>
+              <span style={{ fontFamily: NUM, fontSize: 26, color: ACCENT, fontWeight: 700, paddingTop: 6 }}>
                 01
               </span>
               <p style={{ margin: 0, fontSize: 30, lineHeight: 1.5 }}>
@@ -831,7 +831,7 @@ const P08: Page = () => (
           </Step>
           <Step>
             <div style={{ display: 'flex', gap: 18 }}>
-              <span style={{ fontFamily: NUM, fontSize: 26, color: BLUE, fontWeight: 700, paddingTop: 6 }}>
+              <span style={{ fontFamily: NUM, fontSize: 26, color: ACCENT, fontWeight: 700, paddingTop: 6 }}>
                 02
               </span>
               <p style={{ margin: 0, fontSize: 30, lineHeight: 1.5 }}>
@@ -869,30 +869,30 @@ const P09: Page = () => (
     <Steps>
       <Step>
         <div style={{ display: 'flex', gap: 28 }}>
-          <Card w={546} h={230} accent={BLUE} eyebrow="讲出来">
+          <Card w={546} h={230} accent={ACCENT} eyebrow="讲出来">
             <span style={{ fontSize: 36, fontWeight: 700, lineHeight: 1.3 }}>输出</span>
             <span style={{ fontSize: 27, lineHeight: 1.5, color: MUTED }}>
               能不能用自己的话讲清楚、讲给谁听。
             </span>
-            <span style={{ fontSize: 24, lineHeight: 1.5, color: BLUE, marginTop: 'auto' }}>
+            <span style={{ fontSize: 24, lineHeight: 1.5, color: ACCENT, marginTop: 'auto' }}>
               抓「你只是背得很顺」
             </span>
           </Card>
-          <Card w={546} h={230} accent={BLUE} eyebrow="练一遍">
+          <Card w={546} h={230} accent={ACCENT} eyebrow="练一遍">
             <span style={{ fontSize: 36, fontWeight: 700, lineHeight: 1.3 }}>课后练习</span>
             <span style={{ fontSize: 27, lineHeight: 1.5, color: MUTED }}>
               过一遍，反馈带解释，不是只给对错。
             </span>
-            <span style={{ fontSize: 24, lineHeight: 1.5, color: BLUE, marginTop: 'auto' }}>
+            <span style={{ fontSize: 24, lineHeight: 1.5, color: ACCENT, marginTop: 'auto' }}>
               抓「记得住，但调不出来」
             </span>
           </Card>
-          <Card w={546} h={230} accent={BLUE} eyebrow="做出来">
+          <Card w={546} h={230} accent={ACCENT} eyebrow="做出来">
             <span style={{ fontSize: 36, fontWeight: 700, lineHeight: 1.3 }}>项目</span>
             <span style={{ fontSize: 27, lineHeight: 1.5, color: MUTED }}>
               你自己做的项目，AI 按标准打分。
             </span>
-            <span style={{ fontSize: 24, lineHeight: 1.5, color: BLUE, marginTop: 'auto' }}>
+            <span style={{ fontSize: 24, lineHeight: 1.5, color: ACCENT, marginTop: 'auto' }}>
               抓「原题会做，换个情境就废」
             </span>
           </Card>
@@ -1052,9 +1052,6 @@ const P11: Page = () => (
             </p>
           </Step>
         </Steps>
-        <p style={{ margin: '14px 0 0', fontSize: 26, lineHeight: 1.5, color: DIM }}>
-          这一页是全场唯一一张产品实景图，讲话时把手指向锁住的那一栏。
-        </p>
       </div>
     </div>
   </Frame>
@@ -1072,11 +1069,11 @@ const P12: Page = () => (
     who="黃羿捷"
   >
     <div style={{ display: 'flex', gap: 28 }}>
-      <Card w={546} h={214} accent={BLUE} eyebrow="行为 · 14 天任务完成率">
+      <Card w={546} h={214} accent={ACCENT} eyebrow="行为 · 14 天任务完成率">
         <BigNum n="≥ 50" unit="%" />
         <span style={{ fontSize: 25, lineHeight: 1.5, color: MUTED }}>你到底做没做</span>
       </Card>
-      <Card w={546} h={214} accent={BLUE} eyebrow="成果 · 前测后测差异">
+      <Card w={546} h={214} accent={ACCENT} eyebrow="成果 · 前测后测差异">
         <BigNum n="≥ 20" unit="%" />
         <span style={{ fontSize: 25, lineHeight: 1.5, color: MUTED }}>学之前与学之后差多少</span>
       </Card>
@@ -1344,7 +1341,7 @@ const P15: Page = () => (
   >
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
       <div style={{ display: 'flex', gap: 28 }}>
-        <Card w={812} h={250} accent={BLUE} eyebrow="項目負責人 · 學習與語言端">
+        <Card w={812} h={250} accent={ACCENT} eyebrow="項目負責人 · 學習與語言端">
           <span style={{ fontSize: 40, fontWeight: 800 }}>黃浩然</span>
           <span style={{ fontSize: 26, lineHeight: 1.5, color: MUTED }}>
             中文學習痛點定義、訪談教師與學生、課程介面、對外簡報
@@ -1361,7 +1358,7 @@ const P15: Page = () => (
             已交付物：<span style={{ color: AMBER, fontWeight: 700 }}>［待填］</span>
           </span>
         </Card>
-        <Card w={812} h={250} accent={BLUE} eyebrow="技術負責人 · AI 與數據端">
+        <Card w={812} h={250} accent={ACCENT} eyebrow="技術負責人 · AI 與數據端">
           <span style={{ fontSize: 40, fontWeight: 800 }}>黃羿捷</span>
           <span style={{ fontSize: 26, lineHeight: 1.5, color: MUTED }}>
             模型與提示工程、驗收引擎、校園試點部署、數據管線與私隱安全
@@ -1391,7 +1388,7 @@ const P15: Page = () => (
               paddingTop: 26,
             }}
           >
-            <span style={{ fontSize: 27, fontWeight: 700, color: BLUE }}>痛點訪談</span>
+            <span style={{ fontSize: 27, fontWeight: 700, color: ACCENT }}>痛點訪談</span>
             <span style={{ fontSize: 26, color: DIM }}>→</span>
             <span style={{ fontSize: 27, fontWeight: 700 }}>課程介面</span>
             <span style={{ fontSize: 26, color: DIM }}>→</span>
@@ -1421,13 +1418,13 @@ const P16: Page = () => (
   <Frame kicker="凭什么信你们" title="我们的边界" who="黃浩然">
     <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
       <div style={{ display: 'flex', gap: 28 }}>
-        <Card w={546} h={210} accent={BLUE} eyebrow="不做">
+        <Card w={546} h={210} accent={ACCENT} eyebrow="不做">
           <span style={{ fontSize: 34, fontWeight: 700, lineHeight: 1.3 }}>不为库存生产课程</span>
           <span style={{ fontSize: 26, lineHeight: 1.5, color: MUTED }}>
             我们只为一个人生成一整套课，以及这一整套的验收。
           </span>
         </Card>
-        <Card w={546} h={210} accent={BLUE} eyebrow="不做">
+        <Card w={546} h={210} accent={ACCENT} eyebrow="不做">
           <span style={{ fontSize: 34, fontWeight: 700, lineHeight: 1.3 }}>不给自己打分</span>
           <span style={{ fontSize: 26, lineHeight: 1.5, color: MUTED }}>
             评分权在授课教师手里。我们交出这个权力。
@@ -1480,22 +1477,22 @@ const P17: Page = () => (
         </div>
       </Card>
 
-      <Card w={812} h={380} accent={BLUE} eyebrow="我们怎么做">
+      <Card w={812} h={380} accent={ACCENT} eyebrow="我们怎么做">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 22, marginTop: 8 }}>
           <div style={{ display: 'flex', gap: 16, alignItems: 'baseline' }}>
-            <span style={{ fontFamily: NUM, fontSize: 24, color: BLUE, fontWeight: 700 }}>01</span>
+            <span style={{ fontFamily: NUM, fontSize: 24, color: ACCENT, fontWeight: 700 }}>01</span>
             <span style={{ fontSize: 30, lineHeight: 1.4 }}>数据不出境</span>
           </div>
           <div style={{ display: 'flex', gap: 16, alignItems: 'baseline' }}>
-            <span style={{ fontFamily: NUM, fontSize: 24, color: BLUE, fontWeight: 700 }}>02</span>
+            <span style={{ fontFamily: NUM, fontSize: 24, color: ACCENT, fontWeight: 700 }}>02</span>
             <span style={{ fontSize: 30, lineHeight: 1.4 }}>分户隔离，你只能看自己的</span>
           </div>
           <div style={{ display: 'flex', gap: 16, alignItems: 'baseline' }}>
-            <span style={{ fontFamily: NUM, fontSize: 24, color: BLUE, fontWeight: 700 }}>03</span>
+            <span style={{ fontFamily: NUM, fontSize: 24, color: ACCENT, fontWeight: 700 }}>03</span>
             <span style={{ fontSize: 30, lineHeight: 1.4 }}>访问令牌有时效</span>
           </div>
           <div style={{ display: 'flex', gap: 16, alignItems: 'baseline' }}>
-            <span style={{ fontFamily: NUM, fontSize: 24, color: BLUE, fontWeight: 700 }}>04</span>
+            <span style={{ fontFamily: NUM, fontSize: 24, color: ACCENT, fontWeight: 700 }}>04</span>
             <span style={{ fontSize: 30, lineHeight: 1.4 }}>每次导出留审计记录</span>
           </div>
         </div>
@@ -1516,18 +1513,18 @@ const P18: Page = () => (
     who="黃浩然"
   >
     <div style={{ display: 'flex', gap: 22, alignItems: 'stretch' }}>
-      <Card w={398} h={330} accent={BLUE} eyebrow="第 3 月">
+      <Card w={398} h={330} accent={ACCENT} eyebrow="第 3 月">
         <span style={{ fontSize: 36, fontWeight: 700, lineHeight: 1.3 }}>可用原型</span>
         <span style={{ fontSize: 26, lineHeight: 1.5, color: MUTED }}>
           30–50 次深访
           <br />100 人等候名单
         </span>
       </Card>
-      <Card w={398} h={330} accent={BLUE} eyebrow="第 6 月">
+      <Card w={398} h={330} accent={ACCENT} eyebrow="第 6 月">
         <span style={{ fontSize: 36, fontWeight: 700, lineHeight: 1.3 }}>封闭测试</span>
         <span style={{ fontSize: 26, lineHeight: 1.5, color: MUTED }}>100–200 人真实使用</span>
       </Card>
-      <Card w={398} h={330} accent={BLUE} eyebrow="第 12 月">
+      <Card w={398} h={330} accent={ACCENT} eyebrow="第 12 月">
         <span style={{ fontSize: 36, fontWeight: 700, lineHeight: 1.3 }}>首批付费用户</span>
         <span style={{ fontSize: 26, lineHeight: 1.5, color: MUTED }}>首年目标 100–300 人</span>
       </Card>
@@ -1551,7 +1548,7 @@ const P19: Page = () => (
     who="黃浩然"
   >
     <div style={{ display: 'flex', gap: 32, alignItems: 'stretch' }}>
-      <Card w={812} h={372} accent={BLUE} eyebrow="先做 · 个人用户">
+      <Card w={812} h={372} accent={ACCENT} eyebrow="先做 · 个人用户">
         <span style={{ fontSize: 40, fontWeight: 800 }}>先学后付，积分制</span>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginTop: 6 }}>
           <span style={{ fontSize: 27, lineHeight: 1.5, color: MUTED }}>
@@ -1567,7 +1564,7 @@ const P19: Page = () => (
             borderTop: `1px solid ${RULE}`,
             paddingTop: 18,
             fontSize: 26,
-            color: BLUE,
+            color: ACCENT,
             fontWeight: 600,
           }}
         >
@@ -1617,7 +1614,7 @@ const P20: Page = () => (
     <div style={{ display: 'flex', gap: 64, alignItems: 'flex-start' }}>
       <div style={{ width: 760, flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
-          <span style={{ fontFamily: NUM, fontSize: 150, fontWeight: 800, letterSpacing: '-0.04em', color: BLUE, lineHeight: 1 }}>
+          <span style={{ fontFamily: NUM, fontSize: 150, fontWeight: 800, letterSpacing: '-0.04em', color: ACCENT, lineHeight: 1 }}>
             HK$78
           </span>
           <span style={{ fontSize: 32, color: ON_DARK_MUTED }}>/ 月 · 积分制</span>
@@ -1698,9 +1695,8 @@ const P21: Page = () => (
     title="参考文献与资料来源"
     who="—"
     handoff="答問背景板 · 不計時"
-    note="本頁與下一頁為答問背景板，不列入 20 分鐘正片之計時。"
   >
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px 48px', fontSize: 24, lineHeight: 1.6, color: MUTED }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 44px', fontSize: 22, lineHeight: 1.45, color: MUTED }}>
       <span>HEPI (2026). Student Generative AI Survey 2026, Report 199.</span>
       <span>Rowland (2014). The effect of testing versus restudy. Psychological Bulletin 140(6): 1434–1454.</span>
       <span>Chuang &amp; Ho (2014). HarvardX / MITx completion study（工作論文）.</span>
