@@ -15,14 +15,20 @@ import type { CSSProperties, FC, ReactNode } from 'react';
  * ------------------------------------------------------------------ */
 
 export const design: DesignSystem = {
-  palette: { bg: '#F6F7F9', text: '#0F172A', accent: '#2F6BFF' },
-  fonts: {
-    display:
-      '"PingFang SC","Microsoft JhengHei UI","Microsoft JhengHei","Noto Sans CJK TC","Noto Sans SC","Heiti TC",-apple-system,"Segoe UI",sans-serif',
-    body: '"PingFang SC","Microsoft JhengHei UI","Microsoft JhengHei","Noto Sans CJK TC","Noto Sans SC","Heiti TC",-apple-system,"Segoe UI",sans-serif',
+  palette: {
+    bg: '#f7f5f0',
+    text: '#1a1814',
+    accent: '#6d4cff',
   },
-  typeScale: { hero: 128, body: 33 },
-  radius: 14,
+  fonts: {
+    display: 'Georgia, "Times New Roman", serif',
+    body: '-apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif',
+  },
+  typeScale: {
+    hero: 168,
+    body: 36,
+  },
+  radius: 12,
 };
 
 /* ------------------------------------------------------------------ *
@@ -281,17 +287,7 @@ const Callout: FC<{ tone?: Tone; children: ReactNode; w?: number }> = ({
   const dark = tone === 'dark';
   return (
     <div
-      style={{
-        width: w ?? '100%',
-        boxSizing: 'border-box',
-        borderLeft: `4px solid ${AMBER}`,
-        background: dark ? 'rgba(200,127,26,0.10)' : AMBER_SOFT,
-        padding: '22px 30px',
-        fontSize: 31,
-        lineHeight: 1.5,
-        fontWeight: 600,
-        color: dark ? ON_DARK : INK,
-      }}
+      style={{ width: w ?? '100%', boxSizing: 'border-box', borderLeft: `4px solid ${AMBER}`, background: dark ? 'rgba(200,127,26,0.10)' : AMBER_SOFT, padding: '22px 30px', fontSize: 31, lineHeight: 1.5, fontWeight: 600, color: dark ? ON_DARK : INK, translate: '0px 63.23px' }}
     >
       {children}
     </div>
@@ -355,13 +351,11 @@ const P01: Page = () => (
           letterSpacing: '-0.02em',
         }}
       >
-        把「学会」
-        <br />
-        变成一件可以被检验的事
+        AI时代的加速学习
+        
+        {''}
       </h1>
-      <p style={{ margin: '34px 0 0', fontSize: 36, lineHeight: 1.5, color: ON_DARK_MUTED }}>
-        你的第一个 AI 个人课堂
-      </p>
+      <p style={{ margin: '34px 0 0', fontSize: 36, lineHeight: 1.5, color: ON_DARK_MUTED }}>你的专属AI课堂</p>
     </div>
 
     <div
@@ -423,76 +417,124 @@ const P02: Page = () => (
 );
 
 /* ================================================================== *
- * 03 · 为什么是现在
+ * 03 · 为什么是现在：课堂只能有一个进度
  * ================================================================== */
+
+const CompareRow: FC<{ k: string; a: string; b: string }> = ({ k, a, b }) => (
+  <div style={{ display: 'flex', gap: 24, alignItems: 'stretch' }}>
+    <div
+      style={{
+        width: 210,
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: 26,
+        fontWeight: 700,
+        color: MUTED,
+      }}
+    >
+      {k}
+    </div>
+    <div
+      style={{
+        width: 640,
+        boxSizing: 'border-box',
+        border: `1px solid ${RULE}`,
+        borderRadius: 10,
+        background: PANEL,
+        padding: '22px 26px',
+        fontSize: 28,
+        lineHeight: 1.4,
+        color: MUTED,
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
+      {a}
+    </div>
+    <div
+      style={{
+        flex: 1,
+        boxSizing: 'border-box',
+        border: `1px solid ${BLUE_LINE}`,
+        borderRadius: 10,
+        background: BLUE_SOFT,
+        padding: '22px 26px',
+        fontSize: 28,
+        lineHeight: 1.4,
+        fontWeight: 600,
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
+      {b}
+    </div>
+  </div>
+);
 
 const P03: Page = () => (
   <Frame
     kicker="为什么是现在"
-    title="一对一的价格结构，刚刚崩了"
-    lead="有三件事，过去必须有一个人在场才做得到。"
+    title="课堂的进度，只能有一个"
+    lead="一对一的优势不是「更有耐心」，是三个结构性的不同。"
     who="黃浩然"
-    note="价格：OpenMAIC 公开数据，一整套课约 30 分钟、成本不到 2 美元。家教价格按香港市场每小时 400–600 港元估算。"
+    note="Bloom, B. S. (1984). The 2 Sigma Problem. Educational Researcher 13(6): 4–16.　走神实测间隔不到一分钟（Bunce, Flens & Neiles, 2010）；「十分钟注意力法则」源自 1976 年一项记笔记量的观察，2007 年经系统回顾推翻（Wilson & Korn, Teaching of Psychology 34(2): 85–89）。"
   >
-    <Steps>
-      <Step>
-        <div style={{ display: 'flex', gap: 28 }}>
-          <Card w={546} h={188} eyebrow="01">
-            <span style={{ fontSize: 34, fontWeight: 700, lineHeight: 1.3 }}>随时打断、追问、换一种讲法</span>
-            <span style={{ fontSize: 26, lineHeight: 1.5, color: MUTED }}>
-              过去要等下一次上课，或在 office hour 排队的最后十分钟。
-            </span>
-          </Card>
-          <Card w={546} h={188} eyebrow="02">
-            <span style={{ fontSize: 34, fontWeight: 700, lineHeight: 1.3 }}>
-              针对你这一步的错，给出解释
-            </span>
-            <span style={{ fontSize: 26, lineHeight: 1.5, color: MUTED }}>
-              老师批改给全班同一份评语——你错在哪，他看不见。
-            </span>
-          </Card>
-          <Card w={546} h={188} eyebrow="03">
-            <span style={{ fontSize: 34, fontWeight: 700, lineHeight: 1.3 }}>出题贴着你的边界</span>
-            <span style={{ fontSize: 26, lineHeight: 1.5, color: MUTED }}>
-              过去靠老师经验，因人而异，而且不可复制。
-            </span>
-          </Card>
-        </div>
-      </Step>
-      <Step>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 30, paddingTop: 42 }}>
-          <p style={{ margin: 0, fontSize: 38, lineHeight: 1.4, fontWeight: 700, maxWidth: 1400 }}>
-            这三件事的瓶颈，从来不是「会不会做」，
-            <br />
-            是「有没有人对我说」。
-          </p>
-          <div style={{ display: 'flex', gap: 20, alignItems: 'stretch' }}>
-            <div
-              style={{
-                flex: 1,
-                borderTop: `2px solid ${RULE}`,
-                paddingTop: 22,
-              }}
-            >
-              <div style={{ fontSize: 24, color: MUTED, marginBottom: 8 }}>以前这叫家教</div>
-              <div style={{ fontFamily: NUM, fontSize: 46, fontWeight: 800, letterSpacing: '-0.02em' }}>
-                HK$400–600
-                <span style={{ fontSize: 24, fontWeight: 600, marginLeft: 8 }}>/ 小时</span>
-              </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', fontSize: 44, color: DIM }}>→</div>
-            <div style={{ flex: 1, borderTop: `2px solid ${BLUE}`, paddingTop: 22 }}>
-              <div style={{ fontSize: 24, color: BLUE, marginBottom: 8, fontWeight: 600 }}>
-                现在 · 生成一整套课
-              </div>
-              <div style={{ fontFamily: NUM, fontSize: 46, fontWeight: 800, letterSpacing: '-0.02em', color: BLUE }}>
-                30 分钟 · 不到 US$2
-              </div>
-            </div>
-          </div>
-        </div>
-      </Step>
-    </Steps>
+    <div style={{ display: 'flex', gap: 24, marginBottom: 14 }}>
+      <span style={{ width: 210, fontSize: 23, color: DIM, fontWeight: 600 }}> </span>
+      <span style={{ width: 640, fontSize: 23, color: DIM, fontWeight: 600 }}>传统课堂</span>
+      <span style={{ flex: 1, fontSize: 23, color: BLUE, fontWeight: 700 }}>AI 一对一</span>
+    </div>
+
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <CompareRow
+        k="进度"
+        a="一堂课只能有一个进度：快的被拖，慢的丢"
+        b="进度跟着你，慢的加时，快的跳过"
+      />
+      <CompareRow
+        k="反馈"
+        a="作业收上来要几天，给全班同一份评语"
+        b="错在哪一步，当场告诉你为什么"
+      />
+      <CompareRow
+        k="注意力"
+        a="走神不到一分钟就发生，没人拉你回来"
+        b="随时可以打断，问一句再继续"
+      />
+    </div>
+
+    <div
+      style={{
+        marginTop: 34,
+        display: 'flex',
+        gap: 48,
+        alignItems: 'center',
+        borderTop: `2px solid ${RULE}`,
+        paddingTop: 30,
+      }}
+    >
+      <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <span
+          style={{
+            fontFamily: NUM,
+            fontSize: 92,
+            fontWeight: 800,
+            color: AMBER,
+            letterSpacing: '-0.03em',
+            lineHeight: 1,
+          }}
+        >
+          2σ
+        </span>
+        <span style={{ fontSize: 23, lineHeight: 1.35, color: MUTED }}>1984 年的对照实验</span>
+      </div>
+      <p style={{ margin: 0, fontSize: 30, lineHeight: 1.45, flex: 1 }}>
+        掌握式学习 + 一对一的学生，平均超过传统课堂里 <span style={{ fontWeight: 800 }}>98%</span> 的人。
+        <br />
+        一对一不是效果不好——Bloom 写下的结论是
+        <span style={{ color: AMBER, fontWeight: 800 }}>太贵了</span>。现在生成一整套课：30 分钟、不到 US$2。
+      </p>
+    </div>
   </Frame>
 );
 
@@ -1669,8 +1711,13 @@ const P21: Page = () => (
       <span>Cepeda et al. (2006). Distributed practice. Psychological Bulletin 132(3): 354–380.</span>
       <span>Cowan (2001). Working memory capacity. BBS 24(1): 79–95.</span>
       <span>Adesope, Trevisan &amp; Sundararajan (2017). RER 87(3): 659–701.</span>
+      <span>Bloom, B. S. (1984). The 2 Sigma Problem. Educational Researcher 13(6): 4–16.</span>
       <span>Tang, Guo, Tang &amp; Shang (2025). RPKT: Recursive Prerequisite Knowledge Tracing. IEEE FMLDS 2025.</span>
-      <span>OpenMAIC · 清华大学 THU-MAIC 團隊 · AGPL-3.0 · github.com/THU-MAIC/OpenMAIC</span>
+      <span>Wilson, K. &amp; Korn, J. H. (2007). Attention during lectures: beyond ten minutes. Teaching of Psychology 34(2): 85–89.</span>
+      <span>Bradbury, N. (2016). Attention span during lectures: 8 seconds, 10 minutes, or more? Advances in Physiology Education 40(4): 509–513.</span>
+      <span>Bunce, D., Flens, E. &amp; Neiles, K. (2010). How long can students pay attention in class? Journal of Chemical Education 87(5): 435–439.</span>
+      <span>Kulik, C. C. &amp; Kulik, J. H. (1988). A meta-analysis of outcomes on mastery learning. Review of Educational Research 58(2): 264–299.</span>
+      <span>OpenMAIC · 清华大学 THU-MIC 團隊 · AGPL-3.0 · github.com/THU-MAIC/OpenMAIC</span>
       <span>Hyperknow · hyperknow.io · 公開定價 Free / Pro US$12</span>
       <span>Coursera · 公開定價 Plus US$59/月、US$399/年、旁聽 US$0</span>
       <span>OpenAI · ChatGPT Go US$8、Plus US$20、Pro 起價 US$100（2026）</span>
@@ -1733,9 +1780,10 @@ export const notes: (string | undefined)[] = [
 三秒之后那句「不是你笨」要说得平——像陈述，不像安慰。
 第二拍才给悖论：「AI 让人更快找到答案了，但它没让人学会。」说完停一拍再翻页。`,
 
-  `这一页的目的只有一个：把「一对一」从奢侈品变成可负担。
-数字是两个，不要念文献名。家教 400 到 600 是香港市场行情；30 分钟不到 2 美元是 OpenMAIC 的公开数据。
-讲到这里可以停一下，让他们自己得出「门槛塌了」。`,
+  `这一页是全场唯一一组对照实验，念慢一点。
+三行横着讲完，然后指向 2σ 那个数字。
+必须守住的底线：不要说「我们能达到 2σ」。这是 1984 年真人一对一辅导的结果，我们做的是把它变便宜，不是已经达到它。
+Bloom 原文的结论是「对大多数社会而言太贵」——那句话是他自己写的，所以「成本塌了」这件事有 40 年的文献背书，比我们自己说更有力。`,
 
   `全场最重要的一页，讲慢一点。
 三段一次讲完，不要分段揭示——他们需要同时看见整把尺。
