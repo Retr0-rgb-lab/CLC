@@ -8,11 +8,11 @@ import {
   Steps,
   useSlidePageNumber,
 } from '@open-slide/core';
-import type { CSSProperties, FC, ReactNode } from 'react';
+import { useEffect, type CSSProperties, type FC, type ReactNode } from 'react';
 
-/* ------------------------------------------------------------------ *
+/* ================================================================== *
  * Design system
- * ------------------------------------------------------------------ */
+ * ================================================================== */
 
 export const design: DesignSystem = {
   palette: { bg: '#F6F7F9', text: '#0F172A', accent: '#2F6BFF' },
@@ -21,43 +21,46 @@ export const design: DesignSystem = {
       '"PingFang SC","Microsoft JhengHei UI","Microsoft JhengHei","Noto Sans CJK TC","Noto Sans SC","Heiti TC",-apple-system,"Segoe UI",sans-serif',
     body: '"PingFang SC","Microsoft JhengHei UI","Microsoft JhengHei","Noto Sans CJK TC","Noto Sans SC","Heiti TC",-apple-system,"Segoe UI",sans-serif',
   },
-  typeScale: { hero: 124, body: 33 },
+  typeScale: { hero: 124, body: 32 },
   radius: 14,
 };
 
-/* ------------------------------------------------------------------ *
+/* ================================================================== *
  * Tokens
- * ------------------------------------------------------------------ */
+ *
+ * Discipline: 藍 = 結構 / 數據 / Veridex 自己的正面內容
+ *             琥珀 = 問題 / 未解 / 斷點 / 盲點 / 缺口
+ * 橙色的量，就是那個位置有問題的量。
+ *
+ * ACCENT / AMBER 是「圖形色」——填充、邊框、條形、SVG stroke。
+ * 文字另用 ACCENT_TXT / AMBER_TXT 這組深色版，否則同樣的色相
+ * 在 #F6F7F9 與 AMBER_SOFT 上只有 3.2:1 / 2.96:1，達不到 AA。
+ * ================================================================== */
 
-const ACCENT = 'var(--osd-accent)'; // design token — keep in sync with design.palette.accent
-const BLUE_SOFT = 'rgba(47,107,255,0.09)';
+const ACCENT = 'var(--osd-accent)';
+const ACCENT_TXT = '#1B4FD8';
+const BLUE_SOFT = 'rgba(47,107,255,0.08)';
 const BLUE_LINE = 'rgba(47,107,255,0.30)';
-const AMBER = '#C07A16'; // status only: 未通过 / 盲点 / 行业停在这里
-const AMBER_SOFT = 'rgba(192,122,22,0.11)';
+const AMBER = '#C07A16';
+const AMBER_TXT = '#8F5606';
+const AMBER_SOFT = 'rgba(192,122,22,0.09)';
+const AMBER_LINE = 'rgba(192,122,22,0.34)';
 const MUTED = '#5A6675';
-const DIM = '#6B7684';
+const DIM = '#5F6B79';
 const RULE = '#DFE3E9';
 const PANEL = '#FFFFFF';
-const GREY_SOFT = 'rgba(15,23,42,0.045)';
-
 const NUM = '"Inter","SF Pro Display","Segoe UI",system-ui,-apple-system,sans-serif';
 
-const EASE_OUT = 'cubic-bezier(0.22, 1, 0.36, 1)';
+const EASE_OUT = 'cubic-bezier(0, 0, 0.2, 1)';
 const EASE_IN = 'cubic-bezier(0.4, 0, 1, 1)';
+const HOLD: Keyframe[] = [{ opacity: 1 }, { opacity: 1 }];
 
+/** RISE — 全篇唯一的幕間動作：260ms 淡入 + 6px 上移。 */
 export const transition: SlideTransition = {
   duration: 260,
-  exit: {
-    duration: 160,
-    easing: EASE_IN,
-    keyframes: [
-      { opacity: 1, transform: 'translateY(0)' },
-      { opacity: 0, transform: 'translateY(-4px)' },
-    ],
-  },
+  exit: { duration: 260, easing: EASE_IN, keyframes: HOLD },
   enter: {
     duration: 260,
-    delay: 60,
     easing: EASE_OUT,
     keyframes: [
       { opacity: 0, transform: 'translateY(6px)' },
@@ -66,9 +69,43 @@ export const transition: SlideTransition = {
   },
 };
 
-/* ------------------------------------------------------------------ *
+/* ================================================================== *
+ * Connector draw-on (only motion #3: stroke-dashoffset)
+ * ================================================================== */
+
+const KEYFRAMES_ID = 'veridex-pitch-keyframes';
+const KEYFRAMES_CSS = `
+@keyframes vd-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.vd-line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: vd-draw 620ms cubic-bezier(0,0,0.2,1) forwards; }
+@media (prefers-reduced-motion: reduce) {
+  .vd-line { animation: none; stroke-dashoffset: 0; }
+}
+`;
+
+function useDeckStyles() {
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    if (document.getElementById(KEYFRAMES_ID)) return;
+    const el = document.createElement('style');
+    el.id = KEYFRAMES_ID;
+    el.textContent = KEYFRAMES_CSS;
+    document.head.appendChild(el);
+  }, []);
+}
+
+/* ================================================================== *
+ * Geometry
+ * ================================================================== */
+
+const PAD_X = 120;
+const PAD_TOP = 68;
+const HEAD_H = 24;
+const BOTTOM_H = 148; // 有腳註
+const BOTTOM_H_PLAIN = 112; // 無腳註
+
+/* ================================================================== *
  * Shared parts
- * ------------------------------------------------------------------ */
+ * ================================================================== */
 
 const Foot: FC<{ handoff?: string }> = ({ handoff }) => {
   const { current, total } = useSlidePageNumber();
@@ -76,19 +113,18 @@ const Foot: FC<{ handoff?: string }> = ({ handoff }) => {
     <div
       style={{
         position: 'absolute',
-        left: 120,
-        right: 120,
-        bottom: 44,
+        left: 0,
+        right: 0,
+        bottom: 40,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         fontSize: 22,
+        lineHeight: '24px',
         color: DIM,
-        letterSpacing: '0.02em',
       }}
     >
-      {/* name lives top-right on every page — 題目指引 requires it for 導師辨識 */}
-      <span style={{ fontWeight: 600 }}>{handoff ?? ''}</span>
+      <span style={{ fontWeight: 600, color: MUTED }}>{handoff ?? ''}</span>
       <span style={{ fontFamily: NUM, fontVariantNumeric: 'tabular-nums' }}>
         {String(current).padStart(2, '0')} / {String(total).padStart(2, '0')}
       </span>
@@ -99,1259 +135,1860 @@ const Foot: FC<{ handoff?: string }> = ({ handoff }) => {
 const Frame: FC<{
   kicker: string;
   title: ReactNode;
-  lead?: string;
   who: string;
-  handoff?: string;
+  lead?: string;
   note?: string;
+  handoff?: string;
   children: ReactNode;
-}> = ({ kicker, title, lead, who, handoff, note, children }) => (
+}> = ({ kicker, title, who, lead, note, handoff, children }) => (
   <div
     style={{
       width: '100%',
       height: '100%',
       position: 'relative',
+      boxSizing: 'border-box',
       background: 'var(--osd-bg)',
       color: 'var(--osd-text)',
       fontFamily: 'var(--osd-font-body)',
-      padding: '84px 120px 92px',
-      boxSizing: 'border-box',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: `${PAD_TOP}px ${PAD_X}px 0`,
     }}
   >
     <div
       style={{
+        flex: 'none',
+        height: HEAD_H,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         fontSize: 22,
-        letterSpacing: '0.22em',
+        lineHeight: `${HEAD_H}px`,
+        letterSpacing: '0.2em',
         color: MUTED,
         fontWeight: 600,
       }}
     >
-      <span style={{ color: ACCENT, letterSpacing: '0.22em' }}>{kicker}</span>
+      <span style={{ color: ACCENT_TXT }}>{kicker}</span>
+      {/* 題目指引：每頁右上角必須有講者姓名 */}
       <span style={{ letterSpacing: '0.04em' }}>{who}</span>
     </div>
 
     <h2
       style={{
-        margin: '24px 0 0',
+        flex: 'none',
+        margin: '18px 0 0',
         fontFamily: 'var(--osd-font-display)',
-        fontSize: 64,
+        fontSize: 60,
         fontWeight: 800,
-        lineHeight: 1.15,
+        lineHeight: '69px',
         letterSpacing: '-0.01em',
-        maxWidth: 1520,
       }}
     >
       {title}
     </h2>
 
-    {lead && (
-      <p
-        style={{
-          margin: '16px 0 0',
-          fontSize: 'var(--osd-size-body)',
-          lineHeight: 1.5,
-          color: MUTED,
-          maxWidth: 1400,
-        }}
-      >
+    {lead ? (
+      <p style={{ flex: 'none', margin: '12px 0 0', fontSize: 32, lineHeight: '46px', color: MUTED, maxWidth: 1500 }}>
         {lead}
       </p>
-    )}
+    ) : null}
 
-    <div style={{ marginTop: 42 }}>{children}</div>
+    <div
+      style={{
+        flex: '1 1 auto',
+        minHeight: 0,
+        marginTop: 28,
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      {children}
+    </div>
 
-    {note && (
-      <div
-        style={{
-          position: 'absolute',
-          left: 120,
-          bottom: 82,
-          fontSize: 20,
-          lineHeight: 1.45,
-          color: DIM,
-          maxWidth: 1440,
-        }}
-      >
-        {note}
-      </div>
-    )}
-
-    <Foot handoff={handoff} />
+    <div style={{ flex: 'none', height: note ? BOTTOM_H : BOTTOM_H_PLAIN, position: 'relative' }}>
+      {note ? (
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 78,
+            fontSize: 22,
+            lineHeight: '32px',
+            color: DIM,
+          }}
+        >
+          {note}
+        </div>
+      ) : null}
+      <Foot handoff={handoff} />
+    </div>
   </div>
 );
 
-const Card: FC<{
-  w: number;
-  h: number;
-  accent?: string;
-  eyebrow?: string;
-  children: ReactNode;
-  style?: CSSProperties;
-}> = ({ w, h, accent, eyebrow, children, style }) => (
-  <div
-    style={{
-      width: w,
-      height: h,
-      boxSizing: 'border-box',
-      borderRadius: 'var(--osd-radius)',
-      border: `1px solid ${RULE}`,
-      background: PANEL,
-      padding: '26px 28px',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-start',
-      gap: 12,
-      ...style,
-    }}
-  >
-    {eyebrow && (
-      <span
-        style={{
-          fontSize: 21,
-          letterSpacing: '0.06em',
-          fontWeight: 600,
-          color: accent ?? MUTED,
-        }}
-      >
-        {eyebrow}
-      </span>
-    )}
-    {children}
-  </div>
-);
-
-const Callout: FC<{ children: ReactNode; w?: number; accent?: string }> = ({
+/** 左側色條 + 一句落點。tone: blue = 我們的正面內容 / amber = 問題 */
+const Bar: FC<{ tone: 'blue' | 'amber'; h: number; size?: number; children: ReactNode }> = ({
+  tone,
+  h,
+  size = 30,
   children,
-  w,
-  accent = AMBER,
-}) => (
-  <div
-    style={{
-      width: w ?? '100%',
-      boxSizing: 'border-box',
-      borderLeft: `4px solid ${accent}`,
-      background: accent === ACCENT ? BLUE_SOFT : AMBER_SOFT,
-      padding: '20px 28px',
-      fontSize: 30,
-      lineHeight: 1.5,
-      fontWeight: 600,
-    }}
-  >
-    {children}
-  </div>
+}) => {
+  const c = tone === 'amber' ? AMBER : ACCENT;
+  return (
+    <div
+      style={{
+        boxSizing: 'border-box',
+        height: h,
+        display: 'flex',
+        alignItems: 'center',
+        borderLeft: `5px solid ${c}`,
+        background: tone === 'amber' ? AMBER_SOFT : BLUE_SOFT,
+        padding: `0 30px`,
+        fontSize: size,
+        lineHeight: 1.45,
+        fontWeight: 600,
+        color: 'var(--osd-text)',
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+const Rule: FC<{ w?: number; tone?: string; h?: number }> = ({ w = '100%', tone = RULE, h = 1 }) => (
+  <div style={{ width: w, height: h, background: tone, flex: 'none' }} />
 );
 
-const BigNum: FC<{ n: string; unit?: string; accent?: string; size?: number }> = ({
+/** 大數字 */
+const BigNum: FC<{ n: string; unit?: string; size?: number; color?: string }> = ({
   n,
   unit,
-  accent = ACCENT,
-  size = 78,
+  size = 84,
+  color = ACCENT_TXT,
 }) => (
   <span
     style={{
       fontFamily: NUM,
       fontSize: size,
       fontWeight: 800,
-      lineHeight: 1,
+      lineHeight: `${size * 1.05}px`,
       letterSpacing: '-0.03em',
-      color: accent,
+      color,
       fontVariantNumeric: 'tabular-nums',
     }}
   >
     {n}
-    {unit && (
-      <span style={{ fontSize: 27, fontWeight: 600, marginLeft: 5, letterSpacing: 0 }}>{unit}</span>
-    )}
+    {unit ? (
+      <span style={{ fontSize: Math.round(size * 0.32), fontWeight: 600, marginLeft: 8, letterSpacing: 0 }}>
+        {unit}
+      </span>
+    ) : null}
   </span>
 );
 
+const eyebrow: CSSProperties = {
+  fontSize: 22,
+  lineHeight: '30px',
+  letterSpacing: '0.14em',
+  color: DIM,
+  fontWeight: 600,
+};
+
 /* ================================================================== *
- * 01 · 封面
+ * 01 · 封面 — 大標版式
  * ================================================================== */
 
-const P01: Page = () => (
-  <div
-    style={{
-      width: '100%',
-      height: '100%',
-      position: 'relative',
-      background: 'var(--osd-bg)',
-      color: 'var(--osd-text)',
-      fontFamily: 'var(--osd-font-body)',
-      padding: '96px 120px 88px',
-      boxSizing: 'border-box',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-    }}
-  >
+const P01: Page = () => {
+  useDeckStyles();
+  const { current, total } = useSlidePageNumber();
+  return (
     <div
       style={{
-        position: 'absolute',
-        inset: 52,
-        border: `1px solid ${RULE}`,
-        borderRadius: 20,
-        pointerEvents: 'none',
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+        boxSizing: 'border-box',
+        background: 'var(--osd-bg)',
+        color: 'var(--osd-text)',
+        fontFamily: 'var(--osd-font-body)',
+        padding: `${PAD_TOP}px ${PAD_X}px 0`,
       }}
-    />
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <span style={{ fontFamily: NUM, fontSize: 38, fontWeight: 800, letterSpacing: '0.16em', color: ACCENT }}>
-        VERIDEX
-      </span>
-      <span style={{ fontSize: 22, letterSpacing: '0.22em', color: MUTED, fontWeight: 600 }}>維學</span>
-    </div>
+    >
+      <div
+        style={{
+          height: HEAD_H,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          fontSize: 22,
+          lineHeight: `${HEAD_H}px`,
+          letterSpacing: '0.2em',
+          color: MUTED,
+          fontWeight: 600,
+        }}
+      >
+        <span style={{ color: ACCENT_TXT }}>CLC 3242P · 課程考核</span>
+        <span style={{ letterSpacing: '0.04em' }}>黃浩然 · 黃羿捷</span>
+      </div>
 
-    <div style={{ maxWidth: 1500 }}>
       <h1
         style={{
-          margin: 0,
+          margin: '186px 0 0',
           fontFamily: 'var(--osd-font-display)',
           fontSize: 'var(--osd-size-hero)',
           fontWeight: 800,
-          lineHeight: 1.1,
-          letterSpacing: '-0.02em',
+          lineHeight: '134px',
+          letterSpacing: '-0.025em',
         }}
       >
-        把「学会」
+        把「學會」
         <br />
-        变成一件可以被检验的事
+        變成一件
+        <br />
+        可以被檢驗的事
       </h1>
-      <p style={{ margin: '32px 0 0', fontSize: 34, lineHeight: 1.5, color: MUTED }}>
-        你的第一个 AI 个人课堂
+
+      <p style={{ margin: '44px 0 0', fontSize: 40, lineHeight: '58px', color: MUTED }}>
+        你的第一個 AI 個人課堂 —— Veridex 維學
       </p>
-    </div>
-
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'space-between',
-        fontSize: 24,
-        color: MUTED,
-        lineHeight: 1.6,
-      }}
-    >
-      <span>
-        呈：青年創業基金委員會
-        <br />
-        講者：黃浩然、黃羿捷
-      </span>
-      <span style={{ fontFamily: NUM, letterSpacing: '0.04em' }}>2026 · 10 · 16</span>
-    </div>
-  </div>
-);
-
-/* ================================================================== *
- * 02 · 开场
- * ================================================================== */
-
-const P02: Page = () => (
-  <Frame kicker="開場" title="AI 加速了所有行业" who="黃浩然">
-    <div style={{ maxWidth: 1620, display: 'flex', flexDirection: 'column', gap: 38 }}>
-      <Steps>
-        <Step>
-          <p style={{ margin: 0, fontSize: 50, lineHeight: 1.4, fontWeight: 600, letterSpacing: '-0.01em' }}>
-            醫生用 AI 看片子，律師用 AI 查案例，工程師用 AI 寫程式。
-          </p>
-        </Step>
-        <Step>
-          <p style={{ margin: 0, fontSize: 50, lineHeight: 1.4, fontWeight: 600, letterSpacing: '-0.01em' }}>
-            但每個人要學的東西，只有自己學。
-            <br />
-            <span style={{ color: ACCENT }}>AI 有沒有加速過一個人的學習？</span>
-          </p>
-        </Step>
-        <Step>
-          <div style={{ display: 'flex', gap: 28, paddingTop: 10 }}>
-            <Card w={812} h={200} accent={ACCENT} eyebrow="有人說：有">
-              <span style={{ fontSize: 30, lineHeight: 1.5, color: MUTED }}>
-                找答案快了、講解快了、做題有人講了、講義變成閃卡了。
-              </span>
-            </Card>
-            <Card w={812} h={200} accent={AMBER} eyebrow="也有人說：有害">
-              <span style={{ fontSize: 30, lineHeight: 1.5, color: MUTED }}>
-                答案太容易拿到，於是不再想；講解太容易聽懂，於是不再記。
-              </span>
-            </Card>
-          </div>
-        </Step>
-        <Step>
-          <Callout w={1620}>
-            我們今天想回答的不是 AI 好不好用，而是——
-            <br />
-            <span style={{ color: AMBER }}>一個人學會一件事，到底需要經過什麼？</span>
-          </Callout>
-        </Step>
-      </Steps>
-    </div>
-  </Frame>
-);
-
-/* ================================================================== *
- * 03 · 学习的本质：一个循环
- * ================================================================== */
-
-const StageBox: FC<{ w: number; label: string; desc: string; dim?: boolean }> = ({
-  w,
-  label,
-  desc,
-  dim,
-}) => (
-  <div
-    style={{
-      width: w,
-      boxSizing: 'border-box',
-      border: `1px solid ${dim ? RULE : BLUE_LINE}`,
-      background: dim ? GREY_SOFT : PANEL,
-      borderRadius: 12,
-      padding: '20px 22px',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 6,
-    }}
-  >
-    <span style={{ fontSize: 29, fontWeight: 800, color: dim ? MUTED : 'var(--osd-text)' }}>
-      {label}
-    </span>
-    <span style={{ fontSize: 22, lineHeight: 1.4, color: DIM }}>{desc}</span>
-  </div>
-);
-
-const P03: Page = () => (
-  <Frame
-    kicker="學習的本質"
-    title="学习不是一条线，是一个循环"
-    lead="如果它是一条线：听讲 → 理解 → 考好。但每个人都知道，那条线走不通。"
-    who="黃浩然"
-    note="WIDS《Learning is not Linear, it's Cyclical》：學習循環為動機 → 理解 → 練習 → 應用。加涅（R. M. Gagné）信息加工学习理论：学习过程分准备、操作、迁移三部分，以「反馈」阶段闭合循环。"
-  >
-    <div style={{ display: 'flex', gap: 40, alignItems: 'stretch' }}>
-      <div
-        style={{
-          flex: 1,
-          border: `1px solid ${RULE}`,
-          borderRadius: 12,
-          background: GREY_SOFT,
-          padding: '30px 32px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 18,
-        }}
-      >
-        <span style={{ fontSize: 24, fontWeight: 600, color: MUTED }}>如果是一条线</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <StageBox w={132} label="听讲" dim />
-          <span style={{ color: DIM, fontSize: 24 }}>→</span>
-          <StageBox w={132} label="理解" dim />
-          <span style={{ color: DIM, fontSize: 24 }}>→</span>
-          <StageBox w={132} label="考好" dim />
-          <span style={{ color: DIM, fontSize: 24 }}>✓</span>
-        </div>
-        <span style={{ fontSize: 24, lineHeight: 1.5, color: DIM, marginTop: 'auto' }}>
-          走完就结束，没有下一步。
-        </span>
-      </div>
-
-      <div
-        style={{
-          flex: 1,
-          border: `1px solid ${BLUE_LINE}`,
-          borderRadius: 12,
-          background: BLUE_SOFT,
-          padding: '30px 32px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 18,
-        }}
-      >
-        <span style={{ fontSize: 24, fontWeight: 600, color: ACCENT }}>实际是一个循环</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <StageBox w={132} label="动机" />
-          <span style={{ color: ACCENT, fontSize: 24 }}>→</span>
-          <StageBox w={132} label="理解" />
-          <span style={{ color: ACCENT, fontSize: 24 }}>→</span>
-          <StageBox w={132} label="练习" />
-          <span style={{ color: ACCENT, fontSize: 24 }}>→</span>
-          <StageBox w={132} label="应用" />
-        </div>
-        <span style={{ fontSize: 24, lineHeight: 1.5, color: MUTED, marginTop: 'auto' }}>
-          用完之后，经验回到起点，驱动下一轮。WIDS 的原话是：
-          <span style={{ fontWeight: 700, color: 'var(--osd-text)' }}>「我们需要在时间和重复中学习。」</span>
-        </span>
-      </div>
-    </div>
-
-    <div style={{ marginTop: 34 }}>
-      <Callout w={1660} accent={ACCENT}>
-        循环的第四格叫<span style={{ color: ACCENT }}>应用</span>——而它必须回头连回第一格。
-        <br />
-        这一格有没有人接，决定了整圈是循环，还是一条断掉的线。
-      </Callout>
-    </div>
-  </Frame>
-);
-
-/* ================================================================== *
- * 04 · 循环在哪里断了
- * ================================================================== */
-
-const P04: Page = () => (
-  <Frame
-    kicker="學習的本質 · 斷口"
-    title="循环在哪里断了"
-    lead="四格的前三格，行业都做得不错。断在回头的那一格。"
-    who="黃浩然"
-    note="斷口位置依 WIDS 學習循環與加涅信息加工学习理论的「反馈」阶段判定。下一页逐项对照行业现状。"
-  >
-    <div style={{ position: 'relative', height: 420 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16, paddingTop: 8 }}>
-        <StageBox w={360} label="动机" desc="为什么要学" />
-        <span style={{ color: ACCENT, fontSize: 30 }}>→</span>
-        <StageBox w={360} label="理解" desc="听懂了" />
-        <span style={{ color: ACCENT, fontSize: 30 }}>→</span>
-        <StageBox w={360} label="练习" desc="做过题" />
-        <span style={{ color: AMBER, fontSize: 30 }}>→</span>
-        <StageBox w={360} label="应用" desc="换个情境还做得出" />
-      </div>
-
-      <svg
-        width={1660}
-        height={180}
-        viewBox="0 0 1660 180"
-        style={{ position: 'absolute', left: 0, top: 230 }}
-      >
-        <defs>
-          <marker id="brk" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-            <path d="M0,0 L10,5 L0,10 z" fill={ACCENT} />
-          </marker>
-        </defs>
-        {/* right leg + right run — stops short of the break */}
-        <path d="M1414,4 L1414,70 Q1414,100 1384,100 L886,100" stroke={ACCENT} strokeWidth={3} fill="none" />
-        {/* left run + left leg — arrow back into 动机 */}
-        <path
-          d="M774,100 L230,100 Q200,100 200,70 L200,6"
-          stroke={ACCENT}
-          strokeWidth={3}
-          fill="none"
-          markerEnd="url(#brk)"
-        />
-        {/* THE BREAK — two amber chevrons, unmistakable */}
-        <path d="M884,82 L848,100 L884,118" stroke={AMBER} strokeWidth={5} fill="none" strokeLinecap="round" />
-        <path d="M776,82 L812,100 L776,118" stroke={AMBER} strokeWidth={5} fill="none" strokeLinecap="round" />
-      </svg>
 
       <div
         style={{
           position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 356,
-          display: 'flex',
-          alignItems: 'baseline',
-          justifyContent: 'center',
-          gap: 18,
+          left: PAD_X,
+          right: PAD_X,
+          bottom: 76,
+          borderTop: `1px solid ${RULE}`,
+          paddingTop: 30,
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 40,
         }}
       >
-        <span style={{ fontSize: 30, fontWeight: 800, color: AMBER }}>回头这一格，行业是空的</span>
-        <span style={{ fontSize: 26, color: MUTED }}>
-          用完之后，没有人告诉你这次到底学会了没有
-        </span>
+        <div>
+          <div style={{ ...eyebrow }}>呈</div>
+          <div style={{ marginTop: 8, fontSize: 32, lineHeight: '46px', fontWeight: 600 }}>
+            青年創業基金委員會
+          </div>
+        </div>
+        <div>
+          <div style={{ ...eyebrow }}>講者 · 日期</div>
+          <div style={{ marginTop: 8, fontSize: 32, lineHeight: '46px', fontWeight: 600 }}>
+            黃浩然、黃羿捷　｜　2026 · 10 · 16
+          </div>
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            right: 0,
+            bottom: -56,
+            fontFamily: NUM,
+            fontSize: 22,
+            lineHeight: '24px',
+            color: DIM,
+            fontVariantNumeric: 'tabular-nums',
+          }}
+        >
+          {String(current).padStart(2, '0')} / {String(total).padStart(2, '0')}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ================================================================== *
+ * 02 · 開場 — 四拍文字遞進
+ * ================================================================== */
+
+const P02: Page = () => (
+  <Frame kicker="開場" title="先問一個所有人都答得上的問題" who="黃浩然">
+    <Steps>
+      <Step>
+        <div style={{ height: 200, display: 'flex', alignItems: 'center', fontSize: 50, lineHeight: '68px', fontWeight: 600 }}>
+          醫生用 AI 看片子，律師用 AI 查案例，工程師用 AI 寫程式。
+        </div>
+      </Step>
+      <Step>
+        <div style={{ height: 200, display: 'flex', alignItems: 'center', fontSize: 50, lineHeight: '68px', fontWeight: 600 }}>
+          但每個人要學的東西，只有自己學。
+          <span style={{ color: ACCENT_TXT }}>AI 有沒有加速過一個人的學習？</span>
+        </div>
+      </Step>
+      <Step>
+        <div style={{ height: 200, display: 'flex', alignItems: 'center', fontSize: 50, lineHeight: '68px', fontWeight: 600 }}>
+          有人說有：答案快了、講解快了。／ 也有人說有害：於是不再想。
+        </div>
+      </Step>
+    </Steps>
+
+    <Steps>
+      <Step>
+        <div style={{ marginTop: 40 }}>
+          <Rule />
+          <div
+            style={{
+              marginTop: 28,
+              fontSize: 40,
+              lineHeight: '62px',
+              fontWeight: 700,
+              color: 'var(--osd-text)',
+            }}
+          >
+            今天不討論 AI 好不好用。我們要問的是：
+            <span style={{ color: ACCENT_TXT }}>一個人學會一件事，必須經過什麼？</span>
+          </div>
+        </div>
+      </Step>
+    </Steps>
+  </Frame>
+);
+
+/* ================================================================== *
+ * 03 · 檢驗有效 — 雙大數字卡
+ * ================================================================== */
+
+const P03: Page = () => (
+  <Frame
+    kicker="問題｜學習科學"
+    title="檢驗有效——這不是觀點，是兩個數字"
+    who="黃浩然"
+    note="Wisniewski, Zierer & Hattie (2020), Frontiers in Psychology 11:309, DOI 10.3389/fpsyg.2019.03087　｜　Roediger & Karpicke (2006), Psychological Science 17(3):249–255, DOI 10.1111/j.1467-9280.2006.01693.x"
+  >
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, flex: '1 1 auto', minHeight: 0 }}>
+      <div
+        style={{
+          boxSizing: 'border-box',
+          border: `1px solid ${RULE}`,
+          borderTop: `4px solid ${ACCENT}`,
+          borderRadius: 'var(--osd-radius)',
+          background: PANEL,
+          padding: '32px 34px',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <div style={{ ...eyebrow }}>反饋的效應量（以標準差為單位）</div>
+        <div style={{ marginTop: 18 }}>
+          <BigNum n="d = 0.48" size={80} />
+        </div>
+        <div style={{ marginTop: 14, fontSize: 30, lineHeight: '44px', fontWeight: 600 }}>
+          反饋對學習的整體效果
+        </div>
+        <div style={{ marginTop: 'auto', fontSize: 24, lineHeight: '36px', color: MUTED }}>
+          Wisniewski、Zierer & Hattie (2020) 把同一問題的多份研究合併重算（這種做法叫「元分析」）。常被引用的 0.70 是 2007 年的舊值，Hattie 本人已在 2020 年下修。
+        </div>
+      </div>
+
+      <div
+        style={{
+          boxSizing: 'border-box',
+          border: `1px solid ${RULE}`,
+          borderTop: `4px solid ${ACCENT}`,
+          borderRadius: 'var(--osd-radius)',
+          background: PANEL,
+          padding: '32px 34px',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <div style={{ ...eyebrow }}>一週後的分數落後</div>
+        <div style={{ marginTop: 18 }}>
+          <BigNum n="21" unit="個百分點" size={80} />
+        </div>
+        <div style={{ marginTop: 14, fontSize: 30, lineHeight: '44px', fontWeight: 600 }}>
+          反覆重讀 vs. 只測一次
+        </div>
+        <div style={{ marginTop: 'auto', fontSize: 24, lineHeight: '36px', color: MUTED }}>
+          Roediger & Karpicke (2006)：反覆重讀同一份教材的人，一週後的測驗分數比只測一次的人低 21 個百分點——而他們的信心是三組裡最高的。
+        </div>
       </div>
     </div>
 
-    <div style={{ marginTop: 26 }}>
-      <Steps>
-        <Step>
-          <Callout w={1660} accent={ACCENT}>
-            Veridex 做这一格：<span style={{ color: ACCENT }}>验完之后，判断下一次该学什么</span>。
-          </Callout>
-        </Step>
-      </Steps>
+    <div style={{ marginTop: 32 }}>
+      <Bar tone="blue" h={88} size={36}>
+        測得越準，學得越多。
+      </Bar>
     </div>
   </Frame>
 );
 
 /* ================================================================== *
- * 05 · 传统课堂的问题
+ * 04 · 轉折點 — 左右對比兩欄
  * ================================================================== */
 
-const ProblemRow: FC<{ n: string; title: string; desc: string }> = ({ n, title, desc }) => (
-  <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
-    <span style={{ fontFamily: NUM, fontSize: 24, fontWeight: 700, color: AMBER, paddingTop: 4, width: 30 }}>
-      {n}
-    </span>
-    <div>
-      <div style={{ fontSize: 30, fontWeight: 700, lineHeight: 1.35 }}>{title}</div>
-      <div style={{ fontSize: 24, lineHeight: 1.45, color: MUTED, marginTop: 4 }}>{desc}</div>
+const P04: Page = () => (
+  <Frame
+    kicker="問題｜人的盲點"
+    title="你判斷不了自己學沒學會"
+    who="黃浩然"
+    note="Koriat (1997), Journal of Experimental Psychology 23(5)　｜　Dunlosky & Rawson (2012), Learning and Instruction 22(6), DOI 10.1016/j.learninstruc.2011.08.003　｜　Reines & Camosy (2013), PLoS ONE 8(12):e83777"
+  >
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, flex: '1 1 auto', minHeight: 0 }}>
+      <div
+        style={{
+          boxSizing: 'border-box',
+          border: `1px solid ${AMBER_LINE}`,
+          borderLeft: `5px solid ${AMBER}`,
+          borderRadius: 'var(--osd-radius)',
+          background: PANEL,
+          padding: '30px 32px',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <div style={{ ...eyebrow, color: AMBER_TXT }}>人用的訊號</div>
+        <div style={{ marginTop: 12, fontSize: 52, lineHeight: '64px', fontWeight: 800 }}>順暢感</div>
+        <div style={{ marginTop: 18, fontSize: 26, lineHeight: '42px', color: MUTED }}>
+          「看懂的時候那種順暢感」——而不是真實測試。心理學稱為 cue-utilization：判斷時只用到感覺，不用測試（Koriat, 1997）。
+        </div>
+        <div style={{ marginTop: 'auto' }}>
+          <Rule />
+          <div style={{ marginTop: 18, fontSize: 25, lineHeight: '38px', color: AMBER_TXT, fontWeight: 700 }}>
+            而且會造成實害：過度自信真的會拉低成績（Dunlosky &amp; Rawson 2012，因果研究）。
+          </div>
+        </div>
+      </div>
+
+      <div
+        style={{
+          boxSizing: 'border-box',
+          border: `1px solid ${BLUE_LINE}`,
+          borderLeft: `5px solid ${ACCENT}`,
+          borderRadius: 'var(--osd-radius)',
+          background: PANEL,
+          padding: '30px 32px',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <div style={{ ...eyebrow, color: ACCENT_TXT }}>唯一可靠的訊號</div>
+        <div style={{ marginTop: 12, fontSize: 52, lineHeight: '64px', fontWeight: 800 }}>真實測試</div>
+        <div style={{ marginTop: 18, fontSize: 26, lineHeight: '42px', color: MUTED }}>
+          做一道題，答對才算。它不依賴感覺，也不依賴勇氣——所以它不能由學生自己執行。
+        </div>
+        <div style={{ marginTop: 'auto' }}>
+          <Rule />
+          <div style={{ marginTop: 18, fontSize: 25, lineHeight: '38px', color: ACCENT_TXT, fontWeight: 700 }}>
+            它可以重複、可以計分、可以留下記錄——這三件事，人自己做不到。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style={{ marginTop: 28 }}>
+      <Bar tone="blue" h={92} size={32}>
+        <span style={{ color: AMBER_TXT }}>判斷的人必須站在學生之外</span>
+        ——所以在學生端，這件事只能由系統來做。
+      </Bar>
+    </div>
+    <div style={{ marginTop: 16, display: 'flex', gap: 28, alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ fontSize: 23, lineHeight: '32px', color: MUTED }}>一致性：每次標準相同</div>
+      <div style={{ fontSize: 23, lineHeight: '32px', color: MUTED }}>可規模：幾百人同時驗收</div>
+      <div style={{ fontSize: 23, lineHeight: '32px', color: MUTED }}>24 小時：隨時能重測</div>
+    </div>
+    <div style={{ marginTop: 14, fontSize: 23, lineHeight: '32px', color: DIM, textAlign: 'center' }}>
+      這個落差在醫學一年級的實測裡同樣看得到：自評越高，成績越低（Reines &amp; Camosy 2013, PLoS ONE）。
+    </div>
+  </Frame>
+);
+
+/* ================================================================== *
+ * 05 · 唯一的數據圖頁 — 橫向條形圖
+ * ================================================================== */
+
+const BarRow: FC<{ label: string; pct: string; w: number; last?: boolean }> = ({ label, pct, w, last }) => (
+  <div style={{ display: 'flex', alignItems: 'center', height: 48, marginTop: last ? 26 : 12 }}>
+    <div style={{ width: 340, flex: 'none', fontSize: 26, lineHeight: '36px', color: 'var(--osd-text)' }}>{label}</div>
+    <div style={{ flex: 'none', position: 'relative', width: w, height: 34, background: ACCENT, borderRadius: 3 }} />
+    <div
+      style={{
+        flex: 'none',
+        width: 110,
+        fontFamily: NUM,
+        fontSize: 28,
+        lineHeight: '34px',
+        fontWeight: 700,
+        color: 'var(--osd-text)',
+        fontVariantNumeric: 'tabular-nums',
+      }}
+    >
+      {pct}
+    </div>
+  </div>
+);
+
+const GhostRow: FC = () => (
+  <div style={{ display: 'flex', alignItems: 'center', height: 48, marginTop: 12 }}>
+    <div style={{ width: 340, flex: 'none', fontSize: 26, lineHeight: '36px', color: AMBER_TXT, fontWeight: 700 }}>
+      檢驗我到底學會沒有
+    </div>
+    <div
+      style={{
+        flex: 'none',
+        position: 'relative',
+        width: 220,
+        height: 34,
+        border: `2px dashed ${AMBER_LINE}`,
+        borderRadius: 3,
+        display: 'flex',
+        alignItems: 'center',
+        paddingLeft: 16,
+        fontSize: 22,
+        lineHeight: '30px',
+        color: AMBER_TXT,
+        fontWeight: 600,
+      }}
+    >
+      調查未列此項
     </div>
   </div>
 );
 
 const P05: Page = () => (
   <Frame
-    kicker="現有的學習形式"
-    title="四个已知的学习形式，都停在那一格之前"
-    lead="问题不在「没有工具」，在每个形式都只覆盖循环的前半段。"
+    kicker="問題｜學生現狀"
+    title={
+      <>
+        學生已經在用 AI——但這份問卷裡<span style={{ color: AMBER_TXT }}>沒有一項是檢驗自己</span>
+      </>
+    }
     who="黃浩然"
+    note="HEPI (2026), Student Generative AI Survey, Report 199, n = 1,054，英國全日制本科生樣本。"
   >
-    <div style={{ display: 'flex', gap: 44 }}>
-      <div
-        style={{
-          width: 560,
-          flexShrink: 0,
-          border: `1px solid ${RULE}`,
-          borderRadius: 12,
-          background: PANEL,
-          padding: '28px 30px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 22,
-        }}
-      >
-        <span style={{ fontSize: 25, fontWeight: 700, color: MUTED, letterSpacing: '0.06em' }}>
-          一對多的傳統課堂 · 效率最低
-        </span>
-        <ProblemRow n="1" title="老师精力分散" desc="一个班几十人，没法清楚掌握每个人到底会了什么" />
-        <ProblemRow n="2" title="学生自己判断掌握情况" desc="学之外的认知负担，全压在学生自己身上" />
-        <ProblemRow n="3" title="反馈不及时" desc="作业收上来要几天，问题早就忘了" />
-        <ProblemRow n="4" title="进度只有一条" desc="每个人的节奏不一样，一条进度必然牺牲掉一部分人" />
+    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+      <div style={{ fontSize: 24, lineHeight: '34px', color: MUTED }}>
+        問：學生用生成式 AI 做什麼？（可複選，所以加起來超過 100%）
       </div>
+      <div style={{ fontSize: 24, lineHeight: '34px', color: MUTED, fontFamily: NUM }}>
+        95% 用過 AI　·　94% 用於課業
+      </div>
+    </div>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 18 }}>
-        <Card w={1076} h={148} accent={MUTED} eyebrow="自學 · 一對一">
-          <span style={{ fontSize: 29, fontWeight: 700, lineHeight: 1.35 }}>进度跟着你，反馈也快</span>
-          <span style={{ fontSize: 24, lineHeight: 1.45, color: MUTED }}>
-            唯一的代价：香港市场约每小时 400–600 港元，只有需要加速的人才买得起。
-          </span>
-        </Card>
-        <Card w={1076} h={148} accent={MUTED} eyebrow="線上課 · 錄播">
-          <span style={{ fontSize: 29, fontWeight: 700, lineHeight: 1.35 }}>内容很好，但讲完就结束</span>
-          <span style={{ fontSize: 24, lineHeight: 1.45, color: MUTED }}>
-            没有人在你学完之后回来，问你到底会用没有。
-          </span>
-        </Card>
-        <Card w={1076} h={148} accent={AMBER} eyebrow="AI 工具 · 2023 之后">
-          <span style={{ fontSize: 29, fontWeight: 700, lineHeight: 1.35, color: 'var(--osd-text)' }}>
-            前三格几乎被填满了
-          </span>
-          <span style={{ fontSize: 24, lineHeight: 1.45, color: MUTED }}>
-            找得到、讲得懂、出得了题。第四格——有没有人替你接上——几乎没人做。
-          </span>
-        </Card>
-      </div>
+    <div style={{ marginTop: 14 }}>
+      <BarRow label="解釋概念" pct="58%" w={1180} />
+      <BarRow label="總結材料" pct="47%" w={956} />
+      <BarRow label="提供研究思路" pct="40%" w={814} />
+      <BarRow label="組織思路" pct="39%" w={793} />
+      <BarRow label="聯網搜索" pct="25%" w={508} />
+      <BarRow label="生成文本" pct="25%" w={508} />
+      <BarRow label="直接把 AI 文字放進作業" pct="11%" w={224} />
+      <GhostRow />
+    </div>
+
+    <div style={{ marginTop: 'auto', paddingTop: 26 }}>
+      <Bar tone="amber" h={108} size={28}>
+        <div style={{ fontSize: 24, lineHeight: '34px', color: MUTED, fontWeight: 500 }}>
+          排在最前面的全是「解釋、總結、思路、組織」。
+        </div>
+        <div style={{ marginTop: 6, fontSize: 32, lineHeight: '44px', fontWeight: 700 }}>
+          <span style={{ color: AMBER_TXT }}>這份問卷裡，AI 是拿來解釋的；沒有人問過它拿來考自己。</span>
+        </div>
+      </Bar>
     </div>
   </Frame>
 );
 
 /* ================================================================== *
- * 06 · 行业逐项 + 致命问题
+ * 06 · 三種土辦法 — 三欄上下分層卡
  * ================================================================== */
 
-const Rival: FC<{ name: string; when: string; solved: string; stage: string; left: string }> = ({
-  name,
-  when,
-  solved,
-  stage,
-  left,
-}) => (
+const Habit: FC<{ no: string; name: string; how: string; cost: string }> = ({ no, name, how, cost }) => (
   <div
     style={{
-      flex: 1,
+      height: '100%',
+      boxSizing: 'border-box',
       border: `1px solid ${RULE}`,
-      borderRadius: 12,
+      borderRadius: 'var(--osd-radius)',
       background: PANEL,
-      padding: '22px 24px',
+      padding: '28px 30px',
       display: 'flex',
       flexDirection: 'column',
-      gap: 12,
     }}
   >
-    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-      <span style={{ fontSize: 30, fontWeight: 800 }}>{name}</span>
-      <span style={{ fontFamily: NUM, fontSize: 21, color: DIM }}>{when}</span>
-    </div>
-    <div>
-      <div style={{ fontSize: 19, color: DIM, marginBottom: 3 }}>解决了</div>
-      <div style={{ fontSize: 24, lineHeight: 1.4 }}>{solved}</div>
-    </div>
-    <div>
-      <div style={{ fontSize: 19, color: DIM, marginBottom: 3 }}>对应循环</div>
-      <div style={{ fontSize: 24, lineHeight: 1.4, color: ACCENT, fontWeight: 600 }}>{stage}</div>
-    </div>
-    <div style={{ marginTop: 'auto', borderTop: `1px solid ${RULE}`, paddingTop: 12 }}>
-      <div style={{ fontSize: 19, color: DIM, marginBottom: 3 }}>遗留</div>
-      <div style={{ fontSize: 24, lineHeight: 1.4, color: MUTED }}>{left}</div>
+    <div style={{ ...eyebrow, color: ACCENT_TXT }}>{no}</div>
+    <div style={{ marginTop: 8, fontSize: 40, lineHeight: '50px', fontWeight: 800 }}>{name}</div>
+    <div style={{ marginTop: 12, fontSize: 24, lineHeight: '36px', color: DIM }}>{how}</div>
+    <div style={{ marginTop: 'auto' }}>
+      <Rule />
+      <div style={{ marginTop: 18, ...eyebrow, color: AMBER_TXT }}>代價</div>
+      <div style={{ marginTop: 8, fontSize: 26, lineHeight: '42px', fontWeight: 600, color: AMBER_TXT }}>{cost}</div>
     </div>
   </div>
 );
 
 const P06: Page = () => (
   <Frame
-    kicker="行業 · 逐項"
-    title="四家加起来，第四格还是空的"
+    kicker="問題｜學完之後"
+    title="學完之後那一關，現在沒有人認真做"
     who="黃浩然"
-    note="Hyperknow 公開評測記錄了「消息遺失、無法導出或重新生成、投影片輸出成 JSON、教學影片卡住」等問題。OpenMAIC 為清華大學 THU-MIC 團隊開源（AGPL-3.0）。"
+    lead="我們看過的做法：學生判斷自己有沒有學會，主要是這四種。"
   >
-    <div style={{ display: 'flex', gap: 22 }}>
-      <Rival
-        name="DeepLearning.AI"
-        when="2017"
-        solved="把一项技能拆成能上线的短课"
-        stage="理解"
-        left="讲完即止，没有人知道你学没学"
-      />
-      <Rival
-        name="ChatGPT"
-        when="2022"
-        solved="把提问成本降到零"
-        stage="理解"
-        left="你问什么它答什么，不知道你该问什么"
-      />
-      <Rival
-        name="Hyperknow"
-        when="2025"
-        solved="讲义变测验闪卡，自动排学习日程"
-        stage="理解 + 练习"
-        left="测验测的是记得住，不是换情境还做得出"
-      />
-      <Rival
-        name="OpenMAIC"
-        when="2026"
-        solved="多智能体互动课堂，清华校内 500 余人试用"
-        stage="理解 + 练习"
-        left="进度是它给的，不是你的；课后没有回访"
-      />
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 28, flex: '1 1 auto', minHeight: 0 }}>
+      <Habit no="做法一" name="自己判斷" how="看完之後問自己一句「我懂了嗎」。" cost="靠順暢感，系統性高估。" />
+      <Habit no="做法二" name="問同學" how="找同學互相出題、互相問。" cost="要排隊、要看關係、要欠人情。" />
+      <Habit no="做法三" name="翻答案對照" how="做完題之後翻答案對一遍。" cost="對上了就當學會了——欺騙自己。" />
+      <Habit no="做法四" name="買題庫自測" how="買或找現成的題庫，課後刷題。" cost="題目跟你的課不對焦，錯了也不知道錯在哪一步。" />
     </div>
 
-    <div style={{ marginTop: 34 }}>
-      <Callout w={1660}>
-        <span style={{ color: AMBER }}>致命问题：</span>
-        四家把前三格越做越扎实，但没有任何一家在第四格站住——
-        <br />
-        没有人替你验完之后，<span style={{ color: AMBER }}>判断下一次该学什么</span>。
-      </Callout>
+    <div style={{ marginTop: 'auto', paddingTop: 32 }}>
+      <Bar tone="amber" h={92} size={32}>
+        四種都湊合能用，但沒有一種真的在檢驗。
+      </Bar>
     </div>
   </Frame>
 );
 
 /* ================================================================== *
- * 07 · 最小闭环 + Agent 角色
+ * 07 · 競品 — 對照表（局限欄最寬）
  * ================================================================== */
 
-const Agent: FC<{ tag: string; role: string; does: string }> = ({ tag, role, does }) => (
+const cellHead: CSSProperties = {
+  fontSize: 22,
+  lineHeight: '30px',
+  letterSpacing: '0.1em',
+  color: DIM,
+  fontWeight: 700,
+  textAlign: 'left',
+};
+
+const cell: CSSProperties = { fontSize: 24, lineHeight: '34px', color: 'var(--osd-text)' };
+
+const cellDim: CSSProperties = { ...cell, color: MUTED };
+
+const cellAmber: CSSProperties = { ...cell, color: AMBER_TXT, fontWeight: 600 };
+
+const Rival: FC<{
+  name: string;
+  stage: string;
+  best?: boolean;
+  price: string;
+  limit: string;
+  limitAmber?: boolean;
+}> = ({ name, stage, best, price, limit, limitAmber }) => (
   <div
     style={{
-      flex: 1,
-      border: `1px solid ${BLUE_LINE}`,
-      borderRadius: 12,
-      background: BLUE_SOFT,
-      padding: '24px 26px',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 10,
+      height: 128,
+      display: 'grid',
+      gridTemplateColumns: '340px 300px 360px 1fr',
+      borderBottom: `1px solid ${RULE}`,
     }}
   >
-    <span style={{ fontFamily: NUM, fontSize: 20, fontWeight: 700, color: ACCENT }}>{tag}</span>
-    <span style={{ fontSize: 30, fontWeight: 800 }}>{role}</span>
-    <span style={{ fontSize: 24, lineHeight: 1.45, color: MUTED }}>{does}</span>
+    <div style={{ ...cell, fontWeight: 700, display: 'flex', alignItems: 'center', paddingRight: 20 }}>{name}</div>
+    <div style={{ ...cellDim, display: 'flex', alignItems: 'center', paddingRight: 20 }}>
+      {stage}
+      {best ? <span style={{ color: ACCENT_TXT, fontWeight: 700, marginLeft: 8 }}>最完整</span> : null}
+    </div>
+    <div style={{ ...cellDim, display: 'flex', alignItems: 'center', paddingRight: 24 }}>{price}</div>
+    <div style={{ ...(limitAmber ? cellAmber : cell), display: 'flex', alignItems: 'center' }}>{limit}</div>
   </div>
 );
 
 const P07: Page = () => (
   <Frame
-    kicker="產品 · 最小閉環"
-    title="Veridex 的最小闭环"
-    lead="一条链走完一圈：成课 → 上课 → 验收 → 没验过就回溯补教 → 验过才往下。"
-    who="黃羿捷"
-    handoff="講者：黃羿捷"
+    kicker="問題｜競品現狀"
+    title="行業產品做到了哪一步"
+    who="黃浩然"
+    lead="先承認一件事：對手做得很紮實。"
   >
-    <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        <div
-          style={{
-            padding: '18px 26px', border: `1px solid ${BLUE_LINE}`, background: PANEL,
-            borderRadius: 12, fontSize: 30, fontWeight: 700, whiteSpace: 'nowrap',
-          }}
-        >
-          成课
-        </div>
-        <span style={{ color: DIM, fontSize: 26 }}>→</span>
-        <div
-          style={{
-            padding: '18px 26px', border: `1px solid ${BLUE_LINE}`, background: PANEL,
-            borderRadius: 12, fontSize: 30, fontWeight: 700, whiteSpace: 'nowrap',
-          }}
-        >
-          上课
-        </div>
-        <span style={{ color: DIM, fontSize: 26 }}>→</span>
-        <div
-          style={{
-            padding: '18px 26px', border: `1px solid ${BLUE_LINE}`, background: PANEL,
-            borderRadius: 12, fontSize: 30, fontWeight: 700, whiteSpace: 'nowrap',
-          }}
-        >
-          验收
-        </div>
-        <span style={{ color: DIM, fontSize: 26 }}>→</span>
-        <div
-          style={{
-            padding: '18px 26px', border: `1px solid ${BLUE_LINE}`, background: PANEL,
-            borderRadius: 12, fontSize: 30, fontWeight: 700, whiteSpace: 'nowrap',
-          }}
-        >
-          回溯补教
-        </div>
-        <span style={{ color: DIM, fontSize: 26 }}>→</span>
-        <div
-          style={{
-            padding: '18px 26px', border: `1px solid ${AMBER}`, background: AMBER_SOFT,
-            borderRadius: 12, fontSize: 30, fontWeight: 700, whiteSpace: 'nowrap',
-          }}
-        >
-          回到起点
-        </div>
-      </div>
-      <span style={{ color: AMBER, fontSize: 26 }}>↺</span>
-    </div>
-
-    <div style={{ marginTop: 40 }}>
-      <div style={{ fontSize: 24, fontWeight: 700, color: MUTED, marginBottom: 14, letterSpacing: '0.06em' }}>
-        三個 AI Agent，各自負責一段
-      </div>
-      <div style={{ display: 'flex', gap: 24 }}>
-        <Agent tag="AGENT 01" role="成课 Agent" does="把你的资料或一句主题，拆成章节与知识点" />
-        <Agent tag="AGENT 02" role="授课 Agent" does="1 对 1 讲解，随时可打断、追问、要求换一种讲法" />
-        <Agent tag="AGENT 03" role="验收 Agent" does="出题、判卷，并指出你错在哪一步" />
-      </div>
-    </div>
-  </Frame>
-);
-
-/* ================================================================== *
- * 08 · 成课与课堂
- * ================================================================== */
-
-const P08: Page = () => (
-  <Frame kicker="產品 · 入口與課堂" title="课从哪来，上课怎么上" who="黃羿捷">
-    <div style={{ display: 'flex', gap: 44 }}>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 18 }}>
-        <div style={{ fontSize: 24, fontWeight: 700, color: MUTED, letterSpacing: '0.06em' }}>
-          三種方式進來
-        </div>
-        <Card w={780} h={130} eyebrow="說一句">
-          <span style={{ fontSize: 27, lineHeight: 1.45 }}>
-            丢一个主题进去：「把中央極限定理講清楚。」
-          </span>
-        </Card>
-        <Card w={780} h={130} eyebrow="傳一份資料">
-          <span style={{ fontSize: 27, lineHeight: 1.45 }}>讲义、笔记、作业，按你自己的材料成课。</span>
-        </Card>
-        <Card w={780} h={130} eyebrow="同步你已有的">
-          <span style={{ fontSize: 27, lineHeight: 1.45 }}>Notion、Google Drive、校园 LMS。</span>
-        </Card>
+    <div>
+      <div style={{ display: 'grid', gridTemplateColumns: '340px 300px 360px 1fr', height: 48 }}>
+        <div style={{ ...cellHead, display: 'flex', alignItems: 'flex-end', paddingRight: 20 }}>產品</div>
+        <div style={{ ...cellHead, display: 'flex', alignItems: 'flex-end', paddingRight: 20 }}>做到哪一步</div>
+        <div style={{ ...cellHead, display: 'flex', alignItems: 'flex-end', paddingRight: 24 }}>定價（2026 公開）</div>
+        <div style={{ ...cellHead, display: 'flex', alignItems: 'flex-end' }}>具體局限</div>
       </div>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 18 }}>
-        <div style={{ fontSize: 24, fontWeight: 700, color: MUTED, letterSpacing: '0.06em' }}>
-          課上發生什麼
-        </div>
-        <Steps>
-          <Step>
-            <Card w={780} h={130} accent={ACCENT} eyebrow="01">
-              <span style={{ fontSize: 27, lineHeight: 1.45 }}>AI 讲解，白板板书同步推。</span>
-            </Card>
-          </Step>
-          <Step>
-            <Card w={780} h={130} accent={ACCENT} eyebrow="02">
-              <span style={{ fontSize: 27, lineHeight: 1.45 }}>
-                随时打断、追问、要求换一种讲法。
-              </span>
-            </Card>
-          </Step>
-          <Step>
-            <Card w={780} h={130} accent={AMBER} eyebrow="03">
-              <span style={{ fontSize: 27, lineHeight: 1.45 }}>没验过，下一节不开。</span>
-            </Card>
-          </Step>
-        </Steps>
-      </div>
-    </div>
-  </Frame>
-);
-
-/* ================================================================== *
- * 09 · 验收：三种形式
- * ================================================================== */
-
-const P09: Page = () => (
-  <Frame
-    kicker="產品 · 驗收"
-    title="三种验收，各抓一种「假装会了」"
-    lead="第四格不是一个测验，是三种形式叠在一起。"
-    who="黃羿捷"
-  >
-    <div style={{ display: 'flex', gap: 24 }}>
-      <Card w={546} h={236} accent={ACCENT} eyebrow="讲出来">
-        <span style={{ fontSize: 34, fontWeight: 800, lineHeight: 1.3 }}>输出</span>
-        <span style={{ fontSize: 25, lineHeight: 1.45, color: MUTED }}>
-          能不能用自己的话讲清楚、讲给谁听。
-        </span>
-        <span style={{ fontSize: 23, lineHeight: 1.45, color: ACCENT, marginTop: 'auto' }}>
-          抓：你只是背得很顺
-        </span>
-      </Card>
-      <Card w={546} h={236} accent={ACCENT} eyebrow="练一遍">
-        <span style={{ fontSize: 34, fontWeight: 800, lineHeight: 1.3 }}>课后练习</span>
-        <span style={{ fontSize: 25, lineHeight: 1.45, color: MUTED }}>
-          过一遍，反馈带解释，不只给对错。
-        </span>
-        <span style={{ fontSize: 23, lineHeight: 1.45, color: ACCENT, marginTop: 'auto' }}>
-          抓：记得住，但调不出来
-        </span>
-      </Card>
-      <Card w={546} h={236} accent={ACCENT} eyebrow="做出来">
-        <span style={{ fontSize: 34, fontWeight: 800, lineHeight: 1.3 }}>项目</span>
-        <span style={{ fontSize: 25, lineHeight: 1.45, color: MUTED }}>
-          你自己做的项目，AI 按标准打分。
-        </span>
-        <span style={{ fontSize: 23, lineHeight: 1.45, color: ACCENT, marginTop: 'auto' }}>
-          抓：原题会做，换情境就废
-        </span>
-      </Card>
-    </div>
-
-    <div style={{ marginTop: 38 }}>
-      <Steps>
-        <Step>
-          <div style={{ display: 'flex', gap: 56, alignItems: 'center' }}>
-            <p style={{ margin: 0, fontSize: 32, lineHeight: 1.45, fontWeight: 700, flex: 1 }}>
-              一个形式只能抓一种「装懂」。三种一起，「学会了」这个判断才站得住。
-            </p>
-            <div
-              style={{
-                flexShrink: 0,
-                borderLeft: `4px solid ${AMBER}`,
-                background: AMBER_SOFT,
-                padding: '18px 26px',
-                fontSize: 28,
-                lineHeight: 1.45,
-                fontWeight: 600,
-              }}
-            >
-              30 天后，再来一次。
-            </div>
-          </div>
-        </Step>
-      </Steps>
-    </div>
-  </Frame>
-);
-
-/* ================================================================== *
- * 10 · 追根溯源
- * ================================================================== */
-
-const P10: Page = () => (
-  <Frame
-    kicker="產品 · 回溯"
-    title="没验过，就往回找"
-    lead="你错的不是这一题，是往下那几题。一直找到你真正不会的那一点。"
-    who="黃羿捷"
-    note="RPKT：递归前置知识追踪，实时回溯前置概念直至学习者的真实知识边界（IEEE FMLDS 2025）。"
-  >
-    <div style={{ display: 'flex', gap: 72, alignItems: 'flex-start' }}>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <div
-          style={{
-            display: 'flex', alignItems: 'center', gap: 20,
-            borderLeft: `3px solid ${BLUE_LINE}`, paddingLeft: 22, paddingVertical: 13,
-          }}
-        >
-          <span style={{ fontSize: 29, fontWeight: 700 }}>第 3 章 · 中央極限定理</span>
-          <span style={{ fontSize: 24, color: AMBER, fontWeight: 600 }}>← 你答錯的題</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', borderLeft: `3px solid ${BLUE_LINE}`, paddingLeft: 44, paddingVertical: 13 }}>
-          <span style={{ fontSize: 29, fontWeight: 700, color: MUTED }}>前置 · 樣本平均與期望</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', borderLeft: `3px solid ${BLUE_LINE}`, paddingLeft: 66, paddingVertical: 13 }}>
-          <span style={{ fontSize: 29, fontWeight: 700, color: MUTED }}>前置 · 分佈的加法</span>
-        </div>
-        <div
-          style={{
-            display: 'flex', alignItems: 'center',
-            borderLeft: `3px solid ${AMBER}`, paddingLeft: 88, paddingVertical: 15,
-            background: AMBER_SOFT, borderRadius: '0 10px 10px 0',
-          }}
-        >
-          <span style={{ fontSize: 30, fontWeight: 800 }}>真正的盲點 · 分式運算</span>
-        </div>
-      </div>
-
-      <div style={{ width: 600, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 22, paddingTop: 14 }}>
-        <p style={{ margin: 0, fontSize: 29, lineHeight: 1.55, color: MUTED }}>
-          線代學不好、機率學不好，源頭常常不在高深的概念上。
-        </p>
-        <div style={{ borderTop: `2px solid ${RULE}`, paddingTop: 22, display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <span style={{ fontSize: 33, fontWeight: 800 }}>只补那一点</span>
-          <span style={{ fontSize: 27, lineHeight: 1.5, color: MUTED }}>
-            不重讲全课。补完重验，验过了才往下走。
-          </span>
-        </div>
-      </div>
-    </div>
-  </Frame>
-);
-
-/* ================================================================== *
- * 11 · 验收引擎怎么判
- * ================================================================== */
-
-const P11: Page = () => (
-  <Frame kicker="產品 · 判定" title="判定不只给对错" who="黃羿捷">
-    <div style={{ display: 'flex', gap: 52, alignItems: 'flex-start' }}>
-      <ImagePlaceholder
-        hint="Veridex 驗收頁截圖：判定錯誤、列出兩處需修正、給出正確思路、鎖定下一章"
-        width={840}
-        height={486}
-        style={{ borderRadius: 14, flexShrink: 0 }}
+      <Rival
+        name="Coursera / DeepLearning.AI"
+        stage="學 + 證書"
+        price="US$59 / 月（DL.AI 未能核實）"
+        limit="證書是「上過課」的憑證，不是掌握度評估。"
       />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 20, paddingTop: 6 }}>
-        <Steps>
-          <Step>
-            <p style={{ margin: 0, fontSize: 29, lineHeight: 1.45 }}>
-              <span style={{ fontFamily: NUM, color: AMBER, fontWeight: 700, marginRight: 14 }}>01</span>
-              告诉你错在哪一步
-            </p>
-          </Step>
-          <Step>
-            <p style={{ margin: 0, fontSize: 29, lineHeight: 1.45 }}>
-              <span style={{ fontFamily: NUM, color: AMBER, fontWeight: 700, marginRight: 14 }}>02</span>
-              告诉你为什么会错
-            </p>
-          </Step>
-          <Step>
-            <p style={{ margin: 0, fontSize: 29, lineHeight: 1.45 }}>
-              <span style={{ fontFamily: NUM, color: AMBER, fontWeight: 700, marginRight: 14 }}>03</span>
-              给你正确思路，不给答案
-            </p>
-          </Step>
-          <Step>
-            <p style={{ margin: 0, fontSize: 29, lineHeight: 1.45 }}>
-              <span style={{ fontFamily: NUM, color: AMBER, fontWeight: 700, marginRight: 14 }}>04</span>
-              没验过，下一节锁住
-            </p>
-          </Step>
-        </Steps>
-      </div>
+      <Rival
+        name="Hyperknow"
+        stage="學 + 練"
+        price="US$0 / 18 / 50"
+        limit="檔位命名未公開，無法對照其能力邊界。"
+      />
+      <Rival
+        name="OpenMAIC（清華 MAIC 團隊）"
+        stage="開源課堂框架"
+        price="免費開源（MIT 授權）"
+        limit="社群 issue #1712 回報選項重複導致判分錯誤，修復 PR 已提交未合併。"
+        limitAmber
+      />
+      <Rival
+        name="StudyFetch / Quizlet"
+        stage="學 → 練 → 檢驗"
+        best
+        price="未能核實"
+        limit="公開資料裡看不到它說明「你為什麼錯」；Quizlet 已有 1,123,682 條評分。"
+        limitAmber
+      />
+    </div>
+
+    <div style={{ marginTop: 'auto', paddingTop: 28 }}>
+      <Bar tone="amber" h={84} size={28}>
+        做得最完整的是 StudyFetch 與 Quizlet——但公開資料裡看不到它們說明「你為什麼錯」。
+      </Bar>
     </div>
   </Frame>
 );
 
 /* ================================================================== *
- * 12 · 降低认知负担
+ * 08 · 問題定位 — 上藍下琥珀兩區
  * ================================================================== */
 
-const P12: Page = () => (
-  <Frame
-    kicker="產品 · 負擔"
-    title="学习之外的活，不该由学生干"
-    lead="这些事今天都要学生自己扛：决定学什么、判断自己懂了没有、记住什么时候该复习。"
-    who="黃羿捷"
-    note="认知负荷理论：Sweller (1988), Cognitive Science 12(2): 257–285；Sweller, van Merriënboer & Paas (2019), Educational Psychology Review 31: 261–292。"
-  >
-    <div style={{ display: 'flex', gap: 24 }}>
-      <Card w={812} h={252} accent={MUTED} eyebrow="今天 · 學生要自己做">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 4 }}>
-          <span style={{ fontSize: 27, lineHeight: 1.45 }}>自己决定该学什么</span>
-          <span style={{ fontSize: 27, lineHeight: 1.45 }}>自己判断有没有听懂</span>
-          <span style={{ fontSize: 27, lineHeight: 1.45 }}>自己记住什么时候该复习</span>
-          <span style={{ fontSize: 27, lineHeight: 1.45 }}>自己排进日程</span>
-        </div>
-      </Card>
-
-      <Card w={812} h={252} accent={ACCENT} eyebrow="Veridex · 接管这四件">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 4 }}>
-          <span style={{ fontSize: 27, lineHeight: 1.45 }}>
-            <span style={{ color: ACCENT, fontWeight: 700 }}>成课 Agent</span>　按你的资料排出下一步
-          </span>
-          <span style={{ fontSize: 27, lineHeight: 1.45 }}>
-            <span style={{ color: ACCENT, fontWeight: 700 }}>验收 Agent</span>　判定代替自我评判
-          </span>
-          <span style={{ fontSize: 27, lineHeight: 1.45 }}>
-            <span style={{ color: ACCENT, fontWeight: 700 }}>间隔重复</span>　在快要忘掉时叫你
-          </span>
-          <span style={{ fontSize: 27, lineHeight: 1.45 }}>
-            <span style={{ color: ACCENT, fontWeight: 700 }}>日程</span>　自动排，不用手动跟
-          </span>
-        </div>
-      </Card>
+const Full: FC<{ tone: 'blue' | 'amber'; label: string; h: number; children: ReactNode }> = ({
+  tone,
+  label,
+  h,
+  children,
+}) => {
+  const c = tone === 'amber' ? AMBER_TXT : ACCENT_TXT;
+  return (
+    <div
+      style={{
+        height: h,
+        boxSizing: 'border-box',
+        border: `1px solid ${tone === 'amber' ? AMBER_LINE : BLUE_LINE}`,
+        borderRadius: 'var(--osd-radius)',
+        background: tone === 'amber' ? AMBER_SOFT : BLUE_SOFT,
+        padding: '26px 30px',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <div style={{ ...eyebrow, color: c }}>{label}</div>
+      <div style={{ marginTop: 16, flex: '1 1 auto' }}>{children}</div>
     </div>
+  );
+};
 
-    <div style={{ marginTop: 36 }}>
-      <Callout w={1660} accent={ACCENT}>
-        学生的负担降到一件事：<span style={{ color: ACCENT }}>把它打开，做完，看结果</span>。
-      </Callout>
+const GapQ: FC<{ n: string; q: string; d: string }> = ({ n, q, d }) => (
+  <div style={{ display: 'flex', gap: 18, alignItems: 'flex-start', flex: '1 1 0', minWidth: 0 }}>
+    <div
+      style={{
+        flex: 'none',
+        width: 42,
+        height: 42,
+        borderRadius: 4,
+        background: AMBER,
+        color: '#FFF',
+        fontFamily: NUM,
+        fontSize: 24,
+        lineHeight: '42px',
+        textAlign: 'center',
+        fontWeight: 700,
+      }}
+    >
+      {n}
     </div>
-  </Frame>
-);
-
-/* ================================================================== *
- * 13 · 三个数字
- * ================================================================== */
-
-const P13: Page = () => (
-  <Frame
-    kicker="承諾"
-    title="三个数字"
-    lead="我们承诺被这三个数字检验。这是承诺值，不是已经测出来的结果。"
-    who="黃羿捷"
-  >
-    <div style={{ display: 'flex', gap: 24 }}>
-      <Card w={546} h={210} accent={ACCENT} eyebrow="行為 · 14 天任務完成率">
-        <BigNum n="≥ 50" unit="%" />
-        <span style={{ fontSize: 24, lineHeight: 1.5, color: MUTED }}>你到底做没做</span>
-      </Card>
-      <Card w={546} h={210} accent={ACCENT} eyebrow="成果 · 前測後測差異">
-        <BigNum n="≥ 20" unit="%" />
-        <span style={{ fontSize: 24, lineHeight: 1.5, color: MUTED }}>学之前与学之后差多少</span>
-      </Card>
-      <Card w={546} h={210} accent={AMBER} eyebrow="延遲 · 30 天後回訪">
-        <BigNum n="≥ 70" unit="%" accent={AMBER} />
-        <span style={{ fontSize: 24, lineHeight: 1.5, color: MUTED }}>一个月后还记得多少</span>
-      </Card>
+    <div>
+      <div style={{ fontSize: 30, lineHeight: '42px', fontWeight: 700 }}>{q}</div>
+      <div style={{ fontSize: 24, lineHeight: '34px', color: MUTED }}>{d}</div>
     </div>
-
-    <div style={{ marginTop: 40 }}>
-      <Steps>
-        <Step>
-          <Callout w={1660}>
-            这些分不由我们打。
-            <br />
-            试点学校的<span style={{ color: AMBER }}>授课教师出题、评分</span>；我们只出系统、记过程、出报告。
-          </Callout>
-        </Step>
-      </Steps>
-    </div>
-  </Frame>
-);
-
-/* ================================================================== *
- * 14 · 你的资料
- * ================================================================== */
-
-const P14: Page = () => (
-  <Frame
-    kicker="凭什么信你"
-    title="你的资料，我们怎么保管"
-    lead="你放进来的这三样，正好是你最不想交出去的三样。"
-    who="黃浩然"
-  >
-    <div style={{ display: 'flex', gap: 24 }}>
-      <Card w={812} h={372} eyebrow="我们接什么">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginTop: 6 }}>
-          <div>
-            <span style={{ fontSize: 31, fontWeight: 700 }}>校园 LMS</span>
-            <span style={{ fontSize: 24, color: MUTED, marginLeft: 16 }}>课程材料与进度</span>
-          </div>
-          <div>
-            <span style={{ fontSize: 31, fontWeight: 700 }}>本地资料</span>
-            <span style={{ fontSize: 24, color: MUTED, marginLeft: 16 }}>讲义、笔记、作业</span>
-          </div>
-          <div>
-            <span style={{ fontSize: 31, fontWeight: 700 }}>Notion · Google Drive</span>
-            <span style={{ fontSize: 24, color: MUTED, marginLeft: 16 }}>你已经整理好的东西</span>
-          </div>
-        </div>
-      </Card>
-
-      <Card w={812} h={372} accent={ACCENT} eyebrow="我们怎么做">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 22, marginTop: 6 }}>
-          <div style={{ display: 'flex', gap: 16, alignItems: 'baseline' }}>
-            <span style={{ fontFamily: NUM, fontSize: 23, color: ACCENT, fontWeight: 700 }}>01</span>
-            <span style={{ fontSize: 29, lineHeight: 1.4 }}>数据不出境</span>
-          </div>
-          <div style={{ display: 'flex', gap: 16, alignItems: 'baseline' }}>
-            <span style={{ fontFamily: NUM, fontSize: 23, color: ACCENT, fontWeight: 700 }}>02</span>
-            <span style={{ fontSize: 29, lineHeight: 1.4 }}>分户隔离，你只能看自己的</span>
-          </div>
-          <div style={{ display: 'flex', gap: 16, alignItems: 'baseline' }}>
-            <span style={{ fontFamily: NUM, fontSize: 23, color: ACCENT, fontWeight: 700 }}>03</span>
-            <span style={{ fontSize: 29, lineHeight: 1.4 }}>访问令牌有时效</span>
-          </div>
-          <div style={{ display: 'flex', gap: 16, alignItems: 'baseline' }}>
-            <span style={{ fontFamily: NUM, fontSize: 23, color: ACCENT, fontWeight: 700 }}>04</span>
-            <span style={{ fontSize: 29, lineHeight: 1.4 }}>每次导出留审计记录</span>
-          </div>
-        </div>
-      </Card>
-    </div>
-  </Frame>
-);
-
-/* ================================================================== *
- * 15 · 面向人群
- * ================================================================== */
-
-const P15: Page = () => (
-  <Frame
-    kicker="營收 · 面向人群"
-    title="能力是泛的，付费意愿是分的"
-    lead="AI 能服务任何人，但不会为所有人同样地付钱。"
-    who="黃浩然"
-  >
-    <div style={{ display: 'flex', gap: 24 }}>
-      <Card w={812} h={268} accent={MUTED} eyebrow="能力侧 · 不设限">
-        <span style={{ fontSize: 30, fontWeight: 700, lineHeight: 1.35 }}>同一套系统可以服务</span>
-        <span style={{ fontSize: 25, lineHeight: 1.6, color: MUTED }}>
-          中学生 · 大学生 · 职场转行者 · 语言学习者
-          <br />
-          考试、考证、转行、兴趣——目标不同，机制一样。
-        </span>
-      </Card>
-
-      <Card w={812} h={268} accent={AMBER} eyebrow="收费侧 · 我们只做一类">
-        <span style={{ fontSize: 30, fontWeight: 700, lineHeight: 1.35, color: 'var(--osd-text)' }}>
-          有明确目标 · 有截止日期 · 愿意为结果付钱
-        </span>
-        <span style={{ fontSize: 25, lineHeight: 1.6, color: MUTED }}>
-          「随便学学」不收钱，也不值得收。收费产品的第一条筛子，
-          <br />
-          是对方自己有没有在赶一个日子。
-        </span>
-      </Card>
-    </div>
-
-    <div style={{ marginTop: 34 }}>
-      <Callout w={1660} accent={ACCENT}>
-        首年主攻<span style={{ color: ACCENT }}>香港与内地大学生</span>：目标最清晰、付费意愿最高、验证周期最短。
-      </Callout>
-    </div>
-  </Frame>
-);
-
-/* ================================================================== *
- * 16 · 定价三版
- * ================================================================== */
-
-const Bullet: FC<{ hot: boolean; children: ReactNode }> = ({ hot, children }) => (
-  <div style={{ display: 'flex', gap: 12, alignItems: 'baseline' }}>
-    <span style={{ fontSize: 20, color: hot ? ACCENT : DIM }}>·</span>
-    <span style={{ fontSize: 24, lineHeight: 1.4 }}>{children}</span>
   </div>
 );
 
-const Tier: FC<{
-  name: string;
-  price: string;
-  per: string;
-  tagline: string;
-  hot?: boolean;
-  children: ReactNode;
-}> = ({ name, price, per, tagline, hot, children }) => (
+const P08: Page = () => (
+  <Frame
+    kicker="問題｜問題定位"
+    title={
+      <>
+        檢驗<span style={{ color: ACCENT_TXT }}>不是空白</span>，是<span style={{ color: AMBER_TXT }}>不夠準</span>
+      </>
+    }
+    who="黃浩然"
+    handoff="交接 · 問題講完了，下面講我們怎麼補這一步。"
+    note="「公開資料」＝2026 年 9–10 月查閱的產品官網、開源倉庫與公開 issue 記錄；標「未能核實」者當時取不到公開資料。"
+  >
+    <Full tone="blue" label="這三個位置，早就擠滿了" h={290}>
+      <div style={{ display: 'flex', gap: 24 }}>
+        <div
+          style={{
+            width: 520,
+            height: 82,
+            boxSizing: 'border-box',
+            background: PANEL,
+            border: `1px solid ${BLUE_LINE}`,
+            borderRadius: 8,
+            display: 'flex',
+            alignItems: 'center',
+            paddingLeft: 26,
+            fontSize: 30,
+            lineHeight: '40px',
+            fontWeight: 700,
+          }}
+        >
+          一　找資料
+        </div>
+        <div
+          style={{
+            width: 520,
+            height: 82,
+            boxSizing: 'border-box',
+            background: PANEL,
+            border: `1px solid ${BLUE_LINE}`,
+            borderRadius: 8,
+            display: 'flex',
+            alignItems: 'center',
+            paddingLeft: 26,
+            fontSize: 30,
+            lineHeight: '40px',
+            fontWeight: 700,
+          }}
+        >
+          二　學與解釋
+        </div>
+        <div
+          style={{
+            width: 520,
+            height: 82,
+            boxSizing: 'border-box',
+            background: PANEL,
+            border: `1px solid ${BLUE_LINE}`,
+            borderRadius: 8,
+            display: 'flex',
+            alignItems: 'center',
+            paddingLeft: 26,
+            fontSize: 30,
+            lineHeight: '40px',
+            fontWeight: 700,
+          }}
+        >
+          三　檢驗（判對錯）
+        </div>
+      </div>
+      <div style={{ marginTop: 20, fontSize: 28, lineHeight: '40px', color: MUTED }}>
+        這就是一個人學會一件事必須經過的三步。前兩步早就擠滿了；第三步也擠滿了——只是在我們查得到的公開說明裡，都停在判對錯。
+      </div>
+    </Full>
+
+    <div style={{ marginTop: 26 }}>
+      <Full tone="amber" label="公開資料裡找不到任何一家說明這三件事" h={268}>
+        <div style={{ display: 'flex', gap: 34, alignItems: 'flex-start', flex: '1 1 auto' }}>
+          <GapQ n="1" q="你為什麼錯？" d="要能歸因到個人，不只是判這題對不對。" />
+          <GapQ n="2" q="三十天後還剩多少？" d="排複習是 SRS 已經在做的；用同一套驗收反覆量你還剩多少，公開說明裡看不到。" />
+          <GapQ n="3" q="開放題怎麼判？" d="不是選擇題的題目，誰來打分、怎麼打分。" />
+        </div>
+      </Full>
+    </div>
+
+    <div style={{ marginTop: 'auto' }}>
+      <Bar tone="blue" h={92} size={30}>
+        我們要做的不是多一種測驗，是把最後這一步做準。
+      </Bar>
+    </div>
+  </Frame>
+);
+
+/* ================================================================== *
+ * 09 · 最小閉環 — 雙泳道流程圖
+ * ================================================================== */
+
+const LaneBox: FC<{ x: number; y: number; n: string; text: string }> = ({ x, y, n, text }) => (
   <div
     style={{
-      width: 546,
-      height: 480,
+      position: 'absolute',
+      left: x,
+      top: y,
+      width: 456,
+      height: 180,
       boxSizing: 'border-box',
-      border: `2px solid ${hot ? ACCENT : RULE}`,
-      borderRadius: 14,
-      background: hot ? BLUE_SOFT : PANEL,
+      border: `1px solid ${RULE}`,
+      borderTop: `4px solid ${ACCENT}`,
+      borderRadius: 'var(--osd-radius)',
+      background: PANEL,
+      padding: '22px 24px',
+    }}
+  >
+    <div style={{ fontFamily: NUM, fontSize: 24, lineHeight: '32px', color: ACCENT_TXT, fontWeight: 700 }}>{n}</div>
+    <div style={{ marginTop: 8, fontSize: 26, lineHeight: '42px', fontWeight: 600 }}>{text}</div>
+  </div>
+);
+
+const LaneLabel: FC<{ y: number; name: string; role: string }> = ({ y, name, role }) => (
+  <div
+    style={{
+      position: 'absolute',
+      left: 0,
+      top: y,
+      width: 132,
+      height: 180,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      borderRight: `1px solid ${RULE}`,
+    }}
+  >
+    <div style={{ fontSize: 38, lineHeight: '48px', fontWeight: 800, color: ACCENT_TXT }}>{name}</div>
+    <div style={{ fontSize: 22, lineHeight: '32px', color: DIM }}>{role}</div>
+  </div>
+);
+
+const P09: Page = () => {
+  useDeckStyles();
+  return (
+    <Frame kicker="方案｜一次學習" title="一次學習裡，人和 AI 各做什麼" who="黃羿捷">
+      <div style={{ position: 'relative', height: 500, flex: 'none' }}>
+        <LaneLabel y={20} name="人" role="學的人" />
+        <LaneLabel y={280} name="AI" role="三個角色" />
+
+        <div style={{ position: 'absolute', left: 132, top: 0, width: 1548, height: 500 }}>
+          <LaneBox x={0} y={20} n="人 ①" text="丟一個主題進來" />
+          <LaneBox x={546} y={20} n="人 ②" text="做那一道題" />
+          <LaneBox x={1092} y={20} n="人 ③" text="看結果" />
+
+          <LaneBox x={0} y={280} n="AI ①" text="拆成章節與知識點" />
+          <LaneBox x={546} y={280} n="AI ②" text="1 對 1 講解，隨時可打斷" />
+          <LaneBox x={1092} y={280} n="AI ③" text="出題、判卷、指出你錯在哪一步" />
+
+          <svg
+            width={1548}
+            height={500}
+            viewBox="0 0 1548 500"
+            style={{ position: 'absolute', left: 0, top: 0, pointerEvents: 'none' }}
+          >
+            <g stroke={ACCENT} strokeWidth={2} fill="none" strokeLinecap="round">
+              <path className="vd-line" pathLength={1} d="M 462 110 L 534 110" style={{ animationDelay: '80ms' }} />
+              <path className="vd-line" pathLength={1} d="M 1008 110 L 1080 110" style={{ animationDelay: '160ms' }} />
+              <path className="vd-line" pathLength={1} d="M 462 370 L 534 370" style={{ animationDelay: '80ms' }} />
+              <path className="vd-line" pathLength={1} d="M 1008 370 L 1080 370" style={{ animationDelay: '160ms' }} />
+              <path className="vd-line" pathLength={1} d="M 228 208 L 228 262" style={{ animationDelay: '240ms' }} />
+              <path className="vd-line" pathLength={1} d="M 774 272 L 774 218" style={{ animationDelay: '320ms' }} />
+              <path className="vd-line" pathLength={1} d="M 1320 272 L 1320 218" style={{ animationDelay: '400ms' }} />
+            </g>
+            <g fill={ACCENT}>
+              <polygon points="546,110 534,101 534,119" />
+              <polygon points="1092,110 1080,101 1080,119" />
+              <polygon points="546,370 534,361 534,379" />
+              <polygon points="1092,370 1080,361 1080,379" />
+              <polygon points="228,280 219,268 237,268" />
+              <polygon points="774,200 765,212 783,212" />
+              <polygon points="1320,200 1311,212 1329,212" />
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div
+        style={{
+          marginTop: 40,
+          height: 150,
+          boxSizing: 'border-box',
+          border: `1px solid ${RULE}`,
+          borderRadius: 'var(--osd-radius)',
+          background: PANEL,
+          padding: '24px 30px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          gap: 22,
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+          <div
+            style={{
+              flex: 'none',
+              width: 150,
+              height: 50,
+              borderRadius: 6,
+              background: BLUE_SOFT,
+              border: `1px solid ${BLUE_LINE}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 28,
+              lineHeight: '34px',
+              fontWeight: 700,
+              color: ACCENT_TXT,
+            }}
+          >
+            過了
+          </div>
+          <div style={{ fontSize: 30, lineHeight: '50px', fontWeight: 600 }}>開下一節。</div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+          <div
+            style={{
+              flex: 'none',
+              width: 150,
+              height: 50,
+              borderRadius: 6,
+              background: BLUE_SOFT,
+              border: `1px solid ${BLUE_LINE}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 28,
+              lineHeight: '34px',
+              fontWeight: 700,
+              color: ACCENT_TXT,
+            }}
+          >
+            沒過
+          </div>
+          <div style={{ fontSize: 30, lineHeight: '50px', fontWeight: 600 }}>
+            找出你真正不會的那一點，<span style={{ color: ACCENT_TXT }}>只補那一點</span>。
+          </div>
+        </div>
+      </div>
+    </Frame>
+  );
+};
+
+/* ================================================================== *
+ * 10 · AI 的角色 — 三欄角色卡（它做 / 人做）
+ * ================================================================== */
+
+const Role: FC<{ name: string; gloss: string; ai: string; human: string }> = ({ name, gloss, ai, human }) => (
+  <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div
+      style={{
+        fontSize: 34,
+        lineHeight: '46px',
+        fontWeight: 800,
+        color: ACCENT_TXT,
+      }}
+    >
+      {name}
+    </div>
+    <div style={{ marginTop: 4, fontSize: 24, lineHeight: '36px', color: DIM }}>{gloss}</div>
+    <div style={{ marginTop: 20 }}>
+      <Rule tone={BLUE_LINE} h={2} />
+    </div>
+    <div style={{ marginTop: 22, ...eyebrow, color: ACCENT_TXT }}>它做</div>
+    <div style={{ marginTop: 6, fontSize: 26, lineHeight: '42px', fontWeight: 600 }}>{ai}</div>
+    <div style={{ marginTop: 'auto' }}>
+      <Rule />
+      <div style={{ marginTop: 20, ...eyebrow }}>人做</div>
+      <div style={{ marginTop: 6, fontSize: 26, lineHeight: '42px', color: MUTED }}>{human}</div>
+    </div>
+  </div>
+);
+
+const P10: Page = () => (
+  <Frame
+    kicker="方案｜AI 的角色"
+    title="AI 在這裡扮演三個角色"
+    who="黃羿捷"
+    lead="Agent＝會自己判斷下一步、並自動呼叫工具的 AI 程式。"
+  >
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, flex: '1 1 auto', minHeight: 0 }}>
+      <Role
+        name="成課 Agent"
+        gloss="把材料變成一門課"
+        ai="把資料或一個主題，拆成章節與知識點"
+        human="決定學什麼"
+      />
+      <Role
+        name="授課 Agent"
+        gloss="一對一講解"
+        ai="講解、追問、換一種講法"
+        human="隨時插嘴打斷"
+      />
+      <Role
+        name="驗收 Agent"
+        gloss="出題與判卷"
+        ai="出題、判卷、指出你錯在哪一步與為什麼"
+        human="看結果，決定要不要繼續"
+      />
+    </div>
+
+    <div style={{ marginTop: 30 }}>
+      <Bar tone="blue" h={84} size={30}>
+        三個角色各做一件事，串起來就是一次完整的學習。
+      </Bar>
+    </div>
+  </Frame>
+);
+
+/* ================================================================== *
+ * 11 · 成課三種方式 — 編號行 + 原型佔位
+ * ================================================================== */
+
+const Entry: FC<{ n: string; name: string; desc: string }> = ({ n, name, desc }) => (
+  <div
+    style={{
+      height: 140,
+      display: 'flex',
+      gap: 24,
+      alignItems: 'center',
+      borderTop: `1px solid ${RULE}`,
+    }}
+  >
+    <div
+      style={{
+        flex: 'none',
+        width: 66,
+        height: 66,
+        borderRadius: 6,
+        background: BLUE_SOFT,
+        border: `1px solid ${BLUE_LINE}`,
+        fontFamily: NUM,
+        fontSize: 30,
+        lineHeight: '64px',
+        textAlign: 'center',
+        fontWeight: 800,
+        color: ACCENT_TXT,
+      }}
+    >
+      {n}
+    </div>
+    <div>
+      <div style={{ fontSize: 36, lineHeight: '48px', fontWeight: 700 }}>{name}</div>
+      <div style={{ marginTop: 4, fontSize: 25, lineHeight: '36px', color: MUTED }}>{desc}</div>
+    </div>
+  </div>
+);
+
+const P11: Page = () => (
+  <Frame
+    kicker="方案｜成課"
+    title="三種方式，把東西變成一門課"
+    who="黃羿捷"
+    lead="成課 Agent 現在就有三個入口。"
+  >
+    <div style={{ display: 'grid', gridTemplateColumns: '940px 1fr', gap: 40, flex: '1 1 auto', minHeight: 0 }}>
+      <div>
+        <Entry n="1" name="說一句話" desc="「把中央極限定理講清楚。」" />
+        <Entry n="2" name="傳一份資料" desc="講義、筆記、作業，都可以直接丟進去。" />
+        <Entry n="3" name="同步你已有的" desc="Notion、Google Drive、學校的課程系統。" />
+      </div>
+      <div>
+        <ImagePlaceholder
+          hint="成課 Agent 原型畫面：一份講義 → 課程目錄"
+          width={700}
+          height={420}
+          style={{ borderRadius: 10, background: PANEL, border: `1px dashed ${RULE}` }}
+        />
+        <div style={{ marginTop: 10, fontSize: 22, lineHeight: '30px', color: DIM }}>
+          原型截圖待補。
+        </div>
+      </div>
+    </div>
+
+    <div style={{ marginTop: 30 }}>
+      <Bar tone="amber" h={84} size={30}>
+        這一頁我們不比任何人強——AI 已經能做了。
+      </Bar>
+    </div>
+  </Frame>
+);
+
+/* ================================================================== *
+ * 12 · 驗收三種形式 — 三欄 + 底部橫帶
+ * ================================================================== */
+
+const Form: FC<{ name: string; gloss: string; catch: string }> = ({ name, gloss, catch: caught }) => (
+  <div
+    style={{
+      height: '100%',
+      boxSizing: 'border-box',
+      border: `1px solid ${RULE}`,
+      borderRadius: 'var(--osd-radius)',
+      background: PANEL,
+      padding: '28px 30px',
+      display: 'flex',
+      flexDirection: 'column',
+    }}
+  >
+    <div style={{ fontSize: 38, lineHeight: '50px', fontWeight: 800, color: ACCENT_TXT }}>{name}</div>
+    <div style={{ marginTop: 8, fontSize: 24, lineHeight: '36px', color: MUTED }}>{gloss}</div>
+    <div style={{ marginTop: 'auto' }}>
+      <Rule tone={AMBER_LINE} h={2} />
+      <div style={{ marginTop: 18, ...eyebrow, color: AMBER_TXT }}>抓的是哪一種「假裝會了」</div>
+      <div style={{ marginTop: 8, fontSize: 28, lineHeight: '42px', fontWeight: 700, color: AMBER_TXT }}>{caught}</div>
+    </div>
+  </div>
+);
+
+const P12: Page = () => (
+  <Frame
+    kicker="方案｜驗收"
+    title="三種驗收，各抓一種「假裝會了」"
+    who="黃羿捷"
+    lead="驗收 Agent 出題、判卷，並指出你錯在哪一步。"
+  >
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, flex: '1 1 auto', minHeight: 0 }}>
+      <Form
+        name="講出來"
+        gloss="用自己的話講清楚，講給一個指定的人聽。"
+        catch="你只是背得很順"
+      />
+      <Form
+        name="練一遍"
+        gloss="課後練習：過一遍，反饋帶解釋。"
+        catch="記得住，但調不出來"
+      />
+      <Form
+        name="做出來"
+        gloss="你自己做的項目，AI 按事先寫好的標準打分。"
+        catch="原題會做，換情境就廢"
+      />
+    </div>
+
+    <div style={{ marginTop: 36 }}>
+      <div
+        style={{
+          height: 116,
+          boxSizing: 'border-box',
+          border: `1px solid ${BLUE_LINE}`,
+          borderRadius: 'var(--osd-radius)',
+          background: BLUE_SOFT,
+          padding: '0 30px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 28,
+        }}
+      >
+        <div
+          style={{
+            flex: 'none',
+            fontSize: 30,
+            lineHeight: '40px',
+            fontWeight: 800,
+            color: ACCENT_TXT,
+          }}
+        >
+          第四種形式
+        </div>
+        <div style={{ fontSize: 28, lineHeight: '44px', fontWeight: 600 }}>
+          30 天後再來一次（延遲軸）：同一套驗收，隔一段時間重跑一次，看還剩多少。
+        </div>
+      </div>
+    </div>
+  </Frame>
+);
+
+/* ================================================================== *
+ * 13 · 追根溯源 — 垂直階梯圖
+ * ================================================================== */
+
+const Rung: FC<{ x: number; y: number; w: number; name: string; meta: string; blind?: boolean }> = ({
+  x,
+  y,
+  w,
+  name,
+  meta,
+  blind,
+}) => (
+  <div
+    style={{
+      position: 'absolute',
+      left: x,
+      top: y,
+      width: w,
+      height: 96,
+      boxSizing: 'border-box',
+      border: `1px solid ${blind ? AMBER_LINE : RULE}`,
+      borderLeft: `5px solid ${blind ? AMBER : ACCENT}`,
+      borderRadius: 8,
+      background: blind ? AMBER_SOFT : PANEL,
+      padding: '0 28px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    }}
+  >
+    <div style={{ fontSize: 30, lineHeight: '40px', fontWeight: 700, color: blind ? AMBER_TXT : 'var(--osd-text)' }}>
+      {name}
+    </div>
+    <div style={{ fontSize: 24, lineHeight: '34px', color: blind ? AMBER_TXT : DIM }}>{meta}</div>
+  </div>
+);
+
+const Chevron: FC<{ top: number }> = ({ top }) => (
+  <svg
+    width={22}
+    height={18}
+    viewBox="0 0 22 18"
+    style={{ position: 'absolute', left: 118, top, pointerEvents: 'none' }}
+  >
+    <polygon points="11,17 1,1 21,1" fill={RULE} />
+  </svg>
+);
+
+const P13: Page = () => {
+  useDeckStyles();
+  return (
+    <Frame
+      kicker="方案｜驗收"
+      title="沒驗過，就往回找"
+      who="黃羿捷"
+      lead="前置知識＝學這題必須先會的東西。你答錯的不是這一題，是往下那幾題。"
+      note="遞歸式前置知識追蹤（RPKT, Recursive Prerequisite Knowledge Tracing），IEEE FMLDS 2025。"
+    >
+      <div style={{ position: 'relative', height: 500, flex: '1 1 auto', minHeight: 0 }}>
+        <Rung x={0} y={0} w={1180} name="第 3 章 · 中央極限定理" meta="你答錯的題在這裡" />
+        <Rung x={80} y={128} w={1100} name="前置 · 樣本平均" meta="往下追一層" />
+        <Rung x={160} y={256} w={1020} name="前置 · 期望值與變異數" meta="再往下" />
+        <Rung x={240} y={384} w={940} name="真正的盲點 · 條件機率" meta="你從沒真正學會過" blind />
+
+        <Chevron top={100} />
+        <Chevron top={228} />
+        <Chevron top={356} />
+
+        <svg
+          width={80}
+          height={24}
+          viewBox="0 0 80 24"
+          style={{ position: 'absolute', left: 1186, top: 420, pointerEvents: 'none' }}
+        >
+          <path className="vd-line" pathLength={1} d="M 0 12 L 62 12" stroke={AMBER} strokeWidth={2} fill="none" />
+          <polygon points="78,12 64,5 64,19" fill={AMBER} />
+        </svg>
+
+        <div
+          style={{
+            position: 'absolute',
+            left: 1250,
+            width: 430,
+            height: 480,
+            boxSizing: 'border-box',
+            border: `1px solid ${BLUE_LINE}`,
+            borderRadius: 8,
+            background: BLUE_SOFT,
+            padding: '0 32px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}
+        >
+          <div style={{ ...eyebrow, color: ACCENT_TXT }}>只補這裡</div>
+          <div style={{ marginTop: 10, fontSize: 44, lineHeight: '56px', fontWeight: 800, color: ACCENT_TXT }}>
+            條件機率
+          </div>
+          <div style={{ marginTop: 18 }}>
+            <Rule tone={BLUE_LINE} h={2} />
+          </div>
+          <div style={{ marginTop: 18, fontSize: 24, lineHeight: '36px', color: MUTED }}>
+            這一門課的其他部分，全部跳過。
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 30 }}>
+        <Bar tone="blue" h={88} size={30}>
+          驗收不是給一個分數，是指出你真正卡住的那一點。
+        </Bar>
+      </div>
+    </Frame>
+  );
+};
+
+/* ================================================================== *
+ * 14 · 認知負荷 — 左右對照表
+ * ================================================================== */
+
+const Load: FC<{ mine: string; ours: string }> = ({ mine, ours }) => (
+  <div
+    style={{
+      height: 124,
+      display: 'grid',
+      gridTemplateColumns: '700px 80px 1fr',
+      alignItems: 'center',
+      borderTop: `1px solid ${RULE}`,
+    }}
+  >
+    <div style={{ fontSize: 30, lineHeight: '44px', color: 'var(--osd-text)', fontWeight: 600, paddingRight: 24 }}>
+      {mine}
+    </div>
+    <div style={{ fontSize: 30, lineHeight: '44px', color: ACCENT_TXT, textAlign: 'center', fontWeight: 700 }}>→</div>
+    <div style={{ fontSize: 30, lineHeight: '44px', color: ACCENT_TXT, fontWeight: 700 }}>{ours}</div>
+  </div>
+);
+
+const P14: Page = () => (
+  <Frame
+    kicker="方案｜設計原則"
+    title="學習之外的活，不該由學生扛"
+    who="黃羿捷"
+    lead="我們借用認知負荷理論的思路：腦的容量有限，別讓它去管雜事。"
+    note="Sweller, J. (1988). Cognitive load during problem solving: Effects on learning. Cognitive Science, 12(2), 257–285."
+  >
+    <div>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '700px 80px 1fr',
+          height: 48,
+          alignItems: 'flex-end',
+        }}
+      >
+        <div style={{ ...cellHead, paddingRight: 24 }}>學生今天要自己做</div>
+        <div style={{ ...cellHead, textAlign: 'center' }}>　</div>
+        <div style={{ ...cellHead, color: ACCENT_TXT }}>Veridex 接管</div>
+      </div>
+      <Load mine="決定該學什麼" ours="按你的資料排出下一步" />
+      <Load mine="判斷自己有沒有聽懂" ours="驗收 Agent 判定，代替自我判斷" />
+      <Load mine="記住什麼時候該複習" ours="用驗收結果安排複習時機" />
+      <Load mine="自己排進日程" ours="自動排" />
+    </div>
+
+    <div style={{ marginTop: 30 }}>
+      <Bar tone="blue" h={88} size={30}>
+        這些活全部由系統做，學生只需要做一件事：學。
+      </Bar>
+    </div>
+  </Frame>
+);
+
+/* ================================================================== *
+ * 15 · 三個數字 — 大數字卡 + 琥珀承諾條
+ * ================================================================== */
+
+const Promise: FC<{ kind: string; n: string; name: string; gloss: string }> = ({ kind, n, name, gloss }) => (
+  <div
+    style={{
+      height: '100%',
+      boxSizing: 'border-box',
+      border: `1px solid ${RULE}`,
+      borderRadius: 'var(--osd-radius)',
+      background: PANEL,
       padding: '30px 32px',
       display: 'flex',
       flexDirection: 'column',
-      gap: 14,
     }}
   >
-    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-      <span style={{ fontSize: 30, fontWeight: 800, color: hot ? ACCENT : 'var(--osd-text)' }}>{name}</span>
-      {hot && (
-        <span style={{ fontSize: 20, fontWeight: 700, color: ACCENT, letterSpacing: '0.06em' }}>主力</span>
-      )}
+    <div style={{ ...eyebrow }}>{kind}</div>
+    <div style={{ marginTop: 20 }}>
+      <BigNum n={n} size={88} />
     </div>
-    <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-      <span
-        style={{
-          fontFamily: NUM,
-          fontSize: 62,
-          fontWeight: 800,
-          letterSpacing: '-0.03em',
-          lineHeight: 1,
-          color: hot ? ACCENT : 'var(--osd-text)',
-        }}
-      >
-        {price}
-      </span>
-      <span style={{ fontSize: 24, color: MUTED }}>{per}</span>
+    <div style={{ marginTop: 16, fontSize: 32, lineHeight: '46px', fontWeight: 700 }}>{name}</div>
+    <div style={{ marginTop: 'auto', fontSize: 24, lineHeight: '36px', color: MUTED }}>{gloss}</div>
+  </div>
+);
+
+const P15: Page = () => (
+  <Frame
+    kicker="方案｜試點承諾"
+    title="請用這三個數字判斷我們做不做得成"
+    who="黃羿捷"
+    lead="三個月內簽約並備課；第 6 月封閉測試後，交出第一份數字。"
+    handoff="交接 · 方案講完了，下面說我們是誰、要什麼。"
+  >
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 36, flex: '1 1 auto', minHeight: 0 }}>
+      <Promise kind="行為" n="≥ 50%" name="14 天任務完成率" gloss="教師指派的學習任務；與試點教師共同議定。" />
+      <Promise kind="成果" n="≥ 20%" name="學習前後測差異" gloss="同一批學員各測一次；與試點教師共同議定。" />
+      <Promise kind="延遲" n="≥ 70%" name="30 天後回訪" gloss="同一套驗收重跑一次；與試點教師共同議定。" />
     </div>
-    <div style={{ fontSize: 24, lineHeight: 1.45, color: hot ? ACCENT : MUTED, fontWeight: 600 }}>{tagline}</div>
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 8 }}>{children}</div>
+
+    <div style={{ marginTop: 32 }}>
+      <Bar tone="amber" h={140} size={28}>
+        <div style={{ fontWeight: 600 }}>
+          這些分不由我們打——試點學校的授課教師出題、評分；我們只出系統、記過程、出報告。
+        </div>
+        <div style={{ marginTop: 6, fontWeight: 700, color: AMBER_TXT }}>這是承諾值，不是已經測出來的結果。</div>
+      </Bar>
+    </div>
+  </Frame>
+);
+
+/* ================================================================== *
+ * 16 · 團隊與資料 — 左右分欄
+ * ================================================================== */
+
+const Member: FC<{ name: string; role: string }> = ({ name, role }) => (
+  <div
+    style={{
+      height: '100%',
+      minHeight: 200,
+      flex: '1 1 auto',
+      boxSizing: 'border-box',
+      border: `1px solid ${RULE}`,
+      borderRadius: 'var(--osd-radius)',
+      background: PANEL,
+      padding: '24px 28px',
+      display: 'flex',
+      flexDirection: 'column',
+    }}
+  >
+    <div style={{ fontSize: 34, lineHeight: '46px', fontWeight: 800 }}>{name}</div>
+    <div style={{ marginTop: 4, fontSize: 24, lineHeight: '34px', color: DIM }}>{role}</div>
+    <div
+      style={{
+        marginTop: 'auto',
+        border: `2px dashed ${AMBER_LINE}`,
+        borderRadius: 6,
+        background: AMBER_SOFT,
+        padding: '10px 16px',
+        fontSize: 24,
+        lineHeight: '34px',
+        color: AMBER_TXT,
+        fontWeight: 700,
+      }}
+    >
+      已交付物：［待填］
+    </div>
+  </div>
+);
+
+const Guard: FC<{ n: string; t: string; d: string }> = ({ n, t, d }) => (
+  <div
+    style={{
+      height: 100,
+      display: 'flex',
+      gap: 20,
+      alignItems: 'center',
+      borderTop: `1px solid ${RULE}`,
+    }}
+  >
+    <div
+      style={{
+        flex: 'none',
+        width: 44,
+        height: 44,
+        borderRadius: 4,
+        background: BLUE_SOFT,
+        border: `1px solid ${BLUE_LINE}`,
+        fontFamily: NUM,
+        fontSize: 24,
+        lineHeight: '42px',
+        textAlign: 'center',
+        fontWeight: 800,
+        color: ACCENT_TXT,
+      }}
+    >
+      {n}
+    </div>
+    <div>
+      <div style={{ fontSize: 30, lineHeight: '42px', fontWeight: 700, color: ACCENT_TXT }}>{t}</div>
+      <div style={{ fontSize: 23, lineHeight: '32px', color: DIM }}>{d}</div>
+    </div>
   </div>
 );
 
 const P16: Page = () => (
   <Frame
-    kicker="營收 · 定價"
-    title="三档：免费 · Pro · Max"
-    lead="每档都有固定积分额度，额度按月重置。积分限制的是成本，不是功能。"
+    kicker="收束｜為什麼信你"
+    title="憑什麼信你"
     who="黃浩然"
+    lead="兩件事：我們是誰，以及您的資料在誰手上。"
   >
-    <div style={{ display: 'flex', gap: 22 }}>
-      <Tier
-        name="免费"
-        price="HK$0"
-        per="/ 月"
-        tagline="每月固定积分，够跑完一次完整验收"
-      >
-        <Bullet hot={false}>可以体验全部三种验收形式</Bullet>
-        <Bullet hot={false}>可以上传自己的资料成课</Bullet>
-        <Bullet hot={false}>不提供项目打分</Bullet>
-        <Bullet hot={false}>不做 30 天延迟回访</Bullet>
-      </Tier>
-      <Tier
-        name="Pro"
-        price="HK$78"
-        per="/ 月"
-        tagline="日常学习：多门课在跑，验收随时可用"
-        hot
-      >
-        <Bullet hot>积分约为免费版 6 倍</Bullet>
-        <Bullet hot>解锁项目打分</Bullet>
-        <Bullet hot>解锁 30 天延迟回访</Bullet>
-        <Bullet hot>进度与 Notion / 日历同步</Bullet>
-      </Tier>
-      <Tier
-        name="Max"
-        price="HK$150"
-        per="/ 月"
-        tagline="重度与作品集：同时跑多门，用更重的模型"
-      >
-        <Bullet hot={false}>积分约为 Pro 的 2.5 倍</Bullet>
-        <Bullet hot={false}>大模型优先，复杂题更准</Bullet>
-        <Bullet hot={false}>课程数量不限</Bullet>
-        <Bullet hot={false}>可导出学习记录与作品</Bullet>
-      </Tier>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, flex: '1 1 auto', minHeight: 0 }}>
+      <div>
+        <div style={{ ...eyebrow, color: ACCENT_TXT }}>團隊</div>
+        <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 24, flex: '1 1 auto', minHeight: 0 }}>
+          <Member name="黃浩然" role="學習痛點定義、訪談教師與學生、課程介面、對外簡報" />
+          <Member name="黃羿捷" role="模型與提示工程、驗收引擎、校園試點部署、私隱安全" />
+        </div>
+      </div>
+      <div>
+        <div style={{ ...eyebrow, color: ACCENT_TXT }}>資料保管 · 四條</div>
+        <div style={{ marginTop: 14 }}>
+          <Guard n="1" t="資料留在用戶所屬司法區" d="香港用戶留港、內地用戶留內地；模型自託管，不經境外 API。" />
+          <Guard n="2" t="各校資料分隔" d="學校之間的資料互相不可見。" />
+          <Guard n="3" t="令牌有時效" d="存取權限自動到期，不長期有效。" />
+          <Guard n="4" t="導出留審計" d="誰匯出什麼、什麼時候，全部留記錄。" />
+        </div>
+      </div>
+    </div>
+
+    <div style={{ marginTop: 30 }}>
+      <Bar tone="blue" h={84} size={30}>
+        資料規則寫進合約，不是寫在網站上。
+      </Bar>
     </div>
   </Frame>
 );
 
 /* ================================================================== *
- * 17 · 为什么这样定价
+ * 17 · 面向人群 — 左右對照
  * ================================================================== */
 
-const PriceRow: FC<{ name: string; price: string; us: boolean }> = ({ name, price, us }) => (
-  <div style={{ display: 'flex', alignItems: 'baseline', gap: 18, padding: '9px 0' }}>
-    <span style={{ flex: 1, fontSize: 26 }}>{name}</span>
+const Who: FC<{ t: string }> = ({ t }) => (
+  <div
+    style={{
+      height: 120,
+      boxSizing: 'border-box',
+      border: `1px solid ${BLUE_LINE}`,
+      borderRadius: 8,
+      background: PANEL,
+      display: 'flex',
+      alignItems: 'center',
+      paddingLeft: 28,
+      fontSize: 30,
+      lineHeight: '42px',
+      fontWeight: 600,
+    }}
+  >
+    {t}
+  </div>
+);
+
+const Pay: FC<{ t: string }> = ({ t }) => (
+  <div
+    style={{
+      height: 100,
+      display: 'flex',
+      alignItems: 'center',
+      gap: 18,
+      borderTop: `1px solid ${BLUE_LINE}`,
+    }}
+  >
+    <div
+      style={{
+        flex: 'none',
+        width: 34,
+        height: 34,
+        borderRadius: 17,
+        background: ACCENT,
+        color: '#FFF',
+        fontSize: 22,
+        lineHeight: '34px',
+        textAlign: 'center',
+        fontWeight: 700,
+      }}
+    >
+      ✓
+    </div>
+    <div style={{ fontSize: 30, lineHeight: '42px', fontWeight: 600 }}>{t}</div>
+  </div>
+);
+
+const P17: Page = () => (
+  <Frame
+    kicker="收束｜面向誰"
+    title={
+      <>
+        能力是<span style={{ color: ACCENT_TXT }}>泛</span>的，收費只做<span style={{ color: AMBER_TXT }}>一類</span>
+      </>
+    }
+    who="黃浩然"
+    lead="同一套系統能服務很多人，但我們只對一種人收費。"
+  >
+    <div style={{ display: 'grid', gridTemplateColumns: '1000px 1fr', gap: 40, flex: '1 1 auto', minHeight: 0 }}>
+      <div>
+        <div style={{ ...eyebrow, color: ACCENT_TXT }}>同一套系統可以服務</div>
+        <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+          <Who t="中學生" />
+          <Who t="大學生" />
+          <Who t="轉行者" />
+          <Who t="語言學習者" />
+        </div>
+        <div style={{ marginTop: 18, fontSize: 24, lineHeight: '34px', color: DIM }}>
+          這四類人學的東西不同，但「學會沒有」這個問題是同一個。
+        </div>
+      </div>
+      <div>
+        <div style={{ ...eyebrow, color: AMBER_TXT }}>只收費給這一類</div>
+        <div style={{ marginTop: 16 }}>
+          <Pay t="有明確目標" />
+          <Pay t="有截止日期" />
+          <Pay t="願意為結果付錢" />
+        </div>
+        <div style={{ marginTop: 18, fontSize: 24, lineHeight: '34px', color: DIM }}>
+          其餘三類，我們免費開放，不收費。
+        </div>
+      </div>
+    </div>
+
+    <div style={{ marginTop: 30 }}>
+      <Bar tone="blue" h={112} size={32}>
+        <div style={{ fontSize: 24, lineHeight: '34px', color: MUTED, fontWeight: 500 }}>首年主攻</div>
+        <div style={{ marginTop: 4 }}>香港與內地大學生——人最多、離校園最近的一段。</div>
+      </Bar>
+    </div>
+  </Frame>
+);
+
+/* ================================================================== *
+ * 18 · 定價 — 列式對照表（不與 P6 / P12 的三欄卡片同構）
+ * ================================================================== */
+
+/* 定價頁用「列式對照表」骨架，不與 P6 / P12 的三欄卡片同構。 */
+const tierCell: CSSProperties = {
+  boxSizing: 'border-box',
+  padding: '20px 26px',
+  borderLeft: `1px solid ${RULE}`,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+};
+
+const TierName: FC<{ name: string; main?: boolean }> = ({ name, main }) => (
+  <div style={{ ...tierCell, background: main ? BLUE_SOFT : PANEL, borderTop: `3px solid ${main ? ACCENT : RULE}` }}>
+    <div style={{ ...eyebrow, color: main ? ACCENT_TXT : MUTED }}>{main ? '主力檔' : '檔位'}</div>
+    <div style={{ marginTop: 6, fontSize: 40, lineHeight: '52px', fontWeight: 800, color: main ? ACCENT_TXT : 'var(--osd-text)' }}>
+      {name}
+    </div>
+  </div>
+);
+
+const TierPrice: FC<{ price: string; main?: boolean }> = ({ price, main }) => (
+  <div style={{ ...tierCell, background: main ? BLUE_SOFT : PANEL, borderTop: `3px solid ${main ? ACCENT : RULE}` }}>
+    <BigNum n={price} size={68} />
+  </div>
+);
+
+const AttrRow: FC<{ label: string; a: string; b: string; c: string; mainIdx: number }> = ({
+  label,
+  a,
+  b,
+  c,
+  mainIdx,
+}) => (
+  <>
+    <div
+      style={{
+        boxSizing: 'border-box',
+        padding: '22px 26px',
+        background: PANEL,
+        borderTop: `1px solid ${RULE}`,
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: 26,
+        lineHeight: '40px',
+        fontWeight: 700,
+        color: MUTED,
+      }}
+    >
+      {label}
+    </div>
+    <div style={{ ...tierCell, borderTop: `1px solid ${RULE}`, background: mainIdx === 0 ? BLUE_SOFT : PANEL, fontSize: 27, lineHeight: '42px', fontWeight: 600 }}>
+      {a}
+    </div>
+    <div style={{ ...tierCell, borderTop: `1px solid ${RULE}`, background: mainIdx === 1 ? BLUE_SOFT : PANEL, fontSize: 27, lineHeight: '42px', fontWeight: 600 }}>
+      {b}
+    </div>
+    <div style={{ ...tierCell, borderTop: `1px solid ${RULE}`, background: mainIdx === 2 ? BLUE_SOFT : PANEL, fontSize: 27, lineHeight: '42px', fontWeight: 600 }}>
+      {c}
+    </div>
+  </>
+);
+
+const P18: Page = () => (
+  <Frame
+    kicker="收束｜定價"
+    title="定價：免費 / Pro / Max"
+    who="黃浩然"
+    lead="積分＝跑一次驗收要消耗的額度。"
+  >
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '220px repeat(3, 1fr)',
+        gridAutoRows: '1fr',
+        border: `1px solid ${RULE}`,
+        borderRadius: 'var(--osd-radius)',
+        flex: '1 1 auto',
+        minHeight: 0,
+      }}
+    >
+      <div
+        style={{
+          boxSizing: 'border-box',
+          padding: '20px 26px',
+          background: PANEL,
+          borderTop: `3px solid ${RULE}`,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{ ...eyebrow }}>對照</div>
+        <div style={{ marginTop: 6, fontSize: 30, lineHeight: '40px', fontWeight: 700 }}>三個檔位</div>
+      </div>
+      <TierName name="免費" />
+      <TierName name="Pro" main />
+      <TierName name="Max" />
+
+      <div style={{ boxSizing: 'border-box', background: PANEL, borderTop: `1px solid ${RULE}`, padding: '22px 26px', display: 'flex', alignItems: 'center', fontSize: 26, lineHeight: '40px', fontWeight: 700, color: MUTED }}>
+        價格
+      </div>
+      <TierPrice price="HK$0" />
+      <TierPrice price="HK$78" main />
+      <TierPrice price="HK$150" />
+
+      <AttrRow
+        label="積分（跑驗收的額度）"
+        a="每月固定，夠跑完一次完整驗收"
+        b="約免費版的 6 倍"
+        c="約 Pro 的 2.5 倍"
+        mainIdx={1}
+      />
+      <AttrRow
+        label="核心"
+        a="可體驗全部三種驗收形式"
+        b="解鎖項目打分 ＋ 30 天回訪"
+        c="大模型優先，課程數量不限"
+        mainIdx={1}
+      />
+    </div>
+
+    <div style={{ marginTop: 30 }}>
+      <Bar tone="blue" h={80} size={26}>
+        每個檔位的積分都夠跑完一次完整驗收；我們只收成本，不賺價差。
+      </Bar>
+    </div>
+  </Frame>
+);
+
+/* ================================================================== *
+ * 19 · 切檔理由 — 左理由 + 右價格縱列
+ * ================================================================== */
+
+const Why: FC<{ n: string; t: string; d: string }> = ({ n, t, d }) => (
+  <div
+    style={{
+      height: 190,
+      boxSizing: 'border-box',
+      display: 'flex',
+      gap: 20,
+      alignItems: 'center',
+      borderTop: `1px solid ${RULE}`,
+    }}
+  >
+    <div
+      style={{
+        flex: 'none',
+        fontFamily: NUM,
+        fontSize: 30,
+        lineHeight: '40px',
+        fontWeight: 800,
+        color: ACCENT_TXT,
+        width: 48,
+      }}
+    >
+      {n}
+    </div>
+    <div>
+      <div style={{ fontSize: 30, lineHeight: '42px', fontWeight: 700 }}>{t}</div>
+      <div style={{ marginTop: 4, fontSize: 24, lineHeight: '36px', color: MUTED }}>{d}</div>
+    </div>
+  </div>
+);
+
+const PriceRow: FC<{ name: string; price: string; mine?: boolean; tag?: string }> = ({ name, price, mine, tag }) => (
+  <div
+    style={{
+      height: 108,
+      boxSizing: 'border-box',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '0 18px',
+      background: mine ? BLUE_SOFT : 'transparent',
+      borderBottom: mine ? `2px solid ${ACCENT}` : `1px solid ${RULE}`,
+    }}
+  >
+    <span style={{ fontSize: 25, lineHeight: '34px', fontWeight: mine ? 700 : 500, color: mine ? ACCENT_TXT : 'var(--osd-text)' }}>
+      {name}
+      {tag ? (
+        <span style={{ marginLeft: 10, fontSize: 22, lineHeight: '28px', color: AMBER_TXT, fontWeight: 600 }}>{tag}</span>
+      ) : null}
+    </span>
     <span
       style={{
         fontFamily: NUM,
-        fontSize: 27,
-        fontWeight: 600,
-        color: us ? MUTED : ACCENT,
-        width: 150,
-        textAlign: 'right',
+        fontSize: 25,
+        lineHeight: '34px',
+        fontWeight: 700,
+        color: mine ? ACCENT_TXT : 'var(--osd-text)',
+        fontVariantNumeric: 'tabular-nums',
       }}
     >
       {price}
@@ -1359,385 +1996,402 @@ const PriceRow: FC<{ name: string; price: string; us: boolean }> = ({ name, pric
   </div>
 );
 
-const P17: Page = () => (
-  <Frame
-    kicker="營收 · 定價理由"
-    title="为什么这样切档"
-    lead="定价不是算出来的，是从「别人卡在哪」倒推出来的。"
-    who="黃浩然"
-    note="竞品价格为其 2026 年公开定价：StudyFetch Free／US$7.99／US$11.99，Hyperknow Pro US$12，ChatGPT Go US$8／Plus US$20，Coursera 旁听 US$0／Plus US$59／年 US$399。按 US$1 ≈ HK$7.8 折算。"
-  >
-    <div style={{ display: 'flex', gap: 60, alignItems: 'flex-start' }}>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 22 }}>
-        <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-          <span style={{ fontFamily: NUM, fontSize: 24, fontWeight: 700, color: ACCENT, paddingTop: 3 }}>01</span>
-          <div>
-            <div style={{ fontSize: 30, fontWeight: 700, lineHeight: 1.35 }}>免费版的边界，就是 Pro 的锚</div>
-            <div style={{ fontSize: 24, lineHeight: 1.5, color: MUTED, marginTop: 4 }}>
-              同类产品的免费版常是一堵墙——有评测记录：StudyFetch 的免费额度
-              「一次 30 分钟学习就会撞顶」。我们砍次数，不砍动作：免费也要能真跑完一次验收。
-            </div>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-          <span style={{ fontFamily: NUM, fontSize: 24, fontWeight: 700, color: ACCENT, paddingTop: 3 }}>02</span>
-          <div>
-            <div style={{ fontSize: 30, fontWeight: 700, lineHeight: 1.35 }}>积分限制的是成本，不是功能</div>
-            <div style={{ fontSize: 24, lineHeight: 1.5, color: MUTED, marginTop: 4 }}>
-              不做无上限方案。模型路由让简单的题走小模型、难题才走大模型，
-              所以积分是<b>可预测的</b>，而不是「用多少扣多少」。
-            </div>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-          <span style={{ fontFamily: NUM, fontSize: 24, fontWeight: 700, color: ACCENT, paddingTop: 3 }}>03</span>
-          <div>
-            <div style={{ fontSize: 30, fontWeight: 700, lineHeight: 1.35 }}>Max 是出口，不是升级诱饵</div>
-            <div style={{ fontSize: 24, lineHeight: 1.5, color: MUTED, marginTop: 4 }}>
-              重度用户和作品集需求有出口，就不会把 Pro 的转化率压低，
-              也不会让成本失控的人混在 Pro 里。
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        style={{
-          width: 620,
-          flexShrink: 0,
-          border: `1px solid ${RULE}`,
-          borderRadius: 12,
-          background: PANEL,
-          padding: '24px 28px',
-        }}
-      >
-        <div style={{ fontSize: 24, fontWeight: 700, color: MUTED, marginBottom: 10 }}>
-          同檔位的公開價格（月費）
-        </div>
-        <PriceRow name="Coursera 旁聽" price="US$0" us />
-        <PriceRow name="StudyFetch Base" price="US$7.99" us />
-        <PriceRow name="** Veridex Pro **" price="HK$78" us={false} />
-        <PriceRow name="StudyFetch Premium" price="US$11.99" us />
-        <PriceRow name="Hyperknow Pro" price="US$12" us />
-        <PriceRow name="ChatGPT Plus" price="US$20" us />
-        <div style={{ borderTop: `2px solid ${AMBER}`, marginTop: 14, paddingTop: 16 }}>
-          <div style={{ fontSize: 26, lineHeight: 1.45, fontWeight: 700 }}>
-            便宜的能教会你，贵的也能教会你。
-            <br />
-            <span style={{ color: AMBER }}>没有一个价格，是按「你学会了」结算的。</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </Frame>
-);
-
-/* ================================================================== *
- * 18 · 我们的团队
- * ================================================================== */
-
-const P18: Page = () => (
-  <Frame kicker="凭什么信你们" title="我们的团队" who="黃浩然">
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
-      <div style={{ display: 'flex', gap: 24 }}>
-        <Card w={812} h={240} accent={ACCENT} eyebrow="項目負責人 · 學習與語言端">
-          <span style={{ fontSize: 38, fontWeight: 800 }}>黃浩然</span>
-          <span style={{ fontSize: 25, lineHeight: 1.5, color: MUTED }}>
-            中文學習痛點定義、訪談教師與學生、課程介面、對外簡報
-          </span>
-          <span
-            style={{ marginTop: 'auto', borderTop: `1px solid ${RULE}`, paddingTop: 14, fontSize: 23, color: DIM }}
-          >
-            已交付物：<span style={{ color: AMBER, fontWeight: 700 }}>［待填］</span>
-          </span>
-        </Card>
-        <Card w={812} h={240} accent={ACCENT} eyebrow="技術負責人 · AI 與數據端">
-          <span style={{ fontSize: 38, fontWeight: 800 }}>黃羿捷</span>
-          <span style={{ fontSize: 25, lineHeight: 1.5, color: MUTED }}>
-            模型與提示工程、驗收引擎、校園試點部署、數據管線與私隱安全
-          </span>
-          <span
-            style={{ marginTop: 'auto', borderTop: `1px solid ${RULE}`, paddingTop: 14, fontSize: 23, color: DIM }}
-          >
-            已交付物：<span style={{ color: AMBER, fontWeight: 700 }}>［待填］</span>
-          </span>
-        </Card>
-      </div>
-
-      <div
-        style={{
-          display: 'flex', alignItems: 'center', gap: 18,
-          borderTop: `2px solid ${RULE}`, paddingTop: 24,
-        }}
-      >
-        <span style={{ fontSize: 26, fontWeight: 700, color: ACCENT }}>痛點訪談</span>
-        <span style={{ fontSize: 24, color: DIM }}>→</span>
-        <span style={{ fontSize: 26, fontWeight: 700 }}>課程介面</span>
-        <span style={{ fontSize: 24, color: DIM }}>→</span>
-        <span style={{ fontSize: 26, fontWeight: 700 }}>驗收引擎</span>
-        <span style={{ fontSize: 24, color: DIM }}>→</span>
-        <span style={{ fontSize: 26, fontWeight: 700 }}>校園試點</span>
-        <span style={{ fontSize: 24, color: DIM }}>→</span>
-        <span style={{ fontSize: 26, fontWeight: 700 }}>前後測數據</span>
-        <span style={{ fontSize: 24, color: DIM }}>→ 回流</span>
-      </div>
-
-      <Steps>
-        <Step>
-          <p style={{ margin: 0, fontSize: 29, lineHeight: 1.5, color: MUTED }}>
-            我们都还没做过生意。这条我们用顾问合作和校园试点补，不用假话补。
-          </p>
-        </Step>
-      </Steps>
-    </div>
-  </Frame>
-);
-
-/* ================================================================== *
- * 19 · 18 个月
- * ================================================================== */
-
 const P19: Page = () => (
-  <Frame
-    kicker="要什么"
-    title="18 个月，您会拿到这些"
-    lead="每一个节点都有一件拿得出手的东西。"
-    who="黃浩然"
+  <Frame kicker="收束｜定價理由" title="為什麼這樣切" who="黃浩然">
+    <div style={{ display: 'grid', gridTemplateColumns: '940px 1fr', gap: 40, flex: '1 1 auto', minHeight: 0 }}>
+      <div>
+        <div style={{ ...eyebrow, color: ACCENT_TXT }}>三條理由</div>
+        <div style={{ marginTop: 10 }}>
+          <Why n="01" t="免費版的邊界，就是 Pro 的錨" d="同類產品的免費版常是一堵牆。我們砍次數，不砍動作——免費也要能真跑完一次驗收。" />
+          <Why n="02" t="積分限制的是成本，不是功能" d="不做無上限。簡單題用小模型、難題用大模型，所以額度可以預先算準。" />
+          <Why n="03" t="Max 是出口，不是升級誘餌" d="重度用戶有出口，就不會壓低 Pro 的轉化率。" />
+        </div>
+      </div>
+      <div>
+        <div style={{ ...eyebrow, color: ACCENT_TXT }}>競品公開價格</div>
+        <div style={{ marginTop: 10 }}>
+          <PriceRow name="Coursera 旁聽" price="US$0" />
+          <PriceRow name="StudyFetch" price="未能核實" tag="公開資料取不到價目" />
+          <PriceRow name="Hyperknow" price="US$18 / 50" />
+          <PriceRow name="Coursera Plus" price="US$59" />
+          <PriceRow name="Veridex Pro" price="HK$78" mine />
+        </div>
+      </div>
+    </div>
+
+    <div style={{ marginTop: 28 }}>
+      <Bar tone="blue" h={96} size={30}>
+        便宜的能教會你，貴的也能教會你。區別是——
+        <span style={{ color: ACCENT_TXT }}>沒有一個價格，是按「你學會了」結算的。</span>
+      </Bar>
+    </div>
+  </Frame>
+);
+
+/* ================================================================== *
+ * 20 · 路線圖 — 橫向時間軸
+ * ================================================================== */
+
+const Mile: FC<{ name: string; detail: string; deliver: string }> = ({ name, detail, deliver }) => (
+  <div
+    style={{
+      height: '100%',
+      boxSizing: 'border-box',
+      border: `1px solid ${RULE}`,
+      borderTop: `4px solid ${ACCENT}`,
+      borderRadius: 'var(--osd-radius)',
+      background: PANEL,
+      padding: '26px 26px',
+      display: 'flex',
+      flexDirection: 'column',
+    }}
   >
-    <div style={{ display: 'flex', gap: 22 }}>
-      <Card w={398} h={330} accent={ACCENT} eyebrow="第 3 月">
-        <span style={{ fontSize: 35, fontWeight: 700, lineHeight: 1.3 }}>可用原型</span>
-        <span style={{ fontSize: 25, lineHeight: 1.55, color: MUTED }}>
-          30–50 次深访
-          <br />
-          100 人等候名单
-        </span>
-      </Card>
-      <Card w={398} h={330} accent={ACCENT} eyebrow="第 6 月">
-        <span style={{ fontSize: 35, fontWeight: 700, lineHeight: 1.3 }}>封闭测试</span>
-        <span style={{ fontSize: 25, lineHeight: 1.55, color: MUTED }}>100–200 人真实使用</span>
-      </Card>
-      <Card w={398} h={330} accent={ACCENT} eyebrow="第 12 月">
-        <span style={{ fontSize: 35, fontWeight: 700, lineHeight: 1.3 }}>首批付费用户</span>
-        <span style={{ fontSize: 25, lineHeight: 1.55, color: MUTED }}>首年目标 100–300 人</span>
-      </Card>
-      <Card w={398} h={330} accent={AMBER} eyebrow="第 18 月">
-        <span style={{ fontSize: 35, fontWeight: 700, lineHeight: 1.3 }}>延迟回访数据</span>
-        <span style={{ fontSize: 25, lineHeight: 1.55, color: MUTED }}>30 天数据齐备，决定是否自持</span>
-      </Card>
+    <div style={{ fontSize: 30, lineHeight: '44px', fontWeight: 800 }}>{name}</div>
+    <div style={{ marginTop: 10, fontSize: 27, lineHeight: '42px', color: MUTED }}>{detail}</div>
+    <div style={{ marginTop: 'auto' }}>
+      <Rule tone={BLUE_LINE} h={2} />
+      <div style={{ marginTop: 18, ...eyebrow, color: ACCENT_TXT }}>這一步怎麼算完成</div>
+      <div style={{ marginTop: 6, fontSize: 24, lineHeight: '36px', color: 'var(--osd-text)' }}>{deliver}</div>
     </div>
-  </Frame>
+  </div>
 );
 
+const P20: Page = () => {
+  useDeckStyles();
+  return (
+    <Frame
+      kicker="收束｜路線圖"
+      title="18 個月，您會拿到這些"
+      who="黃浩然 · 黃羿捷"
+      lead="四個時間點，每一個都有可以被驗收的東西。"
+    >
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 26, flex: 'none' }}>
+        <div style={{ fontSize: 34, lineHeight: '48px', fontWeight: 800, color: ACCENT_TXT, textAlign: 'center' }}>第 3 月</div>
+        <div style={{ fontSize: 34, lineHeight: '48px', fontWeight: 800, color: ACCENT_TXT, textAlign: 'center' }}>第 6 月</div>
+        <div style={{ fontSize: 34, lineHeight: '48px', fontWeight: 800, color: ACCENT_TXT, textAlign: 'center' }}>第 12 月</div>
+        <div style={{ fontSize: 34, lineHeight: '48px', fontWeight: 800, color: ACCENT_TXT, textAlign: 'center' }}>第 18 月</div>
+      </div>
+
+      <div style={{ position: 'relative', height: 64, flex: 'none', marginTop: 6 }}>
+        <svg width={1680} height={64} viewBox="0 0 1680 64" style={{ position: 'absolute', left: 0, top: 0 }}>
+          <path className="vd-line" pathLength={1} d="M 8 32 L 1672 32" stroke={RULE} strokeWidth={3} fill="none" />
+        </svg>
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 23,
+            width: 1678,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 26,
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: 20, height: 20, borderRadius: 10, background: ACCENT }} />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: 20, height: 20, borderRadius: 10, background: ACCENT }} />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: 20, height: 20, borderRadius: 10, background: ACCENT }} />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: 20, height: 20, borderRadius: 10, background: ACCENT }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 26, flex: '1 1 auto', minHeight: 0, marginTop: 20 }}>
+        <Mile name="可用原型" detail="30–50 次深訪；100 人等候名單；試點學校簽約。" deliver="一份可以點開的原型 ＋ 簽約學校名單。" />
+        <Mile name="封閉測試" detail="100–200 人真實使用。" deliver="100 人以上的完整使用記錄。" />
+        <Mile name="首批付費用戶" detail="首年目標 100–300 人。" deliver="付費數與留存曲線。" />
+        <Mile name="延遲數據齊備" detail="30 天回訪結果全部回收。" deliver="第一份延遲回訪報告。" />
+      </div>
+
+      <div style={{ marginTop: 22 }}>
+        <div
+          style={{
+            boxSizing: 'border-box',
+            border: `2px dashed ${AMBER_LINE}`,
+            borderRadius: 8,
+            background: AMBER_SOFT,
+            padding: '16px 28px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 28,
+          }}
+        >
+          <div style={{ flex: 'none', fontSize: 30, lineHeight: '42px', fontWeight: 800, color: AMBER_TXT }}>
+            我們要申請
+          </div>
+          <div style={{ fontSize: 27, lineHeight: '42px', color: 'var(--osd-text)' }}>
+            首年要 HK$
+            <span
+              style={{
+                color: AMBER_TXT,
+                fontWeight: 800,
+                borderBottom: `3px dashed ${AMBER_LINE}`,
+                padding: '0 10px 2px',
+              }}
+            >
+              ［待填：金額］
+            </span>
+            ，用在 ①原型開發 ②校園部署 ③模型與運算成本。
+          </div>
+        </div>
+        <div style={{ marginTop: 12, fontSize: 24, lineHeight: '34px', color: MUTED }}>
+          解鎖條件＝第 6 月 100 人真實使用。屆時未達到，我們停。
+        </div>
+      </div>
+
+      <div style={{ marginTop: 'auto', paddingTop: 24 }}>
+        <div
+          style={{
+            height: 96,
+            boxSizing: 'border-box',
+            borderLeft: `5px solid ${ACCENT}`,
+            background: BLUE_SOFT,
+            display: 'flex',
+            alignItems: 'center',
+            padding: '0 30px',
+            fontSize: 34,
+            lineHeight: '48px',
+            fontWeight: 700,
+          }}
+        >
+          一個人學會了，不是他自己說了算。
+          <span style={{ color: ACCENT_TXT }}>我們補的就是這最後一眼。</span>
+        </div>
+      </div>
+    </Frame>
+  );
+};
+
 /* ================================================================== *
- * 20 · 验证，才是终点
+ * 附錄 A · 參考文獻
  * ================================================================== */
 
-const P20: Page = () => (
-  <Frame kicker="收束" title="验证，才是终点" who="黃浩然、黃羿捷">
-    <div style={{ maxWidth: 1560, display: 'flex', flexDirection: 'column', gap: 40 }}>
-      <p style={{ margin: 0, fontSize: 44, lineHeight: 1.45, fontWeight: 700 }}>
-        循环的第四格，只能由验收关上。
-      </p>
-      <Steps>
-        <Step>
-          <Callout w={1620}>
-            今天这 20 分钟只讲了一件事：
-            <span style={{ color: AMBER }}>学完之后，没有人替你回头看一眼。</span>
-            <br />
-            我们补的就是这一眼。
-          </Callout>
-        </Step>
-        <Step>
-          <p style={{ margin: 0, fontSize: 30, lineHeight: 1.5, color: MUTED }}>
-            如果各位只盯一个指标，我们希望它不是完成率，而是
-            <span style={{ color: 'var(--osd-text)', fontWeight: 700 }}> 30 天之后还记得多少</span>。
-          </p>
-        </Step>
-      </Steps>
+const Ref: FC<{ n: number; t: string }> = ({ n, t }) => (
+  <div style={{ display: 'flex', gap: 14, marginTop: 18 }}>
+    <div style={{ flex: 'none', width: 34, fontFamily: NUM, fontSize: 22, lineHeight: '34px', color: ACCENT_TXT, fontWeight: 700 }}>
+      {String(n).padStart(2, '0')}
     </div>
-  </Frame>
+    <div style={{ fontSize: 22, lineHeight: '34px', color: MUTED }}>{t}</div>
+  </div>
 );
-
-/* ================================================================== *
- * 附录 A · 参考文献
- * ================================================================== */
 
 const P21: Page = () => (
-  <Frame kicker="附錄 A" title="参考文献与资料来源" who="—" handoff="答問背景板 · 不計時">
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '12px 44px',
-        fontSize: 22,
-        lineHeight: 1.45,
-        color: MUTED,
-      }}
-    >
-      <span>WIDS. Learning is not Linear, it’s Cyclical. Worldwide Instructional Design System.</span>
-      <span>HEPI (2026). Student Generative AI Survey 2026, Report 199.</span>
-      <span>加涅 Gagné, R. M. 資訊加工學習理論：準備、操作、遷移三部分與八階段。</span>
-      <span>Chuang &amp; Ho (2014). HarvardX / MITx completion study（工作論文）.</span>
-      <span>Sweller, J. (1988). Cognitive load during problem solving. Cognitive Science 12(2): 257–285.</span>
-      <span>Roediger &amp; Karpicke (2006). Test-enhanced learning. Psychological Science 17(3): 249–255.</span>
-      <span>Sweller, J., van Merriënboer, J. J. G., &amp; Paas, F. (2019). Cognitive Architecture and Instructional Design. Educational Psychology Review 31: 261–292.</span>
-      <span>Pan &amp; Rickard (2018). Transfer of test-enhanced learning. Psychological Bulletin 144(7): 710–756.</span>
-      <span>Bisra et al. (2018). Self-explanation. Educational Psychology Review 30(3): 703–725.</span>
-      <span>Cepeda et al. (2006). Distributed practice. Psychological Bulletin 132(3): 354–380.</span>
-      <span>Adesope, Trevisan &amp; Sundararajan (2017). Rethinking the use of tests. RER 87(3): 659–701.</span>
-      <span>Cowan (2001). Working memory capacity. BBS 24(1): 79–95.</span>
-      <span>Tang, Guo, Tang &amp; Shang (2025). RPKT: Recursive Prerequisite Knowledge Tracing. IEEE FMLDS 2025.</span>
-      <span>OpenMAIC · 清华大学 THU-MIC 團隊 · AGPL-3.0 · github.com/THU-MAIC/OpenMAIC</span>
-      <span>Hyperknow · hyperknow.io · Starter / Pro US$12 / Max</span>
-      <span>StudyFetch · Free US$0 / Base US$7.99 / Premium US$11.99</span>
-      <span>OpenAI · ChatGPT Go US$8、Plus US$20、Pro 起價 US$100（2026）</span>
-      <span>Coursera · 旁聽 US$0、Plus US$59/月、US$399/年</span>
+  <Frame kicker="附錄 A" title="參考文獻" who="黃浩然 · 黃羿捷">
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
+      <div>
+        <Ref n={1} t="Wisniewski, Zierer & Hattie (2020). Effects of feedback on learning: A meta-analysis. Frontiers in Psychology 11:309. DOI 10.3389/fpsyg.2019.03087" />
+        <Ref n={2} t="Roediger & Karpicke (2006). Test-enhanced learning. Psychological Science 17(3):249–255. DOI 10.1111/j.1467-9280.2006.01693.x" />
+        <Ref n={3} t="Koriat (1997). Monitoring knowledge from within. Journal of Experimental Psychology 23(5):1181–1196." />
+        <Ref n={4} t="Wei, Soderstrom & Meade (2025). Psychonomic Bulletin & Review. DOI 10.3758/s13423-025-02816-0" />
+        <Ref n={5} t="Dunlosky & Rawson (2012). Overconfidence causes underperformance on exams. Learning and Instruction 22(6):375–382. DOI 10.1016/j.learninstruc.2011.08.003" />
+        <Ref n={6} t="Reines & Camosy (2013). Overconfidence and grades. PLoS ONE 8(12):e83777." />
+        <Ref n={7} t="HEPI (2026). Student Generative AI Survey, Report 199. n = 1,054，英國全日制本科生。" />
+      </div>
+      <div>
+        <Ref n={8} t="OpenMAIC 公開 issue #1712（2026-09-29）：選項重複會破壞題目顯示與判分；修復 PR 已提交、未合併。" />
+        <Ref n={9} t="OpenMAIC 授權：MIT（內嵌 mathml2omml 套件另為 LGPL-3.0-or-later）。" />
+        <Ref n={10} t="Sweller, J. (1988). Cognitive load during problem solving. Cognitive Science 12(2):257–285." />
+        <Ref n={11} t="遞歸式前置知識追蹤（RPKT）. IEEE FMLDS 2025." />
+        <Ref n={12} t="Coursera Plus 公開定價頁，2026 年 9 月查閱：US$59/月、US$399/年。" />
+        <Ref n={13} t="Hyperknow 官網公開定價，2026 年 9 月查閱：US$0 / US$18 / US$50。" />
+        <Ref n={14} t="StudyFetch、Quizlet 公開頁面，2026 年 9 月查閱（Quizlet 評分 1,123,682 條）；兩者定價頁未能取得。" />
+      </div>
+    </div>
+
+    <div style={{ marginTop: 'auto', paddingTop: 24 }}>
+      <Bar tone="blue" h={64} size={24}>
+        <span style={{ fontWeight: 500, color: MUTED }}>
+          標「未能核實」者，為 2026 年 9–10 月查閱時公開渠道取不到資料；本 deck 不以估計值補位。
+        </span>
+      </Bar>
     </div>
   </Frame>
 );
 
 /* ================================================================== *
- * 附录 B · 答问准备
+ * 附錄 B · 答問準備
  * ================================================================== */
 
-const QA: FC<{ q: string; a: ReactNode; h?: boolean }> = ({ q, a, h }) => (
-  <div style={{ borderTop: `1px solid ${h ? AMBER : RULE}`, paddingTop: 14 }}>
-    <div style={{ fontSize: 25, fontWeight: 700, marginBottom: 7, color: h ? AMBER : 'var(--osd-text)' }}>
+const QA: FC<{ q: string; a: string }> = ({ q, a }) => (
+  <div style={{ marginTop: 20, height: 168, boxSizing: 'border-box' }}>
+    <div style={{ fontSize: 27, lineHeight: '40px', fontWeight: 700 }}>
+      <span style={{ color: ACCENT_TXT }}>問　</span>
       {q}
     </div>
-    <div style={{ fontSize: 23, lineHeight: 1.5, color: MUTED }}>{a}</div>
+    <div style={{ marginTop: 8, fontSize: 23, lineHeight: '36px', color: MUTED, paddingLeft: 50 }}>{a}</div>
   </div>
 );
 
 const P22: Page = () => (
-  <Frame kicker="附錄 B" title="答问准备" who="—" handoff="答問背景板 · 不計時">
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px 44px' }}>
-      <QA
-        q="如果做不成怎么办？"
-        h
-        a="第 6 月激活率低于 25%，我们重做定位；第 12 月付费转化低于 3%，我们转向学校与机构采购。这两条我们事先写死了，不事后解释。"
-      />
-      <QA
-        q="循环的第四格，真的能关上吗？"
-        a="不保证。但三种验收叠在一起、加 30 天延迟回访，是目前能找到的最接近「关上」的设计——而且前四家公开产品都没在这一格上做过测量。"
-      />
-      <QA
-        q="两个刚毕业的学生，做得成吗？"
-        a="两人都计算机背景、中文母语，能在本校直接做试点。缺的是学习科学与商业经验——我们用顾问合作和校园试点补，不拿假话补。"
-      />
-      <QA
-        q="Hyperknow 已经很好了，你们凭什么？"
-        a="不用贬低它，它做得很认真，而且主动排程那一点确实比我们强。差别在第四格：它排的是课程什么时候上，我们排的是你卡在哪一步、为什么会卡。"
-      />
-      <QA
-        q="用户为什么不直接用 ChatGPT？"
-        a="可以用，而且它更便宜。但没有任何一个工具会告诉你「你到底学会了没有」——而那正是他付钱的理由。"
-      />
-      <QA
-        q="为什么不做中小学？"
-        a="能力上能做。首年不做是因为付费决策链太长、验证周期太长，我们 18 个月要看到的是 30 天延迟数据，不是招生数据。"
-      />
+  <Frame kicker="附錄 B" title="答問準備" who="黃浩然 · 黃羿捷">
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
+      <div>
+        <QA
+          q="你們的驗收準則怎麼定？"
+          a="每門課有一張「驗收卡」，寫明這門課怎麼算過。試點教師可以改，改了要留記錄，學生的分數仍以教師的版本為準。"
+        />
+        <QA
+          q="AI 判錯了怎麼辦？"
+          a="出題時同時產出標準答案和判分依據，兩者衝突時以試點教師覆核為準。錯判會被記成事件，進修正池。"
+        />
+        <QA
+          q="學生會不會直接用 AI 作弊？"
+          a="三種驗收裡有兩種是開放題（講出來、做出來），不能靠複製答案拿到分；再加上 30 天後重跑一次，短期蒙混會在回訪時露餡。"
+        />
+      </div>
+      <div>
+        <QA q="資料放在哪裡？" a="資料留在用戶所屬司法區：香港用戶留港、內地用戶留內地。各校資料分隔、存取令牌有時效、導出留審計。模型我們自託管或在當地部署，不經境外 API。四條都寫進學校合約。" />
+        <QA
+          q="你和 StudyFetch、Quizlet 差在哪？"
+          a="它們的公開說明裡，驗收做到判對錯。我們多做一步：指出你為什麼錯、錯在哪一步、三十天後還剩多少。"
+        />
+        <QA
+          q="為什麼是你們，不是大公司？"
+          a="我們只做最後那一步，把它做深；而且試點學校的教師直接決定我們的驗收規則，我們改得比大公司快。"
+        />
+      </div>
+    </div>
+
+    <div style={{ marginTop: 'auto', paddingTop: 26 }}>
+      <Bar tone="amber" h={96} size={26}>
+        <span style={{ fontWeight: 600, color: AMBER_TXT }}>停損線（我們自己設的，不是別人訂的）：</span>
+        第 6 月激活率低於 25%，我們重做定位；第 12 月付費轉化低於 3%，我們轉向學校與機構採購。這兩條我們事先寫死了，不事後解釋。
+      </Bar>
     </div>
   </Frame>
 );
 
 /* ================================================================== *
- * Speaker notes · 逐页
+ * Speaker notes — index-aligned with the page array
  * ================================================================== */
 
 export const notes: (string | undefined)[] = [
-  `开场不要念。第一句就把问题抛出去：「AI 加速了所有行业，有没有加速过一个人的学习？」
-两栏（有人说有／有人说有害）不要逐字念，各念一句关键词就好。
-落点是最后那句：「我们今天不是讨论 AI 好不好用，是问一个人学会一件事要经过什么。」`,
+  /* 01 */ `開場白定調：不要從技術講起。
+先講今天要回答的問題——一個人學會一件事，必須經過什麼。
+提醒自己：20 分鐘，20 頁，平均每頁一分鐘。不要念投影片。`,
 
-  `不要投任何东西。让他们想。
-三秒之后那句「不是你笨」要说得平——像陈述，不像安慰。
-第二拍才给悖论：「AI 让人更快找到答案了，但它没让人学会。」说完停一拍再翻页。`,
+  /* 02 */ `四拍講完，每拍停一拍讓聽眾跟上來。
+第一拍：列舉，讓聽眾確認「對，AI 無處不在」。
+第二拍是問題本身——問完停兩秒，不要急著接。
+第三拍：兩種說法都擺出來，表示我們不預設立場。
+第四拍是轉向：今天不評價 AI 好壞，只拆「學會」這件事。
+如果時間緊，這頁可以壓到 40 秒，但第二拍的停頓不能省。`,
 
-  `这一页的目的只有一个：把「学习」从一条线变成一个环。
-左边（线）先说「如果它是一条线，听讲、理解、考好，走完就结束」——他们会点头。
-右边（环）给出来源：WIDS 的原话「我们需要在时间和重复中学习」，加涅的反馈阶段是闭合点。
-不要念理论，只说：这一圈是有的，而且它会转很多次。
-最后一句是本页的钩子：第四格叫应用，它必须回头连回第一格。`,
+  /* 03 */ `這頁是合法性地基：先證明「檢驗有價值」，後面講產品才站得住。
+d = 0.48：效應量以標準差為單位，0.48 是中等偏上的效果。如果有人問 0.70——那是 Hattie 2007 年的舊值，他本人 2020 年重做元分析後下修到 0.48，我們用新值。
+21 個百分點：Roediger & Karpicke 的三組實驗。重讀組一週後落後，而且他們最自信——這正好接下一頁。`,
 
-  `全场最重要的一页，讲慢一点。
-四段一次讲完，不要分段揭示——他们需要同时看见整条链。
-手指从左划到右（动机→理解→练习→应用），然后往下指那条回环箭头。
-停在断口上不说话，让它自己成立。
-落点：前面三格行业都做得不错，断在「回头」这一格。`,
+  /* 04 */ `全篇的轉折點。前面講「應該檢驗」，這頁講「驗收必須發生在學生之外」。
+Koriat 1997：人判斷自己會不會，靠的是順暢感，不是測試。cue-utilization 這個詞可以講，但要立刻用中文解釋成「只用到感覺，不用測試」。
+Dunlosky & Rawson 2012 是因果研究，不是相關性——論文標題就是結論，這點要說。
+落點句要慢念：判斷的人必須站在學生之外。
+接著用三個理由收緊：一致性、可規模、24 小時。這三個都跟「努力不努力」無關，是在講系統為什麼不可替代。
+如果有人追問「那老師驗收不也可以」——可以，而且試點學校的授課教師就是最後把關的人（見 P15、P16）。這不是繞開老師，是把老師從「逐題批改」裡放出來。`,
 
-  `这页是替第四页落地。左边传统课堂四条，右边三个形式各一句。
-「一对多」是总因：老师精力分散 → 不掌握个别情况 → 学生自己评判 → 反馈不及时 → 进度只有一条。
-这五条正好对上课程教的「学之外的认知负担」，第 12 页会呼应它。
-最后一句最重要：四个已知形式，全都停在那第四格之前。`,
+  /* 05 */ `全場唯一的數據圖，講慢一點。
+資料來源先講清楚：HEPI 2026 年調查，1,054 名英國全日制本科生。這是英國樣本，要主動說明，不要等台下問。
+從上往下念前三名就好：解釋概念 58%、總結材料 47%、提供研究思路 40%。
+停頓，然後指向最後那條虛線：調查裡根本沒有「檢驗自己」這一項——注意措辭是「調查未列此項」，不是「沒人用」，這是事實準確的說法。
+落點只講這一句：這份問卷裡，AI 是拿來解釋的；沒有人問過它拿來考自己。
+不要講成「學生從來沒拿 AI 考過自己」——問卷沒列，不等於沒人做。講錯這一句，被追問一次就完了。`,
 
-  `逐个念，每个三句话：解决了什么、对应哪一段、遗留什么。不要念年份。
-念到 OpenMAIC 时要明确说它很强——清华校内 500 余人试用，不要贬低。
-把四张卡指一遍之后，只说结论：四家加起来，第四格还是空的。
-这一页是发布会式的转折点，念完停两秒再翻页。`,
+  /* 06 */ `這頁回答「現有學習形式的問題」，是委員最在意的部分。
+四種做法要講得像你真的用過，不要像在念課本。
+講完第三種停一下：對上了就當學會了——請問在座各位，您上次是怎麼確認自己學會的？
+第四種（買題庫自測）一定要講，這是 2026 年最普遍的作法；代價是題目跟課不對焦，錯了也不知道錯在哪一步。
+落點句：四種都湊合能用，但沒有一種真的在檢驗。`,
 
-  `【交接：交给黃羿捷】前一页结束前递话：「行业卡在哪讲完了，下面讲我们怎么补这一格。」
-先讲五个环节的链条，指着「回到起点」那个箭头强调这是环不是线。
-再讲三个 Agent 各自负责哪一段——成课、上课、验收。
-这页不要展开功能，功能在后面两页。`,
+  /* 07 */ `這一頁不是攻擊，是定位。先講三句好話再講局限。
+承認 StudyFetch 做得最完整，它的三層檢驗是主打卡點；Quizlet 有一百多萬條評分。
+OpenMAIC 要說清楚是清華 MAIC 團隊的開源課堂框架，MIT 授權，不是同級商業競品；issue #1712 是公開記錄，修復 PR 已提交未合併，可以查。
+措辭紀律：說「公開資料裡看不到它們說明你為什麼錯」，不要說「它們沒做」。前者可以被接受，後者一旦被推翻，整份 deck 的可信度就完了。
+限時：只念前三列，OpenMAIC 與 StudyFetch 兩列快速帶過，時間留給下面的結論條。`,
 
-  `三种入口快速念过，重点是最后一句：课从哪来，我们不比任何人强——AI 已经能做了。
-右栏三条用 Steps 一条一条出，讲的时候要有「现场演示」的感觉。
-第三条「没验过下一节不开」是第一次出现验收概念，说完停一拍。`,
+  /* 08 */ `全篇的發布會轉折點，節奏要慢。
+上半部：這三步就是一個人學會一件事必須經過的過程（回答 P2 留下的問題），而且前兩步擠滿，第三步也擠滿了——這是承認對手。
+下半部三個問題，一個一個念，中間停頓。這三個問題就是我們全部的機會。
+第二題要說清楚：排複習這件事 SRS 和 Quizlet 早就在做，我們不比它們；我們做的是「用同一套驗收反覆量你還剩多少」。
+交接點一（照念）：「問題講完了，下面講我們怎麼補這一步。」然後停，看向搭檔，等他接。`,
 
-  `三种形式要讲出「各抓一种装懂」的意思，不要变成功能罗列。
-每张卡最后一行的红字是重点，逐条指。
-最后那句「30 天后，再来一次」是延迟轴，讲的时候要停顿。`,
+  /* 09 */ `黃羿捷第一頁。交接之後第一句要穩。
+講法：先講三個時刻——丟主題、做題、看結果。人只做這三件事。
+再講 AI 做的三件事：拆章節、講解、出題判卷。
+一句話總結：這是單向的一條線，不繞圈。過了就開下一節，沒過就只補那一點。
+禁令提醒自己：不要說「回到起點」或「循環」。`,
 
-  `全场最能体现我们想过的地方。
-从你答错的那题，一层层往下指，最后停在「分式运算」上——停住不说话，让它自己成立。
-这是我们和「重讲一遍全课」的分界线，也是最难被抄走的一格。
-RPKT 那篇放脚注就够，不要在台上念。`,
+  /* 10 */ `對應題目要求的「AI Agent 角色」，講清楚分工。
+每個角色只講兩句：它做什麼、人做什麼。特別強調「人做」那一欄——我們不打算讓 AI 取代判斷，只是把雜事接走。
+Agent 這個詞第一次出現時解釋一句：會自己判斷下一步、並自動呼叫工具的 AI 程式。`,
 
-  `四条一句一条，不解释。手指向截图里「锁定」的那一栏——这是视觉落点。
-第四句「没验过，下一节锁住」是这一页的封口。`,
+  /* 11 */ `這一頁要主動讓位，這是加分項不是減分項。
+說清楚：說一句話、傳一份資料、這兩件事現在的 AI 早就做得了，我們不比這裡強。
+我們的差別從下一頁開始。
+原型截圖如果沒做好，就用這三個入口口頭描述，不要指著空白說「這裡之後放」。`,
 
-  `这一页回应一个很实际的质疑：学生会不会更累。
-左边四项是学生今天要自己扛的，右边四项是我们接手的，一一对应着念。
-Sweller 的认知负荷理论在脚注，不用在台上说。
-落点是那句：学生的负担降到一件事——打开、做完、看结果。`,
+  /* 12 */ `這頁是產品的核心。
+三種形式對應三種不同的「假裝會了」：背得順、調不出來、換情境就廢。
+舉一個具體例子最好：講出來那一項，請學生講給一個指定的對象聽——因為對著牆講和講給人聽，暴露的東西完全不同。
+最後講延遲軸：30 天後同一套驗收重跑一次，這是我們和別人最大的差別。`,
 
-  `必须自己先说：「这是承诺值，不是已经测出来的结果。」不能等评委问。
-然后讲那句最强的：这些分不由我们打，授课教师出题评分。
-语气要平，不要用力推销。`,
+  /* 13 */ `這頁要講得最有興趣，因為它是最不尋常的一頁。
+用一個具體場景：你在第三章答錯一題，系統往下追——不是回到第三章重講，而是追到條件機率。
+這條鏈是認真的：中央極限定理的前置確實是獨立同分布變數的期望與變異，再往下才是條件機率。不要講成「其實是分式運算」之類的笑話，那是錯的。
+強調：只補那一點，不重講全課。這是學生真正會買單的地方。
+腳註的 RPKT 是技術來源，可以提一句「這個做法有論文」，不要展開。`,
 
-  `从「你」开始，不要从「我们」开始。
-先讲那三样是最不想交出去的，再讲我们怎么做。四条措施要快，快到显得是基本操作而不是承诺。`,
+  /* 14 */ `【限時壓縮點之一：時間不夠時整頁跳過，直接翻到 P15。這頁是設計原則的補充，不是主線。】
+用認知負荷理論解釋我們為什麼要接管這些雜事。講法：腦的容量有限，如果還要自己排順序、記複習時間、判斷有沒有聽懂，真正學的空間就沒了。
+措辭紀律：說「我們借用認知負荷理論的思路」，不要說「心理學的認知負荷理論說我們該這麼設計」——Sweller 講的是解題時的工作記憶負荷，不是「把雜務交給系統」。這是我們借用的推論，不是他的結論。
+複習那一行不要說「間隔重複」，那是別人也在做的成熟做法；說「用驗收結果安排複習時機」。
+左邊四行念快一點，右邊四行念慢一點——重點在右邊。落點：學生只需要做一件事，學。`,
 
-  `这页容易被问「你们到底做谁」，所以左右两栏的逻辑要讲清楚。
-左边承认 AI 能力是泛的，右边说收费只做一类人。
-落点：首年主攻大学生——目标最清晰、付费意愿最高、验证周期最短。`,
+  /* 15 */ `這頁最重要的是誠實。
+三個數字是承諾值，不是已經測出來的結果——這句要主動說，不要等台下發現。
+三個數字都是與試點教師共同議定的，念的時候把「與教師共同議定」講出來，這是這三個數字唯一的依據。
+時間表要對：簽約與備課在第 3 月，數字要等第 6 月封閉測試之後才交得出來。不要說「三個月內交數字」，那跟 P20 的路線圖對不上，被追問就穿幫。
+強調評分權不在我們手上：出題和評分都是試點學校的教師，我們只出系統。
+交接點二（照念）：「方案講完了，下面說我們是誰、要什麼。」停，看向搭檔。`,
 
-  `【交接：接回黃浩然】前一页结束前递话：「讲完做了什么，下面讲做给谁、收多少钱。」
-三档并排，左中右。Pro 档是主力，用蓝色高亮。
-每档只念最后一行的核心差异，不要逐条念四个功能点。`,
+  /* 16 */ `收束段的信任頁，講誠懇，不要講條目。
+左邊兩句話講團隊分工。
+【待填】兩個「已交付物：［待填］」必須在上台前填掉。若真的沒有交付物，就刪掉該行，改講真實存在的東西（例如已做出的可用原型、已試講的課程）——空著上台最致命。
+右邊四條資料規則，逐條念，每條一句理由。第一條要念完整：資料留在用戶所屬司法區，香港用戶留港、內地用戶留內地，模型我們自託管或在當地部署，不經境外 API。不要簡化成「數據不出境」，那個說法會被香港／內地兩地使用者一問就破。
+落點：寫進合約，不是寫在網站上。`,
 
-  `这一页是定价的论证，比上一页更重要。
-左栏三条理由逐条念，01 最重要——同类产品的免费版是一堵墙，评测里记着「30 分钟就撞顶」。
-02 讲积分是成本护栏不是功能限制，模型路由让积分可预测。
-03 讲 Max 是出口不是升级诱饵。
-右栏价格表从上往下指一遍，最后停在琥珀色那句。`,
+  /* 17 */ `回答「你們到底做給誰」。
+左邊四類人：能力是同一套，所以邊際成本低。
+右邊三條：只有同時滿足這三條的人才收費。這是刻意的取舍——不追求用戶數大。
+首年聚焦香港與內地大學生，講清楚理由：人最多、離校園最近。
+如果有人問「內地用戶的資料怎麼辦」，回答見 P16 第一條：留在用戶所屬司法區。`,
 
-  `两行分工念完就够，不逐条念职责。「已交付物」两格要提前填好，空着上台很致命。
-最后那句「不用假话补」说完停一拍——这是诚实分。`,
+  /* 18 */ `定價頁，講得平實。這頁已改成列式對照表，逐行念比逐欄念清楚。
+先講免費版：不是試用牆，夠跑完一次完整驗收——這是刻意的，讓用戶真的體驗到驗收。
+再講 Pro 是主力，$78 的理由下一頁拆。Max 是給重度用戶的出口。
+結論條講「只收成本，不賺價差」。不要在台上提「積分絕對數值還沒測算」——那是內部備忘，不是對外頁面該講的話。
+備註（不上台講，只記在這裡）：積分的絕對數值尚未確定，目前只寫比例，成本測算完成後補上。`,
 
-  `四个节点横着指过去，每个一句。第 18 月那格是琥珀色，指到它时稍微停一下。
-不要在这一页提「做不成怎么办」，那题在附录。`,
+  /* 19 */ `【限時壓縮點之二：只念右邊兩行價格——StudyFetch 與 Veridex Pro，其餘行不念。】左邊三條理由講第一條就夠。
+第一條最重要：免費版的邊界決定 Pro 的錨。用戶只有在免費版裡真的驗證過驗收，才會想付費。
+第二條的「模型路由」要翻成白話：簡單題用小模型、難題用大模型，所以額度可以預先算準。不要講「模型路由」這個術語。
+第三條講出口：Max 存在，重度用戶不會硬留在免費版，反而不會壓低 Pro 的轉化率。
+右邊價格表：StudyFetch 那一行標了「公開資料取不到價目」，如果有人追問，直接說官網取不到，不要辯解。
+落點句慢慢念：沒有一個價格，是按「你學會了」結算的。`,
 
-  `收尾讲慢。循环的第四格只能由验收关上——这是全场的回扣。
-最后一句：如果你只盯一个指标，希望不是完成率，是 30 天后还记得多少。
-说完停两秒，不要加「谢谢」。`,
+  /* 20 */ `收尾，兩人同台。
+四個時間點快速帶過，強調每個時間點都有可以被驗收的東西——這是前面十五頁的承諾。
+【待填】中間那條「我們要申請」的金額必須在上台前填好。這是全場唯一一處要錢的句子，必須念出金額、用途、與解鎖條件。
+如果金額還沒定，現場照實說「金額我們在申請表上報，這裡先講用途與解鎖條件」，不要含糊帶過。
+最後一句留給搭檔一起念，或由你念完停下來。
+收束句：「一個人學會了，不是他自己說了算。我們補的就是這最後一眼。」念完停三秒，不要補話。`,
 
-  undefined,
-  undefined,
+  /* 21 */ undefined,
+  /* 22 */ undefined,
 ];
 
 /* ================================================================== *
@@ -1746,7 +2400,7 @@ Sweller 的认知负荷理论在脚注，不用在台上说。
 
 export const meta: SlideMeta = {
   title: 'Veridex 維學 · 青年創業基金口頭報告',
-  createdAt: '2026-09-30T07:09:08.449Z',
+  createdAt: '2026-09-30T07:40:00.000Z',
 };
 
 export default [
