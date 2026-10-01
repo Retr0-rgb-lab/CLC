@@ -191,7 +191,7 @@ AI 講解，白板板書同步推上去
 
 **出處（頁腳）**
 - HEPI (2026). *Student Generative AI Survey*, Report 199, n = 1,054，英國全日制本科生
-- Knof, Berndt, Shiozawa et al. (2024). *BMC Medical Education* 24:923. doi:10.1186/s12909-024-06121-7
+- Knof, Berndt, Shiozawa et al. (2024). *BMC Medical Education* 24:1210. doi:10.1186/s12909-024-06121-7（文章編號 1210；Crossref 登錄號，非 923）
 
 **術語紀律**：「元認知錯覺」**直接用，並緊跟一句白話解釋**。但**附錄不要列它的 DOI**（出處查不到）。
 
