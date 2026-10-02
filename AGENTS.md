@@ -1,50 +1,126 @@
-# open-slide — Agent Guide
+# Veridex 維學 — Agent Guide
 
-You are authoring **slides** in this repo. Every slide is arbitrary React code that you write.
+## 這是什麼專案
 
-## Hard rules
+**Veridex 維學**是一個 AI 教育產品的商業計畫。定位：**為學習而生的 AI Agent，不是 AI 做的課。**
 
-- Put your slide under `slides/<kebab-case-id>/`.
-- The entry is `slides/<id>/index.tsx`.
-- Put slide-specific images/videos/fonts under `slides/<id>/assets/`. For assets reused across decks or themes (logos, avatars), use the global `assets/` folder and import via `@assets/...`.
-- Do **not** touch `package.json`, `open-slide.config.ts`, or other slides.
-- Do not add dependencies. Use only `react` and standard web APIs.
+核心形態是**一節課 = 10–15 分鐘的實時語音教學**。學生可隨時打斷、追問、要求換一種講法。課後有練習／測驗／項目，錯題不重做而是**追溯**到真正不會的那一層。
 
-## Which skill to use
+架構是 **LLM 生成文案 → TTS 轉語音**（不是實時語音對話模型）。定價按**語音合成字數**計：1 積分 = 40 字。
 
-- **Drafting a new deck** — use the `create-slide` skill. It walks through scoping questions, structure, and hand-off.
-- **Applying inspector comments** (`@slide-comment` markers in a page) — use the `apply-comments` skill.
-- **Creating or extracting a theme** — use the `create-theme` skill. Themes live as markdown under `themes/<id>.md` and are read by `create-slide` before authoring.
-- **Resolving "this page" / "this element"** — when the user references the current slide or selection without naming it, consult the `current-slide` skill. It reads the dev server's `node_modules/.open-slide/current.json` to find which slide, page, and inspector-picked element they mean.
-- **Writing a speech script / speaker notes** — use the framework's built-in feature: the `notes` export in the slide's `index.tsx`, index-aligned with the page array and shown in the presenter view. See the **Speaker notes** section of the `slide-authoring` skill. Never deliver a script as a markdown or text file.
-- **Any other slide edit** — read the `slide-authoring` skill before writing. It is the technical reference for everything inside `slides/<id>/`: file contract, the 1920×1080 canvas, type scale, palette, layout, assets, self-review checklist, and anti-patterns. `create-slide` and `apply-comments` both defer to it for the *how*.
+- 兩位負責人：黃浩然、黃羿捷
+- 目前狀態：**產品原型未完成、零用戶**
+- 目標用戶：香港學生
 
-Keep this file short: hard rules only. All deeper guidance lives in the skills above.
+## 模擬環境（重要）
 
-## Content discipline (這個專案)
+這是 **CLC 3242P 課程作業**。課程設定了一個情境：**要向「青年創業基金委員會」申請資助**，交付物是**計劃書 + 口頭報告**。
 
-上面是框架的技術規矩。以下三條是**內容規矩**，優先級更高——它們決定一頁投影片能不能出現。凡兩者衝突時，內容規矩優先。
+**後果是：**
+
+- **「青年創業基金委員會」是模擬設定，不是真實機構。** 不要去查證、也不要糾正這個名稱。真實的香港機構是「青年發展基金」，與本作業無關。
+- **不要去挖掘真實的基金政策**（申請條件、審評權重、通過率、撥款機制）。這些在模擬環境裡是噪音，會讓文件偏離交付重點。
+- **模擬環境裡的規則由使用者定。** 申請金額、資金分配、里程碑都由使用者決定，不要從外部資料套用。
+- **但競品資料是真的。** Hyperknow、Coursera、DeepLearning.AI 的價格、功能、限制都是可查證的事實，這部分要認真取證。
+
+## 目錄結構
+
+```
+specs/            內容規格（唯一的事實來源）
+├── product/      產品是「什麼」——理念、頁面規格
+│   ├── veridex-product-philosophy.md      產品理念、循環單位、設計哲學
+│   ├── veridex-pitch-spec.md              前段逐頁規格
+│   ├── veridex-pitch-product-spec.md      產品 8 頁規格
+│   ├── veridex-pitch-part2-spec.md        P10–P13 規格
+│   └── veridex-pitch-part3-spec.md        後段五頁：誰來用→和誰比→怎麼收錢→人從哪來→請批什麼
+└── economics/     經濟內容——定價、成本、獲客
+    ├── veridex-pricing.md                 定案定價（權威）
+    ├── veridex-financial-model.md         損益表、圖表數據、獲客、敏感度
+    └── archive-2026-10-02-*.md            ⛔ 已作廢，不可引用任何數字
+
+plans/            交付物
+├── build_veridex_ppt_v2.py   PPT 生成器（主）— 22 頁
+├── build_veridex_ppt.py      舊版生成器
+├── Veridex_口頭報告_v2.pptx  現行交付物
+└── prototype/                HTML 原型與截圖
+
+docs/             課程教材（不可修改）
+```
+
+**兩個目錄的邊界**：有些設計同時是產品決策和經濟決策（追溯閘門、觸頂降級、加油包、升級觸發點）。採「同一件事的兩面各歸各位，正文互相引用」——邊界表在 `specs/product/README.md`。
+
+## 唯一的建置命令
+
+```bash
+python3 plans/build_veridex_ppt_v2.py     # → plans/Veridex_口頭報告_v2.pptx
+```
+
+依賴 `python-pptx`（已裝 1.0.2）。**沒有 npm、沒有 dev server、沒有測試。**
+
+⚠️ **這個專案不用 open-slide。** 早前的 open-slide workspace（`slides/`、`themes/`、`.agents/`、`dist/`、`node_modules/`、`package.json`、`tsconfig.json`、`netlify.toml`、`vercel.json`）已於 2026-10-02 全部移除。**若看到 AGENTS.md 提到 `pnpm dev`、`create-slide` skill、1920×1080 canvas，那是舊版殘留——一律忽略。**
+
+## 改 PPT 的正確做法
+
+**改 `plans/build_veridex_ppt_v2.py`，不要手改 .pptx。** .pptx 是生成物，下次執行會覆蓋。
+
+架構（`build_veridex_ppt_v2.py`）：
+
+| 元素 | 值 |
+|---|---|
+| 版面 | 13.333 × 7.5 in（16:9） |
+| 配色 | 墨藍 × 琥珀：`INK #17233B`、`ACCENT #B4531A`、`MUTED #5B6675` |
+| 字體 | `Microsoft JhengHei`（繁體正黑）、`Segoe UI Semibold`（數字，1 與 0 可辨） |
+| 頁數 | 20 頁正片 + 2 頁附錄 |
+
+**頁面不是函式，是頂層程式碼。** 調度靠 `nxt()`：
+
+```python
+s, i = nxt(); ruler(s, i)      # 每頁開頭必須這兩行
+head(s, "區段", "標題", sub="副標")
+... 內容 ...
+foot(s, "出處", HS)            # 署名：HS=黃浩然、HJ=黃羿捷
+```
+
+輔助函式：`rect` / `card` / `tbox` / `para` / `head` / `foot` / `ruler` / `mktable` / `cell` / `rowflag`。
+
+⚠️ **改完務必重跑並確認 `slides: 22`。** 頁數不對就是頁面函式中途拋錯了。
+
+⚠️ **配色是 WCAG AA 實測值**（`INK` 15.67:1、`ACCENT` 5.01:1、`MUTED` 5.83:1）。改顏色要重新驗對比度，`ACCENT` 只在白底／canvas 上作文字或線。
+
+## 內容紀律（優先級高於任何排版考慮）
+
+以下三條決定一頁能不能出現。**衝突時內容紀律優先。**
 
 ### 1. 使用者沒有確定過的內容，不要自己填
 
-沒有明確敲定的東西，**不要憑推測補上**。留下醒目的佔位（`［待填］`、`［待確認］`），或者去問。
+沒有明確敲定的東西，**不要憑推測補上**。留醒目佔位（`［待填］`、`［待確認］`），或者去問。
 
-- ❌ 規格裡沒有，於是「順便加了一頁風險披露」——那一頁把「機器評分與人一致率只有 52%」寫成了投影片標題，等於替評審寫好拒絕我們的理由
-- ✅ 留佔位，在回報裡列出「還需要你補什麼」，讓使用者在答問之前自己填
+- ❌ 規格裡沒有，於是「順便加了一頁風險披露」——那一頁把「機器評分與人一致率只有 52%」寫成了標題，等於替評審寫好拒絕我們的理由
+- ✅ 留佔位，在回報裡列出「還需要你補什麼」
 
 判準：**如果這句話是使用者會想要親自決定的，就不要自己決定。**
 
 ### 2. 不要放沒有證據的內容
 
-任何數字、論文、競品說法、價格，放上投影片之前必須能追溯到可公開查證的出處。
+任何數字、論文、競品說法、價格，放上之前必須能追溯到可公開查證的出處。
 
-- ❌ 引用一篇查不到 DOI 的論文（曾經發生：為了換一個佐證，編造了一篇 `Reines & Camosy 2013`，結果 PubMed 檢索 0 條、Crossref 上那個 DOI 是一篇肌肉病論文）
+- ❌ 引用一篇查不到 DOI 的論文（曾經發生：編造了一篇 `Reines & Camosy 2013`，結果 PubMed 檢索 0 條、Crossref 上那個 DOI 是一篇肌肉病論文）
 - ❌ 報一個「感覺應該是這樣」的效應量
-- ✅ 查不到就不寫。查不到本身就是一條結論——寫進規格的禁用清單，記錄為什麼不能用
+- ✅ 查不到就不寫。**查不到本身就是一條結論**——寫進規格的禁用清單，記錄為什麼不能用
 
 被推翻的迷思同樣禁止上片，即使它聽起來合理、就算它很常見。常見 ≠ 為真。
 
-### 3. 投影片的上下文不能讓人覺得突兀
+**具體到本專案，已知踩過的坑：**
+
+- **「他們都沒有語音」是錯的。** Coursera 有 Role Play 語音對話（2026-07-08 官方公布）。正確說法是「語音不支援中文、不支援手機 App」——這兩條是 Coursera 自己支援文件寫的。
+- **Hyperknow 的積分 20/80/300 無法公開查證**，只能來自登入後 API。官網只有 `$0/$18/$50`。引用時必須標明是產品內部介面擷取。
+- **香港補習類 Google Ads CPC 沒有權威基準**，五個獨立來源互相矛盾（HK$1.8 至 HK$20）。要引用必須標明是估算。
+- **香港補習市場規模的公開數字橫跨 HK$4 億至 HK$281 億（相差 70 倍）**，無一有可核實方法論。官方統計處不單獨公布補習開支。
+- **同類公司（Duolingo／Coursera／Udemy／Gauth／Speak）全部未披露消費者 churn。** 不要寫續訂率、LTV、CAC payback。
+- **DeepLearning.AI 官方稱 150+ 課程，但篩選器實際只列 131 門。**
+- **已作廢的數字不可復活。** `specs/economics/archive-*.md` 裡的 HK$78／HK$150、每積分 HK$0.0155 都是即時語音架構下的估計，現已全部失效。
+
+### 3. 上下文不能讓人覺得突兀
 
 任何數字、術語、序號、對比，都必須在**同一頁之內**給出它所依賴的上下文。聽眾不會為了理解第 4 頁而回頭重讀第 3 頁。
 
@@ -57,17 +133,50 @@ Keep this file short: hard rules only. All deeper guidance lives in the skills a
 ### 衝突時的處理順序
 
 1. 使用者明確說過的
-2. 本專案 `specs/` 裡已核實並記錄的
+2. `specs/` 裡已核實並記錄的
 3. 查得到出處的公開資料
 4. 以上都沒有 → 問使用者，不要猜
 
-## Updating skills
+## 已定案的架構決策（不要重新發明）
 
-The skills above are managed by `@open-slide/core`. Do not edit them in place. To pull the latest versions:
+| 決策 | 內容 |
+|---|---|
+| 循環單位 | **一節課 = 10–15 分鐘實時語音教學**。這是最有價值的設計參數——一節課有完成態 |
+| 架構 | **LLM + TTS**（主口徑 Qwen3-TTS-VC $0.115/萬字），不是實時語音對話模型 |
+| 計價單位 | **按語音合成字數**。1 積分 = 40 字，每積分成本 HK$0.0036 |
+| 對外講法 | 講「**每天幾節課**」，**不講積分數字**——積分對用戶沒有直觀意義 |
+| 定價 | 免費 60 積分/日（2 節短講解）／Pro HK$148（375/日）／Max HK$388（750/日） |
+| 額度結構 | **每日發放 + 7 天結轉**，不設窗口制，不月底清零 |
+| 免費額度 | 每日 60 積分 = **2 節短講解**（不是 2 節完整課——成本差 2.5 倍） |
+| 量折扣 | **放棄競爭**。要拿 26% 需 Max 給到每天 4 小時語音，沒有人會用。Max 靠能力分層 |
+| 追溯閘門 | **不設深度上限，改變「深度」的計價單位**——第 4 層自動路由到語音補講 |
+| 0 積分動作 | 課內追問、回看、上傳、備課腳本、練習、測驗、間隔重複——**沒有一條是「創造新東西」** |
+| Lite 檔 | **不加**（使用者已明確否決） |
 
-```
-pnpm up @open-slide/core
-pnpm sync:skills
-```
+## 財務數字的三個無錨點假設
 
-`pnpm dev` will also detect drift on startup and offer to sync. `pnpm sync:skills --dry-run` (via `pnpm exec open-slide sync:skills --dry-run`) previews changes without writing.
+**任何財務圖表上片都必須標明「這是推算」**，因為分母全部無錨點：
+
+1. **付費轉化率 5%** — 外部區間 2.18%（Adapty 全球 freemium 中位數，16,000+ apps）到 9%（Duolingo 付費佔 MAU，10-K 原文）
+2. **免費額度利用率 40%** — 完全無錨點
+3. **用戶增長路徑** — 完全無錨點
+
+措辭紀律：**寫「這是推算」而不是「我們還沒有數據」。** 前者是承諾邊界，後者是缺口。
+
+⚠️ **所有圖表數字（餅圖／柱狀圖／直方圖）都受此約束。** 詳見 `specs/economics/veridex-financial-model.md` §4.6。
+
+## 兩個已知的誠實讓步
+
+寫競品對比時**必須主動講出來**，因為評審查到會認為我們沒做功課：
+
+- **Coursera 已投資 US$1 億於 LearnVector**，官方描述目標是「one-to-one learning experiences」
+- **Hyperknow 有 US$1M 種子輪（真格領投）、Forbes 30 Under 30**
+
+同樣地，**主動講自己的弱點**：付費流量 CPA 算不過、Sayo Academy 已在政府撥款渠道、小學生人數在跌。
+
+## 工作慣例
+
+- **改規格先於改 PPT。** `specs/` 是事實來源，PPT 是它的投影。發現兩者不一致，改 spec。
+- **取證優先於推理。** 涉及競品、官方統計、API 單價，必須實際抓取並標明出處等級：[A] 第一方 / [B] 具名第三方 / [C] 估算 / [D] 查不到。
+- **改了定價要連帶檢查四處**：`veridex-pricing.md`、`veridex-financial-model.md`、pitch specs 的定價頁、禁用清單。歷史教訓是只改一處會留下互相矛盾的數字。
+- **發現錯誤要直說。** 曾經在一次複核中發現自己的積分模型把「貢獻毛利」誤當「淨收入」，導致整條損益曲線算錯。交叉驗算比對方更可靠。

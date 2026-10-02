@@ -14,7 +14,8 @@ from pptx.enum.shapes import MSO_SHAPE
 from pptx.oxml.ns import qn
 from lxml import etree
 
-OUT = r"E:\College_Projects\CLC\plans\Veridex_口頭報告_v2.pptx"
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                 "Veridex_口頭報告_v2.pptx")
 
 # ---------- 配色：方案 A「墨藍 × 琥珀」 ----------
 INK    = RGBColor(0x17, 0x23, 0x3B)   # 主色  15.67:1
