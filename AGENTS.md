@@ -65,7 +65,7 @@ python3 plans/build_veridex_ppt_front8.py    # → plans/Veridex_前8頁.pptx
 
 ## 改 PPT 的正確做法
 
-**改 `plans/build_veridex_ppt_v2.py`，不要手改 .pptx。** .pptx 是生成物，下次執行會覆蓋。
+**改 `plans/build_veridex_ppt_front8.py`，不要手改 .pptx。** .pptx 是生成物，下次執行會覆蓋。
 
 架構（`build_veridex_ppt_front8.py`）：
 
@@ -87,7 +87,9 @@ head(s, "區段", "標題", sub="副標")
 foot(s, "出處", HS)            # 署名：HS=黃浩然、HJ=黃羿捷
 ```
 
-輔助函式：`rect` / `card` / `tbox` / `para` / `head` / `foot` / `ruler` / `mktable` / `cell` / `rowflag`。
+輔助函式：`rect` / `card` / `tbox` / `para` / `head` / `foot` / `ruler`。
+
+內容用小組件：`colhead`（欄標題）/ `stepnum`（序號圓點）/ `talkline`（左豎線引言）/ `hbar`（橫條 + 數值）/ `downarrow`（下箭頭）。
 
 ⚠️ **改完務必重跑並確認 `slides: 8`。** 頁數不對就是頁面程式碼中途拋錯了。
 
