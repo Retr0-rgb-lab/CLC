@@ -38,11 +38,13 @@ specs/            內容規格（唯一的事實來源）
     ├── veridex-financial-model.md         損益表、圖表數據、獲客、敏感度
     └── archive-2026-10-02-*.md            ⛔ 已作廢，不可引用任何數字
 
-plans/            交付物
-├── build_veridex_ppt_v2.py   PPT 生成器（主）— 22 頁
-├── build_veridex_ppt.py      舊版生成器
-├── Veridex_口頭報告_v2.pptx  現行交付物
-└── prototype/                HTML 原型與截圖
+plans/            交付物（全部由 Python 產生）
+├── build_veridex_ppt_front8.py  前 8 頁生成器 ← 現行主線
+├── Veridex_前8頁.pptx           前 8 頁成品
+├── build_veridex_ppt_v2.py      22 頁版本（敘事與定價已過時，見下）
+├── build_veridex_ppt.py         v1（更舊）
+├── prototype/                   HTML 原型與截圖
+└── _archive-openslide/          OpenSlide 原稿（僅作核對依據，非依賴）
 
 docs/             課程教材（不可修改）
 ```
@@ -52,25 +54,29 @@ docs/             課程教材（不可修改）
 ## 唯一的建置命令
 
 ```bash
-python3 plans/build_veridex_ppt_v2.py     # → plans/Veridex_口頭報告_v2.pptx
+python3 plans/build_veridex_ppt_front8.py    # → plans/Veridex_前8頁.pptx
 ```
 
-依賴 `python-pptx`（已裝 1.0.2）。**沒有 npm、沒有 dev server、沒有測試。**
+依賴 `python-pptx`（1.0.2）。**沒有 npm、沒有 dev server、沒有測試、沒有 TypeScript。**
 
-⚠️ **這個專案不用 open-slide。** 早前的 open-slide workspace（`slides/`、`themes/`、`.agents/`、`dist/`、`node_modules/`、`package.json`、`tsconfig.json`、`netlify.toml`、`vercel.json`）已於 2026-10-02 全部移除。**若看到 AGENTS.md 提到 `pnpm dev`、`create-slide` skill、1920×1080 canvas，那是舊版殘留——一律忽略。**
+⚠️ **本專案已徹底不用 open-slide。** `package.json`、`tsconfig.json`、`node_modules/`、`slides/` 全部移除。前 8 頁已從 OpenSlide（React）逐頁轉換成 python-pptx。**若看到任何 `pnpm dev`、`create-slide` skill、1920×1080 canvas 的說法，那是舊版殘留——一律忽略。**
+
+⚠️ **`build_veridex_ppt_v2.py` 的敘事已過時，不要拿它當基準。** 它是「服務大學生／先學後付不綁月費／申請 18 萬」那一版，與現定案（服務所有人／HK$148+388 訂閱制／申請 44 萬）直接衝突。保留僅為對照。
 
 ## 改 PPT 的正確做法
 
 **改 `plans/build_veridex_ppt_v2.py`，不要手改 .pptx。** .pptx 是生成物，下次執行會覆蓋。
 
-架構（`build_veridex_ppt_v2.py`）：
+架構（`build_veridex_ppt_front8.py`）：
 
 | 元素 | 值 |
 |---|---|
 | 版面 | 13.333 × 7.5 in（16:9） |
 | 配色 | 墨藍 × 琥珀：`INK #17233B`、`ACCENT #B4531A`、`MUTED #5B6675` |
 | 字體 | `Microsoft JhengHei`（繁體正黑）、`Segoe UI Semibold`（數字，1 與 0 可辨） |
-| 頁數 | 20 頁正片 + 2 頁附錄 |
+| 頁數 | 8 頁 |
+
+**P3 有一個待補項**：右欄是課程頁截圖的位置，現為「［待放入課程頁截圖］」佔位。使用者需提供真實截圖。
 
 **頁面不是函式，是頂層程式碼。** 調度靠 `nxt()`：
 
@@ -83,7 +89,9 @@ foot(s, "出處", HS)            # 署名：HS=黃浩然、HJ=黃羿捷
 
 輔助函式：`rect` / `card` / `tbox` / `para` / `head` / `foot` / `ruler` / `mktable` / `cell` / `rowflag`。
 
-⚠️ **改完務必重跑並確認 `slides: 22`。** 頁數不對就是頁面函式中途拋錯了。
+⚠️ **改完務必重跑並確認 `slides: 8`。** 頁數不對就是頁面程式碼中途拋錯了。
+
+⚠️ **本環境沒有 LibreOffice，無法轉 PDF 驗證視覺效果。** 改版面後只能靠幾何檢查：確認無元素越出 13.333×7.5 in，且最低元素距底邊留有餘量。文字溢出要自己估算。
 
 ⚠️ **配色是 WCAG AA 實測值**（`INK` 15.67:1、`ACCENT` 5.01:1、`MUTED` 5.83:1）。改顏色要重新驗對比度，`ACCENT` 只在白底／canvas 上作文字或線。
 
