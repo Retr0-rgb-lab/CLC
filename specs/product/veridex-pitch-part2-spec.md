@@ -2,7 +2,7 @@
 
 > 狀態：草稿，待使用者拍板
 > 前置：P1–P9 已在 `slides/prototype/v3.html` 定稿，本文件不動它們
-> 配套：`veridex-product-philosophy.md`、`veridex-pricing.md`、`veridex-pitch-product-spec.md`
+> 配套：`veridex-product-philosophy.md`、`../economics/veridex-pricing.md`、`veridex-pitch-product-spec.md`
 > 資料檢索日：2026-10-01（所有競品出處皆為當日抓取的官方頁面）
 
 ---
@@ -184,7 +184,7 @@ P10 已鋪了六件事；P11 只深挖第 5、6 格，深度做得足。這一�
 > 每日額度是我們的內部估算，會用前幾個月的真實使用數據校準。我們尚無續訂與留存數據，因此本頁不承諾成本與毛利。
 
 措辭紀律：**寫「本頁不承諾什麼」而不是「我們還沒有什麼」**。前者是承諾邊界，後者是缺口。
-成本的實測口徑見 `veridex-pricing.md` §1；完整財務模型見 `veridex-financial-model.md`。
+成本的實測口徑見 `../economics/veridex-pricing.md` §1；完整財務模型見 `../economics/veridex-financial-model.md`。
 
 **⛔ 本頁禁用**
 

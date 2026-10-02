@@ -2,7 +2,7 @@
 
 > 取證日期：2026-10-02（所有第一方定價頁與政府統計當日實抓）
 > 匯率：**HK$7.80 / US$1**（金管局 7.75–7.85 中值）
-> 配套：`veridex-pricing.md`（定價與積分）、`veridex-unit-economics.md`（已作廢，見該文件頂部）
+> 配套：`veridex-pricing.md`（定價與積分）、`archive-2026-10-02-realtime-voice-economics.md`（已作廢，見該文件頂部）
 > 本文件是**內部規劃文件，不上投影片**。上片的數字見 §11。
 
 ---

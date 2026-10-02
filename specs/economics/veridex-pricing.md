@@ -1,7 +1,7 @@
 # Veridex 維學 — 定價規格
 
 > 狀態：**已定案**（2026-10-02 使用者逐項確認）
-> 配套文件：`veridex-unit-economics.md`、`veridex-product-philosophy.md`
+> 配套文件：`archive-2026-10-02-realtime-voice-economics.md`、`../product/veridex-product-philosophy.md`
 > 本文件只記錄定案結果與其依據，不記錄推導過程。
 
 ---
