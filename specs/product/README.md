@@ -9,8 +9,8 @@
 | 1 | `veridex-product-philosophy.md` | **產品是什麼。** 一句話定位、三部分組成、設計哲學、運作機制、對外三句核心陳述 |
 | 2 | `veridex-pitch-product-spec.md` | **產品 8 頁怎麼講。** P1–P8 的逐頁規格、禁用清單、設計系統 |
 | 3 | `veridex-pitch-spec.md` | **前 20 頁怎麼講。** 場景與約束、核心論證、逐頁規格、講者分工 |
-| 4 | `veridex-pitch-part2-spec.md` | **後 5 頁怎麼講。** P10–P14、逐字危險句清單、可引用清單 |
-| 5 | `veridex-pitch-part3-spec.md` | **五頁結構：誰來用 → 和誰比 → 怎麼收錢 → 人從哪來 → 請批什麼** |
+| 4 | `veridex-pitch-part2-spec.md` | **P10–P13 怎麼講。** 逐字危險句清單、可引用清單 |
+| 5 | `veridex-pitch-part3-spec.md` | **五頁結構：誰來用 → 和誰比 → 怎麼收錢 → 人從哪來 → 請批什麼**（模擬環境，不含外部政策） |
 
 ## 核心概念速查
 
