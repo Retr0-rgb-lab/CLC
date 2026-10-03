@@ -1,3 +1,10 @@
 node_modules
 dist
 .DS_Store
+
+# Python 构建产物
+__pycache__/
+*.pyc
+
+# 第三方 skill 副本（用 git clone 取回，不入库）
+tools/
