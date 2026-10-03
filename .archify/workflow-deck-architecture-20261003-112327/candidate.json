@@ -3,7 +3,7 @@
   "diagram_type": "workflow",
   "meta": {
     "title": "Veridex 青年创业基金简报 · 逻辑结构与内容架构",
-    "subtitle": "20 页 · 4 段论证主线 · 瑞士国际主义 Style B",
+    "subtitle": "20 页 · 三段论证 · 瑞士国际主义 Style B",
     "locale": "zh-CN",
     "quality_profile": "showcase",
     "output": "specs/veridex-deck-architecture.html",
@@ -11,7 +11,7 @@
       "url": "https://github.com/Retr0-rgb-lab/CLC",
       "provider": "github",
       "link_mode": "local-only",
-      "revision": "14eef5b94eaddcdcb8f0cd0936a072920d7a91cb"
+      "revision": "b9641fa289241112ebf65a0060077496135bdc50"
     }
   },
   "lanes": [
@@ -35,112 +35,70 @@
   ],
   "phases": [
     {
-      "id": "ph_open",
-      "label": "开场",
+      "id": "p0",
+      "label": "第一段 · 问题 P1–P8",
       "fromCol": 0,
-      "toCol": 0
+      "toCol": 0,
+      "variant": "emphasis"
     },
     {
-      "id": "ph_custom",
-      "label": "第一段 · 定制化课程 P2–P4",
+      "id": "p1",
+      "label": "第二段 · 定位 P9–P12",
       "fromCol": 1,
       "toCol": 1,
       "variant": "emphasis"
     },
     {
-      "id": "ph_assess",
-      "label": "第二段 · 有效的检验 P5–P8",
+      "id": "p2",
+      "label": "第三段 · 商业模式与请求 P13–P20",
       "fromCol": 2,
       "toCol": 2,
-      "variant": "emphasis"
-    },
-    {
-      "id": "ph_position",
-      "label": "第三段 · 定位 P9–P12",
-      "fromCol": 3,
-      "toCol": 3,
-      "variant": "emphasis"
-    },
-    {
-      "id": "ph_business",
-      "label": "第四段 · 商业模式 P13–P19",
-      "fromCol": 4,
-      "toCol": 4,
-      "variant": "emphasis"
-    },
-    {
-      "id": "ph_ask",
-      "label": "请求 P20",
-      "fromCol": 5,
-      "toCol": 5,
       "variant": "emphasis"
     }
   ],
   "groups": [
     {
-      "id": "g_biz_spine",
-      "label": "商业模式 · 最重的一段",
+      "id": "gp",
+      "label": "双侧夹逼",
       "lane": "spine",
-      "fromCol": 4,
-      "toCol": 4,
+      "fromCol": 0,
+      "toCol": 0,
       "variant": "emphasis"
     },
     {
-      "id": "g_biz_proof",
-      "label": "六页证据",
-      "lane": "proof",
-      "fromCol": 4,
-      "toCol": 4,
-      "variant": "dashed"
-    },
-    {
-      "id": "g_biz_concede",
-      "label": "两处坦白",
+      "id": "gc",
+      "label": "本段披露",
       "lane": "concede",
-      "fromCol": 4,
-      "toCol": 4,
+      "fromCol": 2,
+      "toCol": 2,
       "variant": "security"
     }
   ],
   "mainPath": [
-    "s_open",
-    "s_custom",
-    "s_assess",
+    "s_problem",
     "s_position",
-    "s_business",
-    "s_ask"
+    "s_biz"
   ],
   "nodes": [
     {
-      "id": "s_open",
+      "id": "s_problem",
       "lane": "spine",
       "col": 0,
       "type": "backend",
-      "width": 168,
-      "label": "封面与定位",
-      "sublabel": "P1 · 为学习而生的 AI 学习平台",
-      "tag": "原型未完成",
+      "width": 150,
+      "label": "问题",
+      "sublabel": "P1–P8 · 双侧夹逼",
+      "tag": "两段",
       "sources": [
         {
           "path": "plans/Veridex_17p_SwissB.html",
           "line": 1226,
           "label": "P1 封面"
-        }
-      ]
-    },
-    {
-      "id": "s_custom",
-      "lane": "spine",
-      "col": 1,
-      "type": "backend",
-      "width": 168,
-      "label": "定制化课程",
-      "sublabel": "P2–P4 · 课堂形态与造课流程",
-      "sources": [
+        },
         {
           "path": "plans/Veridex_17p_SwissB.html",
-          "line": 1246,
-          "label": "P2 起点"
+          "line": 1350,
+          "label": "P5 诊断缺口"
         },
         {
           "path": "specs/product/OUTLINE.md",
@@ -150,29 +108,13 @@
       ]
     },
     {
-      "id": "s_assess",
-      "lane": "spine",
-      "col": 2,
-      "type": "backend",
-      "width": 168,
-      "label": "有效的检验",
-      "sublabel": "P5–P8 · 双侧夹逼",
-      "sources": [
-        {
-          "path": "plans/Veridex_17p_SwissB.html",
-          "line": 1350,
-          "label": "P5 起点"
-        }
-      ]
-    },
-    {
       "id": "s_position",
       "lane": "spine",
-      "col": 3,
+      "col": 1,
       "type": "backend",
-      "width": 168,
+      "width": 150,
       "label": "定位",
-      "sublabel": "P9–P12 · 六格归谁决定",
+      "sublabel": "P9–P12 · 六格归谁",
       "sources": [
         {
           "path": "plans/Veridex_17p_SwissB.html",
@@ -187,31 +129,20 @@
       ]
     },
     {
-      "id": "s_business",
+      "id": "s_biz",
       "lane": "spine",
-      "col": 4,
+      "col": 2,
       "type": "backend",
-      "width": 168,
-      "label": "商业模式",
-      "sublabel": "P13–P19 · 客群到获客",
+      "width": 150,
+      "label": "商业模式与请求",
+      "sublabel": "P13–P20 · HK$440,000",
+      "tag": "八页",
       "sources": [
         {
           "path": "plans/Veridex_17p_SwissB.html",
           "line": 1630,
           "label": "P13 起点"
-        }
-      ]
-    },
-    {
-      "id": "s_ask",
-      "lane": "spine",
-      "col": 5,
-      "type": "backend",
-      "width": 168,
-      "label": "请求",
-      "sublabel": "P20 · HK$440,000 与三里程碑",
-      "tag": "两人同台",
-      "sources": [
+        },
         {
           "path": "plans/Veridex_17p_SwissB.html",
           "line": 1947,
@@ -220,61 +151,34 @@
       ]
     },
     {
-      "id": "pr_status",
+      "id": "pr_gap",
       "lane": "proof",
       "col": 0,
       "type": "database",
       "width": 150,
-      "label": "零用户 · 全部为设计",
-      "sublabel": "诚实前提，先讲状态",
-      "sources": [
-        {
-          "path": "specs/product/veridex-product-philosophy.md",
-          "line": 130,
-          "label": "现状记录"
-        }
-      ]
-    },
-    {
-      "id": "pr_multimodal",
-      "lane": "proof",
-      "col": 1,
-      "type": "database",
-      "width": 150,
-      "label": "多模态课堂",
-      "sublabel": "文字 / 语音 / 图片 / 动画",
-      "sources": [
-        {
-          "path": "plans/Veridex_17p_SwissB.html",
-          "line": 1314,
-          "label": "P4 多模态"
-        }
-      ]
-    },
-    {
-      "id": "pr_hepi",
-      "lane": "proof",
-      "col": 2,
-      "type": "database",
-      "width": 150,
-      "label": "HEPI 2026 · Knof 2024",
-      "sublabel": "n=975 与 n=165 · 唯一定量页",
+      "label": "诊断缺口的证据",
+      "sublabel": "HEPI n=975 · 四步示意",
       "sources": [
         {
           "path": "plans/Veridex_17p_SwissB.html",
           "line": 1350,
           "label": "P5 数据页"
+        },
+        {
+          "path": "plans/Veridex_17p_SwissB.html",
+          "line": 1413,
+          "label": "P6 定性示意"
         }
       ]
     },
     {
       "id": "pr_compare",
       "lane": "proof",
-      "col": 3,
+      "col": 1,
       "type": "database",
       "width": 150,
       "label": "四家 × 六维度",
-      "sublabel": "官网公开页 2026-10-02 擷取",
+      "sublabel": "官网公开页 2026-10-02",
       "sources": [
         {
           "path": "plans/Veridex_17p_SwissB.html",
@@ -284,77 +188,39 @@
       ]
     },
     {
-      "id": "pr_market",
+      "id": "pr_biz",
       "lane": "proof",
-      "col": 4,
+      "col": 2,
       "type": "database",
       "width": 150,
-      "label": "香港教育人口",
-      "sublabel": "中學生 347,820 · DSE 55,781",
+      "label": "三页证据与里程碑",
+      "sublabel": "347,820 ／ 2.18–9% ／ M3·M6·M12",
       "sources": [
         {
           "path": "specs/economics/veridex-financial-model.md",
           "line": 261,
           "label": "教育局统计"
-        }
-      ]
-    },
-    {
-      "id": "pr_anchor",
-      "lane": "proof",
-      "col": 4,
-      "type": "database",
-      "width": 150,
-      "label": "转化假设锚点",
-      "sublabel": "2.18% / 5% / 9% · 口径各异",
-      "sources": [
+        },
         {
           "path": "specs/economics/veridex-financial-model.md",
           "line": 419,
-          "label": "Adapty 与 Duolingo"
-        }
-      ]
-    },
-    {
-      "id": "pr_revenue",
-      "lane": "proof",
-      "col": 4,
-      "type": "database",
-      "width": 150,
-      "label": "收入结构与轨迹",
-      "sublabel": "Max 25% 付费用户贡献 47% 收入",
-      "sources": [
-        {
-          "path": "specs/economics/veridex-financial-model.md",
-          "line": 194,
-          "label": "分档经济意义"
-        }
-      ]
-    },
-    {
-      "id": "pr_milestone",
-      "lane": "proof",
-      "col": 5,
-      "type": "database",
-      "width": 150,
-      "label": "三个里程碑",
-      "sublabel": "M3 / M6 / M12 · 均为推算",
-      "sources": [
+          "label": "Adapty 锚点"
+        },
         {
           "path": "specs/economics/veridex-financial-model.md",
           "line": 118,
-          "label": "用户里程碑表"
+          "label": "里程碑"
         }
       ]
     },
     {
       "id": "co_shape",
       "lane": "concede",
-      "col": 2,
+      "col": 0,
       "type": "security",
       "width": 150,
-      "label": "条形为定性示意",
-      "sublabel": "非实测数据",
+      "label": "非实测",
+      "sublabel": "条形为定性示意",
       "sources": [
         {
           "path": "plans/Veridex_17p_SwissB.html",
@@ -366,10 +232,10 @@
     {
       "id": "co_blank",
       "lane": "concede",
-      "col": 3,
+      "col": 1,
       "type": "security",
       "width": 150,
-      "label": "留白＝公开资料看不到",
+      "label": "留白＝看不到",
       "sublabel": "先讲对手的强项",
       "sources": [
         {
@@ -380,61 +246,39 @@
       ]
     },
     {
-      "id": "co_sayo",
+      "id": "co_biz",
       "lane": "concede",
-      "col": 4,
+      "col": 2,
       "type": "security",
       "width": 150,
-      "label": "Sayo 已在同批拨款",
-      "sublabel": "我们不是先进入者",
+      "label": "三处坦白",
+      "sublabel": "Sayo · 小学生 · 推算",
       "sources": [
         {
           "path": "specs/economics/veridex-financial-model.md",
           "line": 367,
-          "label": "智启学教拨款"
-        }
-      ]
-    },
-    {
-      "id": "co_pop",
-      "lane": "concede",
-      "col": 4,
-      "type": "security",
-      "width": 150,
-      "label": "小学生连续下跌",
-      "sublabel": "窗口 3–5 年",
-      "sources": [
+          "label": "Sayo 披露"
+        },
         {
           "path": "specs/economics/veridex-financial-model.md",
           "line": 263,
           "label": "小学生人数"
-        }
-      ]
-    },
-    {
-      "id": "co_est",
-      "lane": "concede",
-      "col": 5,
-      "type": "security",
-      "width": 150,
-      "label": "里程碑是推算",
-      "sublabel": "三个假设均无实测锚点",
-      "sources": [
+        },
         {
           "path": "specs/economics/veridex-financial-model.md",
           "line": 249,
-          "label": "推算标注要求"
+          "label": "推算标注"
         }
       ]
     },
     {
       "id": "op_shot",
       "lane": "open",
-      "col": 1,
+      "col": 0,
       "type": "external",
       "width": 150,
-      "label": "P3 课程页截图",
-      "sublabel": "需真实画面",
+      "label": "P3 截图",
+      "sublabel": "上台前必须补",
       "sources": [
         {
           "path": "specs/product/OUTLINE.md",
@@ -444,30 +288,19 @@
       ]
     },
     {
-      "id": "op_start",
+      "id": "op_biz",
       "lane": "open",
-      "col": 4,
+      "col": 2,
       "type": "external",
       "width": 150,
-      "label": "从哪开始",
-      "sublabel": "起始客群与切入科目",
+      "label": "两处待拍板",
+      "sublabel": "从哪开始 · 资金分配",
       "sources": [
         {
           "path": "plans/Veridex_17p_SwissB.html",
           "line": 1645,
           "label": "P13 占位"
-        }
-      ]
-    },
-    {
-      "id": "op_fund",
-      "lane": "open",
-      "col": 5,
-      "type": "external",
-      "width": 150,
-      "label": "资金用途五项分配",
-      "sublabel": "比例尚未定案",
-      "sources": [
+        },
         {
           "path": "plans/Veridex_17p_SwissB.html",
           "line": 1963,
@@ -479,106 +312,45 @@
   "edges": [
     {
       "id": "e1",
-      "from": "s_open",
-      "to": "s_custom",
-      "label": "先讲课堂形态",
-      "variant": "emphasis",
-      "role": "main"
-    },
-    {
-      "id": "e2",
-      "from": "s_custom",
-      "to": "s_assess",
-      "label": "形态解决后，问题转向效果",
-      "variant": "emphasis",
-      "role": "main"
-    },
-    {
-      "id": "e3",
-      "from": "s_assess",
+      "from": "s_problem",
       "to": "s_position",
       "label": "确认需求后定位",
       "variant": "emphasis",
       "role": "main"
     },
     {
-      "id": "e4",
+      "id": "e2",
       "from": "s_position",
-      "to": "s_business",
+      "to": "s_biz",
       "label": "定位收束后进生意",
       "variant": "emphasis",
       "role": "main"
     },
     {
-      "id": "e5",
-      "from": "s_business",
-      "to": "s_ask",
-      "label": "商业讲完才提请求",
-      "variant": "emphasis",
-      "role": "main"
-    },
-    {
       "id": "x1",
-      "from": "pr_status",
-      "to": "s_open",
+      "from": "pr_gap",
+      "to": "s_problem",
       "variant": "dashed",
       "role": "branch"
     },
     {
       "id": "x2",
-      "from": "pr_multimodal",
-      "to": "s_custom",
-      "variant": "dashed",
-      "role": "branch"
-    },
-    {
-      "id": "x3",
-      "from": "pr_hepi",
-      "to": "s_assess",
-      "label": "支撑诊断缺口",
-      "variant": "dashed",
-      "role": "branch"
-    },
-    {
-      "id": "x4",
       "from": "pr_compare",
       "to": "s_position",
       "variant": "dashed",
       "role": "branch"
     },
     {
-      "id": "x5",
-      "from": "pr_market",
-      "to": "s_business",
-      "variant": "dashed",
-      "role": "branch"
-    },
-    {
-      "id": "x6",
-      "from": "pr_anchor",
-      "to": "pr_revenue",
-      "label": "假设决定收入",
-      "variant": "dashed",
-      "role": "branch"
-    },
-    {
-      "id": "x7",
-      "from": "pr_revenue",
-      "to": "s_business",
-      "variant": "dashed",
-      "role": "branch"
-    },
-    {
-      "id": "x8",
-      "from": "pr_milestone",
-      "to": "s_ask",
+      "id": "x3",
+      "from": "pr_biz",
+      "to": "s_biz",
       "variant": "dashed",
       "role": "branch"
     },
     {
       "id": "y1",
       "from": "co_shape",
-      "to": "s_assess",
+      "to": "s_problem",
       "variant": "security",
       "role": "branch"
     },
@@ -591,46 +363,9 @@
     },
     {
       "id": "y3",
-      "from": "co_sayo",
-      "to": "s_business",
+      "from": "co_biz",
+      "to": "s_biz",
       "variant": "security",
-      "role": "branch"
-    },
-    {
-      "id": "y4",
-      "from": "co_pop",
-      "to": "pr_market",
-      "label": "与上升同时讲",
-      "variant": "security",
-      "role": "branch"
-    },
-    {
-      "id": "y5",
-      "from": "co_est",
-      "to": "s_ask",
-      "variant": "security",
-      "role": "branch"
-    },
-    {
-      "id": "z1",
-      "from": "op_shot",
-      "to": "s_custom",
-      "label": "上台前必须补",
-      "variant": "dashed",
-      "role": "branch"
-    },
-    {
-      "id": "z2",
-      "from": "op_start",
-      "to": "s_business",
-      "variant": "dashed",
-      "role": "branch"
-    },
-    {
-      "id": "z3",
-      "from": "op_fund",
-      "to": "s_ask",
-      "variant": "dashed",
       "role": "branch"
     }
   ],
@@ -640,10 +375,11 @@
       "title": "论证结构 · 双侧夹逼",
       "items": [
         "第二段不是两个并列问题，而是一个学习闭环被从两端切开",
-        "走 AI 这条路有内容、没诊断：学生不知道自己哪里不会，于是盲信",
-        "走平台这条路有诊断、没实施：让人看懂，但没让人用起来",
-        "P7 四问 = 诊断两问 + 实施两问，正好把两个缺口具体化",
-        "P8 四个动作分别落在两段上，构成收口"
+        "走 AI 有内容、没诊断：不知道自己哪里不会，于是盲信",
+        "走平台有诊断、没实施：让人看懂，但没让人用起来",
+        "P7 四问 = 诊断两问 + 实施两问，把两个缺口具体化",
+        "P8 四个动作分别落在两段上，构成收口",
+        "四条泳道按列对齐，主线之下的证据、披露、待拍板属于同一页区间"
       ]
     },
     {
