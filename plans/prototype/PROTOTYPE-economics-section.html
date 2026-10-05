@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROTOTYPE — Veridex 商业模式段（5 页 v2）</title>
+<style>
+/* PROTOTYPE — throwaway. 商业模式段 5 页，按评委做决定的顺序。
+   v2 变更：竞品定价统一港币 / 第1页去掉解释小字 / 成本页改成成本-收益-净收益三栏 /
+            宣发改成「社媒投放 + 内测招募」双轨并行 */
+:root{
+  --ikb:#002FA7; --paper:#fafaf8; --ink:#0a0a0a;
+  --g1:#e8e8e6; --g2:#c3c2be; --g3:#8a8a85; --g4:#57575a;
+  --sans:"Helvetica Neue",Helvetica,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+  --mono:"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#23231f;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;padding:26px 20px 92px}
+.hdr{max-width:1280px;margin:0 auto 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.hdr h1{font-size:15px;font-weight:500;color:#f2f2ee}
+.hdr .tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:#e0a33c;border:1px solid #6b5324;padding:3px 8px;border-radius:2px;white-space:nowrap}
+.hdr p{font-size:12.5px;color:#a5a49e;max-width:80ch;line-height:1.55;margin-top:6px}
+.deck{max-width:1280px;margin:0 auto;position:relative;aspect-ratio:16/9;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.42)}
+.slide{background:var(--paper);position:absolute;inset:0;display:flex;flex-direction:column;padding:4.2% 5% 3.2%}
+.slide[hidden]{display:none}
+.chrome{display:flex;justify-content:space-between;font-size:11.5px;color:var(--g4);padding-bottom:1.2vh;border-bottom:1px solid var(--g1)}
+.cat{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--ikb);text-transform:uppercase}
+.h{font-weight:200;letter-spacing:-.035em;line-height:1.02}
+.lead{color:var(--g4);line-height:1.5;font-weight:300}
+.foot{margin-top:auto;padding-top:1.2vh;border-top:1px solid var(--g1);display:flex;justify-content:space-between;
+  align-items:flex-end;gap:3%;font-size:10.5px;color:var(--g3);line-height:1.5}
+.foot b{color:var(--g4);font-weight:500}
+.src{display:inline-flex;padding:1.5px 4px;border-radius:2px;font-family:var(--mono);font-size:9px;
+  letter-spacing:.06em;white-space:nowrap;margin-left:.4em}
+.src--a{background:rgba(0,47,167,.10);color:var(--ikb);border:1px solid rgba(0,47,167,.28)}
+.src--b{background:rgba(90,90,60,.10);color:#5f5f42;border:1px solid rgba(120,120,80,.3)}
+.src--own{background:var(--ikb);color:#fff;border:1px solid var(--ikb)}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:1.15vh 1vw;border-bottom:1px solid var(--g1);
+  font-family:var(--sans),var(--sans-zh);font-size:max(14px,.92vw);line-height:1.4}
+th{font-weight:500;font-size:max(12px,.8vw);color:var(--g4);border-bottom:2px solid var(--ink);
+  padding-bottom:.9vh;letter-spacing:.02em}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.us td{color:var(--ikb);font-weight:500}
+.num{font-family:var(--sans);font-weight:200;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.unit{font-size:.36em;font-weight:300;opacity:.6;margin-left:.08em}
+.lbl{font-size:max(12px,.84vw);color:var(--g3);margin-top:.7vh;line-height:1.4}
+/* 三卡 */
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:2.2vw}
+.card{background:var(--g1);padding:2.2vh 1.5vw;display:flex;flex-direction:column;gap:.7vh}
+.card b{font-family:var(--sans),var(--sans-zh);font-size:max(19px,1.4vw);font-weight:500;line-height:1.2}
+.card p{font-size:max(13px,.88vw);line-height:1.5;color:var(--g4)}
+/* 三栏账：成本 → 收益 → 净收益 */
+.calc{margin-top:1vh;display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:0}
+.calc__h{font-size:max(13px,.88vw);font-weight:500;padding:0 1vw 1vh 0;border-bottom:2px solid var(--ink)}
+.calc__arrow{display:flex;align-items:center;justify-content:center;padding:0 .8vw;
+  font-family:var(--mono);font-size:max(15px,1.1vw);color:var(--g2);padding-bottom:1vh}
+.calc__cell{padding:1.7vh 1vw 1.7vh 0;border-bottom:1px solid var(--g1);display:flex;
+  flex-direction:column;justify-content:center;gap:.5vh}
+.calc__cell--k{color:var(--g4)}
+.calc__cell--n{font-family:var(--mono);font-size:max(11.5px,.8vw);color:var(--g4);line-height:1.5}
+.calc__v{font-family:var(--sans);font-weight:200;font-size:min(2.8vw,4.8vh);letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums}
+.calc__v--us{color:var(--ikb)}
+.calc__row{grid-column:1/-1;display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch}
+.calc__tag{font-size:max(13px,.9vw);font-weight:500;color:var(--ikb);padding-right:1vw;white-space:nowrap}
+/* 双轨 */
+.tracks{margin-top:2.2vh;display:grid;grid-template-columns:1fr 1fr;gap:2.6vw;flex:1;min-height:0}
+.track{display:flex;flex-direction:column;border-top:2px solid var(--ink);padding-top:1.6vh}
+.track--a{border-top-color:var(--g3)}
+.track--b{border-top-color:var(--ikb)}
+.track__n{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;color:var(--g3)}
+.track--b .track__n{color:var(--ikb)}
+.track b{font-family:var(--sans),var(--sans-zh);font-size:max(19px,1.35vw);font-weight:500;margin-top:.7vh;line-height:1.2}
+.track p{font-size:max(13px,.88vw);line-height:1.55;color:var(--g4);margin-top:.9vh}
+.track ul{margin-top:1vh;padding-left:0;list-style:none}
+.track li{font-size:max(12.5px,.86vw);line-height:1.5;color:var(--g4);padding:.45vh 0 .45vh 1.2em;position:relative}
+.track li::before{content:"—";position:absolute;left:0;color:var(--g2)}
+.warn{border-left:3px solid var(--ikb);padding:1.1vh 0 1.1vh 1.1vw;background:rgba(0,47,167,.045);margin-top:auto}
+.warn p{font-size:max(12.5px,.85vw);line-height:1.55;color:var(--g4);margin:0}
+.bar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:50;display:flex;align-items:center;
+  gap:6px;background:#111110;border:1px solid #35352f;border-radius:999px;padding:7px 9px;box-shadow:0 8px 26px rgba(0,0,0,.5)}
+.bar button{background:#242420;border:1px solid #3d3d36;color:#e8e8e2;cursor:pointer;width:30px;height:30px;
+  border-radius:999px;font-size:14px;line-height:1;display:grid;place-items:center}
+.bar button:hover{background:#33332c}
+.bar span{font-size:12.5px;color:#e8e8e2;min-width:270px;text-align:center}
+.bar span em{font-style:normal;color:#8a8a83;font-family:var(--mono);font-size:11px;margin-right:.5em}
+.note{max-width:1280px;margin:14px auto 0;font-size:11.5px;color:#8f8e88;line-height:1.65}
+.note b{color:#c9c8c1;font-weight:500}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <h1>商业模式段原型 v2 · 5 页</h1>
+    <p>v2 变更：竞品定价<b style="color:#c9c8c1">统一换算港币</b>／第 1 页去掉数字下的解释小字／
+       第 4 页改成<b style="color:#c9c8c1">成本 → 收益 → 净收益</b>三栏／宣发改成
+       <b style="color:#c9c8c1">社媒投放 + 内测招募</b>双轨并行。</p>
+  </div>
+  <div class="tag">PROTOTYPE · 可弃</div>
+</div>
+
+<div class="deck">
+
+<!-- ══ 1 · 卖给谁 ══════════════════════════════════ -->
+<section class="slide" data-v="1">
+  <div class="chrome"><span>商业模式 · 卖给谁</span><span>01 / 05 · HS</span></div>
+  <div style="margin-top:2.2%">
+    <div class="cat">Business · Who pays first</div>
+    <h2 class="h" style="font-size:min(4.4vw,7.6vh);margin-top:1.2%">任何有学习需求的人，<br/>都是我们的用户。</h2>
+    <p class="lead" style="font-size:max(12px,.9vw);margin-top:1.4%">能力是泛的。上传什么材料，就变成什么课——三类的差别只在上传的东西，不在产品。</p>
+  </div>
+
+  <div class="cols3" style="margin-top:3.4vh">
+    <div class="card"><b>小学生</b><p>语文、数学。基础没打牢，越早开始越省事。</p></div>
+    <div class="card"><b>快要考试的人</b><p>DSE 有明确日期和统一评核标准，<strong style="font-weight:500;color:var(--ink)">有截止日期的需求最好卖</strong>。</p></div>
+    <div class="card"><b>想学职业技能<br/>求就业的人</b><p>为了一个岗位、一个证书、一份作品集——付费意愿来自结果，不是来自课程。</p></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:3.4vw;margin-top:3.4vh;padding-top:2.2vh;border-top:1px solid var(--g2)">
+    <div>
+      <div class="num" style="font-size:min(3.4vw,5.8vh)">55,781</div>
+      <div class="lbl">DSE 2025 考生 <span class="src src--a">A</span></div>
+    </div>
+    <div>
+      <div class="num" style="font-size:min(3.4vw,5.8vh);color:var(--g3)">317,233</div>
+      <div class="lbl">小学生，连续下跌 <span class="src src--a">A</span></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div><b>能力是泛的，收费才要分档。</b>下一页讲按什么单位收。</div>
+    <div>窗口讲的是有截止日期的人，不是总人口<br/>教育局 TAB0402 · HKEAA</div>
+  </div>
+</section>
+
+<!-- ══ 2 · 竞品定价（全港币）══════════════════════ -->
+<section class="slide" data-v="2" hidden>
+  <div class="chrome"><span>商业模式 · 竞品定价</span><span>02 / 05 · HS</span></div>
+  <div style="margin-top:2.2%">
+    <div class="cat">Business · What they charge today</div>
+    <h2 class="h" style="font-size:min(4vw,6.8vh);margin-top:1.2%">同一个月费，<br/>买到的东西完全不同。</h2>
+  </div>
+
+  <div style="margin-top:2.8vh">
+    <table>
+      <thead><tr>
+        <th style="width:24%">产品</th><th>入门</th><th>主力档</th><th>高阶</th><th style="width:26%">计费单位</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><b>Hyperknow</b></td>
+          <td class="n">HK$0</td><td class="n">HK$140</td><td class="n">HK$390</td>
+          <td>积分（窗口期重置，过期作废）</td>
+        </tr>
+        <tr>
+          <td><b>Coursera</b></td>
+          <td class="n">—</td><td class="n">HK$460</td><td class="n">—</td>
+          <td>无限订阅 · 2000+ 门课任上</td>
+        </tr>
+        <tr>
+          <td><b>DeepLearning.AI</b></td>
+          <td class="n">—</td><td class="n">HK$195 <span style="color:var(--g3);font-weight:400">／年付</span></td><td class="n">HK$234 <span style="color:var(--g3);font-weight:400">／月付</span></td>
+          <td>无限订阅 · 130+ 门课任上</td>
+        </tr>
+        <tr>
+          <td><b>ChatGPT</b></td>
+          <td class="n">HK$0</td>
+          <td class="n">HK$156</td>
+          <td class="n">HK$62 <span style="color:var(--g3);font-weight:400">／</span> HK$780 起</td>
+          <td>通用 AI 能力与使用量的梯度</td>
+        </tr>
+        <tr class="us">
+          <td><b>Veridex</b> <span class="src src--own">设计中</span></td>
+          <td class="n">HK$0</td><td class="n">HK$148</td><td class="n">HK$388</td>
+          <td><b>积分</b> · 每日发放，累积七天</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="foot">
+    <div>ChatGPT HK$156 与 Hyperknow HK$140、我们 HK$148 —— <b>三个人在同一条价格带上</b>。<br/>
+    差的是买到的单位：他们卖<b>能力和使用量</b>，我们卖<b>完成学习与验收</b>。</div>
+    <div>全部按 US$1 = HK$7.8 换算 · 抓取日 2026-10-03<br/>ChatGPT 取自 openai.com/chatgpt/pricing（Pro $200／$500 不列）</div>
+  </div>
+</section>
+
+<!-- ══ 3 · 我们的定价 ════════════════════════════════ -->
+<section class="slide" data-v="3" hidden>
+  <div class="chrome"><span>商业模式 · 我们的定价</span><span>03 / 05 · HS</span></div>
+  <div style="margin-top:2.2%">
+    <div class="cat">Business · Our three tiers</div>
+    <h2 class="h" style="font-size:min(4vw,6.8vh);margin-top:1.2%">计费单位是积分。</h2>
+    <p class="lead" style="font-size:max(12px,.9vw);margin-top:1.2%">积分背后挂的是 token，而 <b style="font-weight:500">一个积分吃多少 token、token 单价多少，都会变</b>。<br/>
+    所以我们不把它换算成字数或时长交给用户——<b style="font-weight:500">积分是一个稳定的单位：底层价格怎么变，你每月付的数不变。</b></p>
+  </div>
+
+  <div style="margin-top:2.6vh">
+    <table>
+      <thead><tr><th style="width:22%"></th><th>普通</th><th style="color:var(--ikb)">Pro</th><th style="color:var(--ikb)">Max</th></tr></thead>
+      <tbody>
+        <tr class="us"><td><b>月费</b></td><td class="n">HK$0</td><td class="n">HK$148</td><td class="n">HK$388</td></tr>
+        <tr><td><b>每天</b></td><td>2 節短講解</td><td>5 節完整課</td><td>10 節完整課</td></tr>
+        <tr><td><b>每月</b></td><td>24 節等值</td><td>150 節完整課</td><td>300 節完整課</td></tr>
+        <tr><td><b>模型档次</b></td><td>固定中档</td><td>可开启路由</td><td>疑难优先用强模型</td></tr>
+        <tr><td><b>云端空间</b></td><td>200 MB</td><td>5 GB</td><td>20 GB</td></tr>
+        <tr><td><b>连接器</b></td><td>1 个</td><td>5 个</td><td>不限</td></tr>
+        <tr><td><b>课内追问</b></td><td>照常计</td><td>0</td><td>0</td></tr>
+        <tr><td><b>高峰优先 / 客服</b></td><td>—</td><td>—</td><td>✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="foot">
+    <div>额度<b>每日发放、累积七天</b>，不设窗口期，不月底清零。<br/>课内追问不另外计费——收费用的是「生成了一段新语音」。</div>
+    <div>积分与 token 的换算只在内部算成本，<b>不对外披露</b>。</div>
+  </div>
+</section>
+
+<!-- ══ 4 · 成本 → 收益 → 净收益 ═══════════════════ -->
+<section class="slide" data-v="4" hidden>
+  <div class="chrome"><span>商业模式 · 成本与收益</span><span>04 / 05 · HS</span></div>
+  <div style="margin-top:2%">
+    <div class="cat">Business · Cost · Revenue · Net</div>
+    <h2 class="h" style="font-size:min(3.6vw,6.2vh);margin-top:1%">把每一笔都算清楚。</h2>
+    <p class="lead" style="font-size:max(11.5px,.84vw);margin-top:.9vh">核算范围只有<b style="font-weight:500">生成课程内容</b>：TTS（千问）＋ 文字（DeepSeek），不含研发、合规、设备。</p>
+  </div>
+
+  <div class="calc" style="margin-top:1.8vh">
+    <div class="calc__h">成本</div><div class="calc__arrow"></div>
+    <div class="calc__h">收益</div><div class="calc__arrow"></div>
+    <div class="calc__h" style="border-bottom-color:var(--ikb)">净收益</div>
+
+    <div class="calc__row">
+      <div class="calc__tag" style="grid-row:1;grid-column:1;display:flex;align-items:center;padding-right:1vw"><span>Pro</span></div>
+      <div class="calc__cell" style="grid-row:1;grid-column:2">
+        <div class="calc__v">68.10</div>
+        <div class="calc__cell--n">TTS 48.60 ＋ 文字 19.50<br/>375 积分/日 × 30 天 ＝ 150 節完整課</div>
+      </div>
+      <div class="calc__cell" style="grid-row:1;grid-column:4;border-left:none">
+        <div class="calc__v">148</div>
+        <div class="calc__cell--n">HK$／月 订阅费</div>
+      </div>
+      <div class="calc__cell" style="grid-row:1;grid-column:6;border-left:2px solid var(--accent)">
+        <div class="calc__v calc__v--us">79.90</div>
+        <div class="calc__cell--n">HK$／月 · 净利率 54.0%</div>
+      </div>
+    </div>
+
+    <div class="calc__row">
+      <div class="calc__tag" style="grid-row:1;grid-column:1;display:flex;align-items:center;padding-right:1vw"><span>Max</span></div>
+      <div class="calc__cell" style="grid-row:1;grid-column:2">
+        <div class="calc__v">136.20</div>
+        <div class="calc__cell--n">TTS 97.20 ＋ 文字 39.00<br/>750 积分/日 × 30 天 ＝ 300 節完整課</div>
+      </div>
+      <div class="calc__cell" style="grid-row:1;grid-column:4;border-left:none">
+        <div class="calc__v">388</div>
+        <div class="calc__cell--n">HK$／月 订阅费</div>
+      </div>
+      <div class="calc__cell" style="grid-row:1;grid-column:6;border-left:2px solid var(--accent)">
+        <div class="calc__v calc__v--us">251.80</div>
+        <div class="calc__cell--n">HK$／月 · 净利率 64.9%</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2.2vw;margin-top:2.4vh;padding-top:1.8vh;border-top:1px solid var(--g2)">
+    <div><div class="num" style="font-size:min(2.2vw,3.8vh)">0.19</div><div class="lbl">小课 1,200 字</div></div>
+    <div><div class="num" style="font-size:min(2.2vw,3.8vh)">0.45</div><div class="lbl">中课 3,000 字（锚点）</div></div>
+    <div><div class="num" style="font-size:min(2.2vw,3.8vh)">2.27</div><div class="lbl">大课 15,000 字</div></div>
+    <div><div class="num" style="font-size:min(2.2vw,3.8vh);color:var(--g3)">10.90</div><div class="lbl">免费档补贴 HK$／人／月</div></div>
+  </div>
+
+  <div class="foot">
+    <div>这是<b>成本上限</b>——假设用户每天都把额度用满，按当前单价估算。<br/>真实值取决于使用率，而使用率正是第一个月要测出来的东西。</div>
+    <div>不含课内语音追问的实时模型成本——<b>那部分目前定价 0 积分，是已知风险项</b><br/>首月以账单校准后再定</div>
+  </div>
+</section>
+
+<!-- ══ 5 · 双轨并行 ═════════════════════════════════ -->
+<section class="slide" data-v="5" hidden>
+  <div class="chrome"><span>商业模式 · 双轨并行</span><span>05 / 05 · 两人</span></div>
+  <div style="margin-top:2.2%">
+    <div class="cat">Business · Two tracks, running together</div>
+    <h2 class="h" style="font-size:min(3.6vw,6.2vh);margin-top:1.2%">社媒投放的同时，<br/>先请第一批人来内测。</h2>
+  </div>
+
+  <div class="tracks">
+    <div class="track track--a">
+      <div class="track__n">TRACK 01</div>
+      <b>社媒投放</b>
+      <ul>
+        <li>X、小红书等平台并行投放</li>
+        <li>验证的是<b>自然流量能不能带来注册</b></li>
+        <li>看的是注册转化与成本，不看播放量</li>
+      </ul>
+      <div class="warn" style="border-left-color:var(--g3);background:var(--g1)">
+        <p>投放预算 <b>［待定，未上片］</b>。<br/>付费流量是否划算尚未实测——第 3 个月用实测 CPA 校准，不在这里先下结论。</p>
+      </div>
+    </div>
+
+    <div class="track track--b">
+      <div class="track__n">TRACK 02</div>
+      <b>内测招募</b>
+      <ul>
+        <li>邀请第一批客户真实试用，给<b>补偿</b></li>
+        <li>换的是测试反馈与<b>可公开的评语</b></li>
+        <li>这些评语就是之后给学校看的第一个证据</li>
+      </ul>
+      <div class="warn">
+        <p><b>补偿金额、目标内测人数：</b>［待定，未上片］<br/>
+        两条能变成收入的路径：<b>转介绍</b>（区间为估算，暂不上片）与<b>学校 B2B</b>——学校为「每生一笔钱」买 AI 辅助教学服务，钱是给学校的，不是我们的收入，两条线分开报。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div>Sayo Academy 已在同一批政府拨款里，<b>我们不是先进入者</b>；<br/>竞争力靠产品形态证明，不自称吻合度最高。</div>
+    <div>智启学教 HK$5 亿 / 每校 HK$500,000 <span class="src src--a">A</span> 政府新闻公报 2025-12-16<br/>
+    已删除：YouTube 22h31m（只说明香港人看长视频，不是获客成本）</div>
+  </div>
+</section>
+
+</div>
+
+<div class="note">
+  <b>第 4 页的改法：</b>原来是「左边单课成本、右边满额净利」，只有成本没有收益，看不出这笔账怎么来的。改成<b>成本 → 收益 → 净收益</b>三栏横着走，两行（Pro／Max）各走一遍，读者一眼看到 148 − 40.37 = 107.63 是怎么算出来的。<br>
+  <b>净利率保留但加了限定：</b>72.7% / 79.2% 是「每天用满额度」下的<b>成本上限</b>，不是预测。真实值取决于使用率——而使用率正是第一个月要测的东西。这样写，评评审追问时我们答得上来。<br>
+  <b>第 5 页的改法：</b>从「社媒不保证有效所以做内测」改成<b>两条轨同时跑</b>。原来的写法把社媒写成了失败备选，双轨才是实际的获客结构——社媒验证流量，内测换证据。
+</div>
+
+<div class="bar">
+  <button id="prev" aria-label="上一页">←</button>
+  <span id="lbl"></span>
+  <button id="next" aria-label="下一页">→</button>
+</div>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var titles={1:'卖给谁 · 三类客群',2:'竞品定价 · 全部港币',
+              3:'我们的定价 · 积分是唯一单位',4:'成本 → 收益 → 净收益',5:'双轨并行 · 社媒 + 内测'};
+  var i=0;
+  function render(){
+    slides.forEach(function(s,k){ s.hidden=k!==i; });
+    document.getElementById('lbl').innerHTML='<em>'+(i+1)+' / 5</em> '+titles[i+1];
+  }
+  function go(n){ i=(n+slides.length)%slides.length; render(); }
+  document.getElementById('prev').onclick=function(){go(i-1)};
+  document.getElementById('next').onclick=function(){go(i+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.target.matches('input,textarea,[contenteditable]')) return;
+    if(e.key==='ArrowRight'){e.preventDefault();go(i+1);}
+    if(e.key==='ArrowLeft'){e.preventDefault();go(i-1);}
+  });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROTOTYPE — P6 呈现形式：他们怎么做检测，我们怎么做</title>
+<style>
+/* PROTOTYPE — throwaway. 只回答一个问题：第六页用什么形式讲「检测」这件事。
+   风格贴着 plans/Veridex_17p_SwissB.html，好在与真实 deck 并排判断。 */
+:root{
+  --ikb:#002FA7; --paper:#fafaf8; --ink:#0a0a0a;
+  --g1:#e8e8e6; --g2:#c3c2be; --g3:#8a8a85; --g4:#57575a;
+  --sans:"Helvetica Neue",Helvetica,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+  --mono:"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#23231f;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;padding:28px 20px 96px}
+.hdr{max-width:1280px;margin:0 auto 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.hdr h1{font-size:15px;font-weight:500;color:#f2f2ee;letter-spacing:-.01em}
+.hdr .tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:#e0a33c;border:1px solid #6b5324;padding:3px 8px;border-radius:2px;white-space:nowrap}
+.hdr p{font-size:12.5px;color:#a5a49e;max-width:78ch;line-height:1.55;margin-top:6px}
+.stage{max-width:1280px;margin:0 auto}
+.slide{background:var(--paper);aspect-ratio:16/9;position:relative;overflow:hidden;display:flex;
+  flex-direction:column;padding:4.4% 5% 3.6%;box-shadow:0 18px 50px rgba(0,0,0,.42)}
+.slide[hidden]{display:none}
+.chrome{display:flex;justify-content:space-between;font-size:11.5px;color:var(--g4);padding-bottom:1.5%;
+  border-bottom:1px solid var(--g1)}
+.cat{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--ikb);text-transform:uppercase}
+.h{font-weight:200;letter-spacing:-.035em;line-height:1.02}
+.lead{color:var(--g4);line-height:1.5;font-weight:300}
+.foot{margin-top:auto;padding-top:1.5%;border-top:1px solid var(--g1);display:flex;justify-content:space-between;
+  align-items:flex-end;gap:3%}
+.foot .t{font-size:11.5px;color:var(--g4);line-height:1.45;max-width:60%}
+.foot .s{font-size:10px;color:var(--g3);line-height:1.5;text-align:right}
+.src{display:inline-flex;align-items:center;gap:.35em;font-family:var(--mono);font-size:9px;letter-spacing:.06em;
+  padding:1.5px 4px;border-radius:2px;white-space:nowrap}
+.src--a{background:rgba(0,47,167,.10);color:var(--ikb);border:1px solid rgba(0,47,167,.28)}
+.src--b{background:rgba(90,90,60,.10);color:#5f5f42;border:1px solid rgba(120,120,80,.3)}
+.src--own{background:var(--ikb);color:#fff;border:1px solid var(--ikb)}
+.src--todo{background:rgba(200,130,30,.14);color:#8a5a12;border:1px solid rgba(190,130,40,.35)}
+
+/* ══ A 三行对照表 ══════════════════════════════════ */
+.rows{margin-top:2.2%;flex:1;display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:1fr 2.1fr 1.9fr;gap:1.8%;padding:1.5% 0;
+  border-bottom:1px solid var(--g1);align-items:start}
+.row--h{border-bottom:2px solid var(--ink);padding-bottom:.9%}
+.row__q b{font-size:14.5px;font-weight:500;line-height:1.25;display:block;margin-bottom:.5em}
+.row__q i{font-style:normal;font-size:10.5px;color:var(--g3);line-height:1.4;display:block}
+.row__a{font-size:12.5px;line-height:1.45}
+.row__a p{margin-bottom:.45em}
+.row__a u{text-decoration:none;color:var(--g3);font-size:10.5px}
+.row__f{font-size:12.5px;line-height:1.45;color:var(--ikb);font-weight:500}
+.row__f span{display:block;color:var(--g4);font-weight:400;font-size:11px;margin-top:.35em}
+
+/* ══ B 左右分栏 ════════════════════════════════════ */
+.duo{margin-top:2.6%;flex:1;display:grid;grid-template-columns:1fr 1px 1fr;gap:0}
+.duo__rule{background:var(--g1)}
+.duo__side{padding:0 2.2%;display:flex;flex-direction:column}
+.duo__side:first-child{padding-left:0}
+.duo__side--us{padding-right:0}
+.duo__cap{font-size:12px;color:var(--g4);padding-bottom:.9%;border-bottom:2px solid var(--g2);margin-bottom:.5%}
+.duo__side--us .duo__cap{border-bottom-color:var(--ikb);color:var(--ikb)}
+.item{padding:2% 0;border-bottom:1px solid var(--g1);flex:1;display:flex;flex-direction:column;justify-content:center;gap:.5em}
+.item:last-child{border-bottom:none}
+.item b{font-size:15px;font-weight:500;line-height:1.25}
+.item p{font-size:12.5px;color:var(--g4);line-height:1.45}
+.item .src{align-self:flex-start}
+.duo__side--us .item p{color:var(--ikb);font-weight:500}
+
+/* ══ C 练习密度 ════════════════════════════════════ */
+.dens{margin-top:2.4%;flex:1;display:flex;flex-direction:column;gap:.9%}
+.dbar{display:grid;grid-template-columns:12.5em 1fr auto;gap:1.4%;align-items:center;padding:.75% 0}
+.dbar__k{font-size:12.5px;font-weight:400}
+.dbar__k em{font-style:normal;color:var(--g3);font-size:10.5px;display:block}
+.dbar__t{position:relative;height:20px;background:var(--g1)}
+.dbar__t i{position:absolute;left:0;top:0;bottom:0;display:block}
+.dbar__t .zero{position:absolute;left:0;top:-3px;bottom:-3px;width:2px;background:var(--ikb)}
+.dbar__v{font-family:var(--mono);font-size:11.5px;color:var(--g4);white-space:nowrap}
+.dsec{font-size:10.5px;font-family:var(--mono);letter-spacing:.14em;color:var(--g3);
+  padding-top:1.1%;border-top:1px solid var(--g2);margin-top:.6%}
+.dbar--us .dbar__v{color:var(--ikb)}
+.dbar--us .dbar__k{color:var(--ikb);font-weight:500}
+
+/* ══ D 题目生成时刻 ════════════════════════════════ */
+.tl2{margin-top:3%;flex:1;display:grid;grid-template-rows:auto 1fr;gap:1.2%}
+.tl2__axis{position:relative;height:30px;border-bottom:1px solid var(--g2)}
+.tl2__axis span{position:absolute;font-size:10.5px;color:var(--g3);font-family:var(--mono);white-space:nowrap}
+.tl2__axis span.r{right:0}
+.tl2__axis span.m{transform:translateX(-50%)}
+.tl2__track{position:relative;display:grid;grid-template-rows:repeat(3,1fr);gap:1.6%}
+.tl2__r{position:relative;display:flex;align-items:center}
+.tl2__lbl{width:11em;font-size:13px;font-weight:500;flex:none}
+.tl2__lane{position:relative;flex:1;height:100%}
+.tl2__lane::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--g1)}
+.pin{position:absolute;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:.5em}
+.pin b{font-size:11.5px;font-weight:500;white-space:nowrap}
+.pin i{width:10px;height:10px;border-radius:50%;background:var(--g3);flex:none}
+.pin--live i{background:var(--ikb);width:13px;height:13px}
+.pin--live b{color:var(--ikb)}
+.pin--soft i{background:transparent;border:2px solid var(--g3);width:11px;height:11px}
+.tl2__r--us .tl2__lbl{color:var(--ikb)}
+
+.bar{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:50;display:flex;align-items:center;
+  gap:6px;background:#111110;border:1px solid #35352f;border-radius:999px;padding:7px 9px;box-shadow:0 8px 26px rgba(0,0,0,.5)}
+.bar button{background:#242420;border:1px solid #3d3d36;color:#e8e8e2;cursor:pointer;width:30px;height:30px;
+  border-radius:999px;font-size:14px;line-height:1;display:grid;place-items:center}
+.bar button:hover{background:#33332c}
+.bar span{font-size:12.5px;color:#e8e8e2;min-width:250px;text-align:center}
+.bar span em{font-style:normal;color:#8a8a83;font-family:var(--mono);font-size:11px;margin-right:.5em}
+.note{max-width:1280px;margin:14px auto 0;font-size:11.5px;color:#8f8e88;line-height:1.65}
+.note b{color:#c9c8c1;font-weight:500}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <h1>P6 呈现形式原型 · DeepLearning.AI + Coursera 的检测长什么样，我们的又长什么样</h1>
+    <p>四个结构不同的变体。来源标记：<span style="color:#7a90c8">A = 第一方官网</span> ／
+       <span style="color:#8f8f6a">B = 具名第三方</span> ／
+       <span style="color:#e0a33c">待核</span> ／ <span style="color:#b9b9b3">设计中</span>。
+       这一层标记本身就是要评审的东西。</p>
+  </div>
+  <div class="tag">PROTOTYPE · 可弃</div>
+</div>
+
+<div class="stage">
+
+<!-- ══ A 三行对照 ══════════════════════════════════════ -->
+<section class="slide" data-v="A">
+  <div class="chrome"><span>问题二 · 有效的检验</span><span>06 / 20 · HS</span></div>
+  <div style="margin-top:2.2%">
+    <div class="cat">Problem 02 · How the check is built</div>
+    <h2 class="h" style="font-size:clamp(21px,2.9vw,44px);margin-top:1.2%">不是不做检测。<br/>是检测建在课里，不是建在你身上。</h2>
+  </div>
+
+  <div class="rows">
+    <div class="row row--h">
+      <div class="row__q"><b>三个问题</b></div>
+      <div class="row__q"><b>DeepLearning.AI + Coursera 的做法</b></div>
+      <div class="row__q"><b>Veridex 的做法</b></div>
+    </div>
+
+    <div class="row">
+      <div class="row__q"><b>① 练习密度不一致</b><i>有的模块有作业，有的没有</i></div>
+      <div class="row__a">
+        <p>AI Python for Beginners：Module 1 有 1 个编程作业 + 1 个测验，<b>Module 2 只有 2 个测验，零作业</b>。</p>
+        <u>deeplearning.ai 课程页 <span class="src src--a">A</span></u>
+        <p style="margin-top:.5em">Coursera 21,088 门在架课里只有 3,662 门（<b>17.4%</b>）有互评作业；去年同期 24.7%，2023 年 6 月 39%。</p>
+        <u>Class Central 分析 <span class="src src--b">B</span></u>
+      </div>
+      <div class="row__f">每节课都配练习
+        <span>课内还有小测，练习密度不靠老师排</span></div>
+    </div>
+
+    <div class="row">
+      <div class="row__q"><b>② 题型单一</b><i>练的是刷题，不是应用</i></div>
+      <div class="row__a">
+        <p>DeepLearning.AI 绝大多数检测是 <b>10 分钟的 Graded Quiz</b>——选择题。</p>
+        <u>deeplearning.ai 课程页 <span class="src src--a">A</span></u>
+        <p style="margin-top:.5em">第三方分析直言：自动化优先导致课程「<b>过度使用选择题</b>」，因为好自动评分。</p>
+        <u>Class Central <span class="src src--b">B</span></u>
+      </div>
+      <div class="row__f">题型丰富
+        <span>选择、判断、概念问答</span></div>
+    </div>
+
+    <div class="row">
+      <div class="row__q"><b>③ 难度不可调</b><i>适配不了个人能力圈</i></div>
+      <div class="row__a">
+        <p>Coursera 官方：作业按 <b>「课程预先创作的题目 + 老师预设的量表」</b>评分。题目在开课前就定好了。</p>
+        <u>coursera.support <span class="src src--a">A</span></u>
+        <p style="margin-top:.5em">DeepLearning.AI 的 Graded Quiz 同样是课程里预先写死的。</p>
+        <u>deeplearning.ai <span class="src src--a">A</span></u>
+      </div>
+      <div class="row__f">AI 长期记忆跟踪进度
+        <span>难度合适，而且随时可调</span></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="t">他们也有练习，练习质量也不差。<b>差的是练习跟着课走，不跟着人走。</b></div>
+    <div class="s">本页不含 Hyperknow · 三个问题各挂第一方或具名第三方出处<br/>Veridex 一行为产品设计，尚未上线</div>
+  </div>
+</section>
+
+<!-- ══ B 左右分栏 ════════════════════════════════════ -->
+<section class="slide" data-v="B" hidden>
+  <div class="chrome"><span>问题二 · 有效的检验</span><span>06 / 20 · HS</span></div>
+  <div style="margin-top:2.2%">
+    <div class="cat">Problem 02 · Their check, our check</div>
+    <h2 class="h" style="font-size:clamp(21px,2.9vw,44px);margin-top:1.2%">同样的三件事，<br/>建在不同的东西上。</h2>
+  </div>
+
+  <div class="duo">
+    <div class="duo__side">
+      <div class="duo__cap">DeepLearning.AI + Coursera · 检测建在课程上</div>
+      <div class="item">
+        <b>密度不均</b>
+        <p>AI Python for Beginners 的 Module 2 只有两个测验，<strong>一个作业都没有</strong>。Coursera 上有互评作业的课只占 17.4%，而且在缩。</p>
+        <span class="src src--a">A 官网 + B Class Central</span>
+      </div>
+      <div class="item">
+        <b>题型窄</b>
+        <p>检测基本是 10 分钟的选择题测验——好自动评分，所以被大量采用。练的是「选出对的答案」。</p>
+        <span class="src src--a">A 官网 ＋ B Class Central</span>
+      </div>
+      <div class="item">
+        <b>难度固定</b>
+        <p>题目和量表都是老师开课前定好的。同一门课，能力不同的人做同一张卷。</p>
+        <span class="src src--a">A coursera.support</span>
+      </div>
+    </div>
+
+    <div class="duo__rule"></div>
+
+    <div class="duo__side duo__side--us">
+      <div class="duo__cap">Veridex · 检测建在人身上 <span class="src src--own">设计中</span></div>
+      <div class="item">
+        <b>密度固定</b>
+        <p>每节课都配练习，课内还有小测。练习密度由产品保证，不靠每位老师自己排。</p>
+      </div>
+      <div class="item">
+        <b>题型多样</b>
+        <p>选择、判断、概念问答——考的是「能不能说清楚」，不只是「能不能选对」。</p>
+      </div>
+      <div class="item">
+        <b>难度跟着人</b>
+        <p>AI 长期记忆跟踪你的进度，题目难度合适，而且随时可以调。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="t">不是他们做得不好，是<b>检测的对象不同</b>：他们的检测对象是课程，你的检测对象是人。</div>
+    <div class="s">左栏各条出处见标签 · 右栏为产品设计</div>
+  </div>
+</section>
+
+<!-- ══ C 练习密度 ════════════════════════════════════ -->
+<section class="slide" data-v="C" hidden>
+  <div class="chrome"><span>问题二 · 有效的检验</span><span>06 / 20 · HS</span></div>
+  <div style="margin-top:2.2%">
+    <div class="cat">Problem 02 · Practice density, counted</div>
+    <h2 class="h" style="font-size:clamp(20px,2.6vw,40px);margin-top:1.2%">同一门课的两周，<br/>一周有作业，一周没有。</h2>
+  </div>
+
+  <div class="dens">
+    <div class="dbar dbar--us">
+      <div class="dbar__k">Veridex · 任一节课<em>设计中</em></div>
+      <div class="dbar__t"><i style="width:100%;background:var(--ikb)"></i><span class="zero" style="left:100%"></span></div>
+      <div class="dbar__v">每节 ≥1 练习</div>
+    </div>
+
+    <div class="dsec">DEEPLEARNING.AI · AI PYTHON FOR BEGINNERS（官网课程页 [A]）</div>
+    <div class="dbar">
+      <div class="dbar__k">Module 1 · Basics of AI Python</div>
+      <div class="dbar__t"><i style="width:50%;background:var(--g4)"></i></div>
+      <div class="dbar__v">1 作业 ＋ 1 测验</div>
+    </div>
+    <div class="dbar">
+      <div class="dbar__k">Module 2 · Your Own Data<em style="color:var(--ikb)">同一门课</em></div>
+      <div class="dbar__t"><span class="zero" style="left:0"></span></div>
+      <div class="dbar__v" style="color:var(--ikb)">0 作业 ＋ 2 测验</div>
+    </div>
+
+    <div class="dsec">COURSERA · 全平台（Class Central 2026 分析 [B]）</div>
+    <div class="dbar">
+      <div class="dbar__k">2023 年 6 月 · 有互评作业的课</div>
+      <div class="dbar__t"><i style="width:100%;background:var(--g4)"></i></div>
+      <div class="dbar__v">39%</div>
+    </div>
+    <div class="dbar">
+      <div class="dbar__k">2025 · 同上</div>
+      <div class="dbar__t"><i style="width:63%;background:var(--g4)"></i></div>
+      <div class="dbar__v">24.7%</div>
+    </div>
+    <div class="dbar">
+      <div class="dbar__k">2026 · 同上</div>
+      <div class="dbar__t"><i style="width:44.6%;background:var(--g4)"></i></div>
+      <div class="dbar__v">17.4%</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="t">练习密度不只是「有多少题」，是<b>会不会某一周突然空掉</b>。</div>
+    <div class="s">Coursera 数据：21,088 门在架课程中 3,662 门有互评作业<br/>条长按「有作业的课占比」等比，蓝色竖线＝零</div>
+  </div>
+</section>
+
+<!-- ══ D 题目生成时刻 ════════════════════════════════ -->
+<section class="slide" data-v="D" hidden>
+  <div class="chrome"><span>问题二 · 有效的检验</span><span>06 / 20 · HS</span></div>
+  <div style="margin-top:2.2%">
+    <div class="cat">Problem 02 · When was the question written?</div>
+    <h2 class="h" style="font-size:clamp(21px,2.9vw,44px);margin-top:1.2%">题目是什么时候<br/>写下来的？</h2>
+    <p class="lead" style="font-size:clamp(11.5px,.85vw,13.5px);margin-top:1.4%">难度不可调，根子在这里：<b>题是什么时候写下来的</b>。</p>
+  </div>
+
+  <div class="tl2">
+    <div class="tl2__axis">
+      <span style="left:0">老师写题</span>
+      <span class="m" style="left:32%">开课</span>
+      <span class="m" style="left:64%">你做练习</span>
+      <span class="r">你答的时候</span>
+    </div>
+    <div class="tl2__track">
+      <div class="tl2__r">
+        <div class="tl2__lbl">DeepLearning.AI</div>
+        <div class="tl2__lane">
+          <div class="pin" style="left:4%"><i></i><b>Graded Quiz 随课发布</b></div>
+        </div>
+      </div>
+      <div class="tl2__r">
+        <div class="tl2__lbl">Coursera</div>
+        <div class="tl2__lane">
+          <div class="pin" style="left:6%"><i></i><b>题目＋量表，课前定好</b></div>
+          <div class="pin pin--soft" style="left:74%"><i></i><b>你做同一张卷</b></div>
+        </div>
+      </div>
+      <div class="tl2__r tl2__r--us">
+        <div class="tl2__lbl">Veridex <span class="src src--own" style="margin-left:.4em">设计中</span></div>
+        <div class="tl2__lane">
+          <div class="pin pin--live" style="left:93%"><i></i><b>按你此刻的水平出题</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="t">他们的题在你开始之前就写好了。<b>所以它只能是「这门课该考什么」，不能是「你需要练什么」。</b></div>
+    <div class="s">出处：coursera.support「课程预先创作的题目＋老师预设量表」[A] · deeplearning.ai 课程页 [A]</div>
+  </div>
+</section>
+
+</div>
+
+<div class="note">
+  <b>这一版和上一版最大的不同：</b>上一版用「强度条」表达劣势——那是我估的数，评审问一句就答不上来。
+  这一版改成<b>每条主张都挂第一方或具名第三方的出处</b>：DLAI 官网课程页显示 Module 2 零作业（Coursera 17.4% 来自 Class Central 2026）。
+  三个问题里「难度不可调」改用「题目什么时候写下来」来讲——因为「不可调」是否定式命题，难举证；而「课前定好的题目」是 Coursera 官方文档里的原话，可查。<br>
+  <b>四个变体的分工：</b>A 密度最高、出处最全，最防守得住；B 视觉最平衡，左右对照最直觉；C 把「密度不一致」变成可数的条，最有说服力但只覆盖第一个问题；
+  D 把「难度不可调」讲透，但只有一条线，另外两个问题没地方放。<b>我的建议是 A 打底 + C 的条形补进去</b>，代价是那页会非常满。
+</div>
+
+<div class="bar">
+  <button id="prev" aria-label="上一个变体">←</button>
+  <span id="lbl"></span>
+  <button id="next" aria-label="下一个变体">→</button>
+</div>
+
+<script>
+(function(){
+  var KEYS=['A','B','C','D'];
+  var NAMES={A:'三行对照 · 问题／依据／解法',B:'左右分栏 · 他们的检测 vs 我们的检测',
+             C:'练习密度 · 把它变成可数的条',D:'题目生成时刻 · 难度不可调的根子'};
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var q=new URLSearchParams(location.search);
+  var i=Math.max(0,KEYS.indexOf((q.get('variant')||'A').toUpperCase()));
+  function render(){
+    slides.forEach(function(s,k){ s.hidden=k!==i; });
+    document.getElementById('lbl').innerHTML='<em>'+KEYS[i]+'</em> '+NAMES[KEYS[i]];
+  }
+  function go(n){ i=(n+KEYS.length)%KEYS.length; q.set('variant',KEYS[i]);
+    history.replaceState(null,'','?'+q.toString()); render(); }
+  document.getElementById('prev').onclick=function(){go(i-1)};
+  document.getElementById('next').onclick=function(){go(i+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.target.matches('input,textarea,[contenteditable]')) return;
+    if(e.key==='ArrowRight'){e.preventDefault();go(i+1);}
+    if(e.key==='ArrowLeft'){e.preventDefault();go(i-1);}
+  });
+  render();
+})();
+</script>
+</body>
+</html>

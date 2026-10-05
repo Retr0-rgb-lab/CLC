@@ -1,17 +1,31 @@
 <!DOCTYPE html>
+<!--
+  Veridex 青年创业基金简报 — 构建骨架（勿直接编辑生成物）
+
+  这份 HTML 只是一个壳。真实内容来自：
+    styles/*.css            设计系统（10 个主题分节 + 1 个商业段）
+    slides/*.html           17 页，一页一个文件
+    body-prelude.html       body 顶部工具栏与 WebGL 画布
+    data/speaker-notes.json 讲者备注
+    runtime-*.js            字体补偿 / 备注 / 核心 / ASCII 场 / 动效
+    vendor/motion.min.js    第三方动效引擎（构建时 base64 内联）
+
+  构建：  python3 build.py            →  ../Veridex_17p_SwissB.html
+  只验证：python3 build.py --check
+  改任何源文件后重新构建；不要手改生成物。
+-->
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Veridex 维学 — 青年创业基金委员会 · 瑞士国际主义 Style B</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&family=Noto+Sans+SC:wght@200;300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root{
+
+/* ═══ 01-theme.css ═══ */
     /* ============ 主题色(默认: 🔵 克莱因蓝 IKB) ============
        切换主题: 从 references/themes-swiss.md 复制对应的 :root 块
        整体替换标有"主题色"注释的所有变量,其他散落的 var() 引用无需逐处改 */
+  :root{
     --paper:#fafaf8;          /* 主底色: 高级灰白 */
     --paper-rgb:250,250,248;
     --ink:#0a0a0a;            /* 文字主色: 近黑 */
@@ -81,6 +95,7 @@
     -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility
   }
 
+/* ═══ 02-layout.css ═══ */
   /* ============ WebGL 网格背景 ============ */
   canvas.bg{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block;opacity:.55;mix-blend-mode:multiply;pointer-events:none}
   body.dark-bg canvas.bg{mix-blend-mode:screen;opacity:.42}
@@ -132,6 +147,7 @@
     opacity:.22;
   }
 
+/* ═══ 03-chrome.css ═══ */
   /* ============ Chrome (顶部 meta) + Foot (底部) ============ */
   .chrome{
     display:flex;justify-content:space-between;align-items:flex-start;
@@ -176,6 +192,7 @@
   .tag.solid{background:currentColor;color:var(--paper);border-color:transparent}
   .tag.accent{background:var(--accent);color:var(--accent-on);border-color:transparent;opacity:1}
 
+/* ═══ 04-type.css ═══ */
   /* ============ 标题层级 (无衬线 · 极轻字重 · 极致字号对比) ============ */
   .h-hero{
     font-family:var(--sans),var(--sans-zh);
@@ -263,6 +280,7 @@
     background:currentColor;opacity:.5;vertical-align:middle
   }
 
+/* ═══ 05-kpi-stat.css ═══ */
   /* ============ KPI Hero (视觉英雄数据) ============ */
   .kpi-hero{
     font-family:var(--sans);
@@ -374,6 +392,7 @@
     padding:0 .05em
   }
 
+/* ═══ 06-grid.css ═══ */
   /* ============ 网格系统 (模块化网格) ============ */
   .frame{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden}
   .frame.grid-2-7-5,
@@ -448,6 +467,7 @@
     opacity:.6;
   }
 
+/* ═══ 07-misc.css ═══ */
   /* ============ Icons (Lucide via CDN) ============ */
   .ico{width:1em;height:1em;display:inline-block;vertical-align:-.12em;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
   .ico-lg,.ico-md,.ico-sm{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
@@ -541,6 +561,7 @@
   .bar-row .bar-fill.ink{background:currentColor}
   .bar-row .bar-value{font-family:var(--sans);font-weight:700;font-size:max(16px,1.05vw);text-align:right;font-feature-settings:"tnum"}
 
+/* ═══ 08-chrome-nav.css ═══ */
   /* ============ 导航 ============ */
   /* 底部分页导航: 仅保留方块本身,无背景无描边 */
   #nav{position:fixed;left:50%;bottom:2vh;transform:translateX(-50%);z-index:30;display:flex;gap:10px;padding:0;background:transparent;border:0}
@@ -626,6 +647,7 @@
   body.low-power.motion-ready [data-anim],
   body.low-power [data-anim]{opacity:1!important;transform:none!important}
 
+/* ═══ 09-animation.css ═══ */
   /* ============================================================
      ↓↓↓ V2 EXTENSIONS · Canvas Mode + 参考图新类
      验证效果后沉淀回 template-swiss.html
@@ -650,7 +672,7 @@
     width:100vw;
     height:100vh;
     background:var(--paper);color:var(--ink);
-    padding:5.6vh 5vw 4.4vh;
+    padding:5.6vh 5vw 6.8vh;
     display:flex;flex-direction:column;
     position:relative;overflow:hidden;
     box-shadow:none;
@@ -1031,6 +1053,7 @@
   }
   .cross-mat.lg{--d:32px}
 
+/* ═══ 10-dataviz.css ═══ */
   /* ========== V3: 几何水平柱状图 ========== */
   /* 横向柱图: 标签列 + 柱体列 + 数值列 — 严格瑞士网格 */
   .h-bar-chart{
@@ -1181,39 +1204,125 @@
     .grid-2-7-5,.grid-2-6-6,.grid-2-8-4,.grid-2-4-8{grid-template-columns:1fr}
     .grid-12{grid-template-columns:repeat(6,1fr)}
   }
+
+/* ═══ 11-business.css ═══ */
+/* ═══ 商业段（原型搬入）：vx- 前缀，不污染 deck 原有样式 ═══ */
+.vx-cat{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
+.vx-h{font-weight:200;letter-spacing:-.035em;line-height:1.02}
+.vx-lead{color:var(--text-secondary);line-height:1.5;font-weight:300}
+.vx-foot{margin-top:auto;padding:1.2vh 0 1.4vh;border-top:1px solid var(--border-subtle);display:flex;
+  justify-content:space-between;align-items:flex-end;gap:3%;font-size:10.5px;color:var(--text-helper);
+  line-height:1.5;text-transform:none;letter-spacing:normal;font-family:var(--sans),var(--sans-zh);opacity:1}
+.vx-foot b{color:var(--text-secondary);font-weight:500}
+/* 内容较少的页面:撑满内容区并均匀分布,避免 margin-top:auto 制造空洞 */
+.vx-fill{flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-between;min-height:0}
+.vx-src{display:inline-flex;padding:1.5px 4px;border-radius:2px;font-family:var(--mono);font-size:9px;
+  letter-spacing:.06em;white-space:nowrap;margin-left:.4em;vertical-align:middle}
+.vx-src--a{background:rgba(0,47,167,.10);color:var(--accent);border:1px solid rgba(0,47,167,.28)}
+.vx-src--b{background:rgba(90,90,60,.10);color:#5f5f42;border:1px solid rgba(120,120,80,.3)}
+.vx-src--own{background:var(--accent);color:var(--accent-on);border:1px solid var(--accent)}
+.vx-num{font-family:var(--sans);font-weight:200;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.vx-unit{font-size:.36em;font-weight:300;opacity:.6;margin-left:.08em}
+.vx-lbl{font-size:max(12px,.84vw);color:var(--text-helper);margin-top:.7vh;line-height:1.4}
+.vx-cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:2.2vw}
+.vx-card{background:var(--grey-1);padding:2.6vh 1.5vw;display:flex;flex-direction:column;gap:.8vh}
+.vx-card b{font-family:var(--sans),var(--sans-zh);font-size:max(19px,1.4vw);font-weight:500;line-height:1.2}
+.vx-card p{font-size:max(13px,.88vw);line-height:1.5;color:var(--text-secondary)}
+.vx-table{width:100%;border-collapse:collapse}
+.vx-table th,.vx-table td{text-align:left;padding:var(--row-pad,1.05vh) 1vw;border-bottom:1px solid var(--border-subtle);
+  font-family:var(--sans),var(--sans-zh);font-size:max(16px,1.06vw);line-height:1.45}
+.vx-table th{font-weight:500;font-size:max(14px,.92vw);color:var(--text-helper);
+  border-bottom:2px solid var(--ink);padding-bottom:.9vh;letter-spacing:.02em;text-transform:none;opacity:1}
+.vx-table td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.vx-table tr.us td{color:var(--accent);font-weight:500}
+.vx-calc{margin-top:1.4vh;display:grid;grid-template-columns:7.5vw 1fr 1fr 1fr;
+  grid-auto-rows:minmax(0,auto);align-content:space-between;flex:1 1 auto;min-height:0}
+.vx-calc-h{font-size:max(14px,.95vw);font-weight:500;padding:0 1vw .9vh 0;border-bottom:2px solid var(--ink)}
+.vx-calc-h--us{border-bottom-color:var(--accent);color:var(--accent);font-weight:500}
+.vx-calc-arrow{display:flex;align-items:center;justify-content:center;padding:0 .8vw 1vh;
+  font-family:var(--mono);font-size:max(15px,1.1vw);color:var(--grey-2)}
+.vx-calc-cell{padding:2.2vh 1vw 2.2vh 0;border-bottom:1px solid var(--border-subtle);display:flex;
+  flex-direction:column;justify-content:flex-start;gap:.7vh;min-width:0}
+.vx-calc-cell--n{font-family:var(--mono);font-size:max(11.5px,.8vw);color:var(--text-helper);line-height:1.5}
+.vx-calc-v{font-family:var(--sans);font-weight:200;font-size:min(2.8vw,4.8vh);letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums}
+.vx-calc-v--us{color:var(--accent)}
+.vx-calc-cell--us{border-left:2px solid var(--accent);padding-left:1vw}
+.vx-calc-v--loss{color:var(--ink);font-weight:400}
+.vx-calc-cell--n b{color:var(--text-secondary);font-weight:500}
+.vx-calc-row{grid-column:1/-1;display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch}
+.vx-calc-tag{font-size:max(21px,1.5vw);font-weight:500;color:var(--ink);padding:2.2vh 1vw 2.2vh 0;
+  border-bottom:1px solid var(--border-subtle);display:flex;align-items:flex-start;white-space:nowrap}
+.vx-tracks{margin-top:2.2vh;display:grid;grid-template-columns:1fr 1fr;gap:2.6vw;flex:1;min-height:0}
+.vx-track{display:flex;flex-direction:column;border-top:2px solid var(--ink);padding-top:1.6vh}
+.vx-track--a{border-top-color:var(--grey-2)}
+.vx-track--b{border-top-color:var(--accent)}
+.vx-track-n{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;color:var(--text-helper)}
+.vx-track--b .vx-track-n{color:var(--accent)}
+.vx-track b{font-family:var(--sans),var(--sans-zh);font-size:max(19px,1.35vw);font-weight:500;margin-top:.7vh;line-height:1.2}
+.vx-track p{font-size:max(13px,.88vw);line-height:1.55;color:var(--text-secondary);margin-top:.9vh}
+.vx-track ul{margin-top:1vh;padding-left:0;list-style:none;flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-evenly;min-height:0}
+.vx-track li{font-size:max(12.5px,.86vw);line-height:1.5;color:var(--text-secondary);padding:.45vh 0 .45vh 1.2em;position:relative}
+.vx-track li::before{content:"—";position:absolute;left:0;color:var(--grey-2)}
+.vx-warn{border-left:3px solid var(--accent);padding:1.1vh 0 1.1vh 1.1vw;background:rgba(0,47,167,.045);margin-top:4.6vh}
+.vx-track .vx-warn{border-left-color:var(--grey-2);background:var(--grey-1)}
+.vx-warn p{font-size:max(12.5px,.85vw);line-height:1.55;color:var(--text-secondary);margin:0}
+
+/* ---- p14 成本结构三段 ---- */
+.vx-acts{display:grid;grid-template-columns:repeat(3,1fr);gap:2.2vw;margin-top:3vh;flex:1 1 auto;min-height:0}
+.vx-act{border-top:2px solid var(--ink);padding:2.2vh 0 0;display:flex;flex-direction:column;gap:1.4vh;min-width:0}
+.vx-act--reuse{border-top-color:var(--accent)}
+.vx-act-n{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--text-helper)}
+.vx-act--reuse .vx-act-n{color:var(--accent)}
+.vx-act-t{font-size:max(19px,1.45vw);font-weight:500;line-height:1.25;letter-spacing:-.01em}
+.vx-act-d{font-size:max(13px,.88vw);line-height:1.55;color:var(--text-secondary)}
+.vx-act-tag{font-family:var(--mono);font-size:max(11.5px,.78vw);color:var(--text-helper);
+  border:1px solid var(--border-subtle);padding:.5vh .7vw;align-self:flex-start;white-space:nowrap}
+.vx-act-tag--good{color:var(--accent);border-color:rgba(0,47,167,.35);background:rgba(0,47,167,.05)}
+.vx-act-f{font-size:max(13px,.9vw);color:var(--text-secondary);border-top:1px solid var(--border-subtle);padding-top:2.6vh;margin-top:auto}
+.vx-act-f b{font-family:var(--sans),var(--sans-zh);font-weight:600;font-size:max(15px,1.05vw)}
+.vx-act--reuse .vx-act-f b{color:var(--accent)}
+.vx-thesis{margin-top:3.6vh;margin-bottom:2.8vh;padding:2.8vh 0 0;border-top:2px solid var(--ink)}
+.vx-thesis p{font-size:max(16px,1.3vw);line-height:1.55;color:var(--text-secondary);font-weight:300}
+
+
+/* ---- p15 客户结构 ---- */
+.vx-mix{display:flex;flex-direction:column}
+.vx-mix-row{display:grid;grid-template-columns:7vw 1fr 8vw;gap:1.4vw;align-items:center;padding:2.8vh 0;border-top:1px solid var(--border-subtle)}
+.vx-mix-row:first-child{border-top:2px solid var(--ink)}
+.vx-mix-l{font-size:max(14px,1vw);color:var(--text-secondary);white-space:nowrap}
+.vx-mix-track{height:40px;background:var(--grey-1);position:relative}
+.vx-mix-fill{height:100%;background:var(--ink)}
+.vx-mix-fill--grey{background:var(--grey-2)}
+.vx-mix-fill--acc{background:var(--accent)}
+.vx-mix-v{font-family:var(--sans);font-weight:300;font-size:min(2.4vw,4.2vh);letter-spacing:-.02em;font-variant-numeric:tabular-nums;text-align:right}
+.vx-mix-v span{font-size:.5em;color:var(--text-helper);margin-left:.15em}
+.vx-mix-v--acc{color:var(--accent)}
+.vx-ratio{margin-top:4vh;display:flex;align-items:baseline;gap:2vw}
+.vx-ratio-n{font-family:var(--sans);font-weight:200;font-size:min(6vw,10.4vh);letter-spacing:-.035em;line-height:1}
+.vx-ratio-n span{color:var(--accent)}
+.vx-ratio-l{font-size:max(12px,.85vw);line-height:1.5;color:var(--text-secondary)}
+.vx-note{margin-top:auto;padding-top:1.6vh;border-top:1px solid var(--border-subtle);font-size:max(11.5px,.8vw);line-height:1.55;color:var(--text-helper)}
+.vx-note b{color:var(--text-secondary);font-weight:500}
+.vx-sub{font-size:max(13px,.88vw);font-weight:500;color:var(--text-helper);letter-spacing:.06em;text-transform:uppercase;padding-bottom:1.2vh}
+.vx-sub--sp{margin-top:2.6vh}
+.vx-item{padding:1.5vh 0;border-top:1px solid var(--border-subtle)}
+.vx-item p{font-size:max(13px,.88vw);line-height:1.6;color:var(--text-secondary)}
+.vx-item b{font-weight:500;color:var(--text-primary)}
+.vx-item--acc{border-top:2px solid var(--accent)}
+.vx-item--acc p{color:var(--text-primary)}
+.vx-item--acc b{color:var(--accent)}
+
+.vx-chrome{padding:1.4vh 0 1.2vh;border-bottom:1px solid var(--border-subtle);display:flex;
+  justify-content:space-between;font-size:11.5px;color:var(--text-helper)}
+
+.vx-n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.vx-us{color:var(--accent);font-weight:500}
 </style>
 </head>
 <body class="canvas-mode">
-<script>
-  // Windows 平台标记 — 雅黑没有 ExtraLight,需要字重补偿
-  if(/Win/i.test(navigator.platform || navigator.userAgentData?.platform || '')){
-    document.body.classList.add('is-win');
-  }
-  (function(){
-    const KEY = 'guizang-ppt-low-power';
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const stored = localStorage.getItem(KEY);
-    window.__lowPowerMode = stored === '1' || (stored === null && reduced);
-    function updateHint(){
-      const label = document.querySelector('.ppt-low-power-label');
-      if(label) label.textContent = window.__lowPowerMode ? '动态' : '静态';
-    }
-    window.__setLowPowerMode = function(on, opts={}){
-      window.__lowPowerMode = !!on;
-      document.body.classList.toggle('low-power', window.__lowPowerMode);
-      if(opts.persist !== false) localStorage.setItem(KEY, window.__lowPowerMode ? '1' : '0');
-      if(window.__lowPowerMode && document.getAnimations){
-        document.getAnimations().forEach(a=>a.cancel());
-      }
-      updateHint();
-      dispatchEvent(new CustomEvent('swiss-low-power-change', {detail:{on:window.__lowPowerMode}}));
-      if(window.__playSlide) window.__playSlide(window.__currentSlideIndex || 0);
-    };
-    document.body.classList.toggle('low-power', window.__lowPowerMode);
-    addEventListener('DOMContentLoaded', updateHint, {once:true});
-  })();
-</script>
 
+<body class="canvas-mode">
 <canvas id="bg-grid" class="bg"></canvas>
 <div id="hint" role="toolbar" aria-label="快捷控制">
   <span>← → 翻页</span><span class="ppt-sep">·</span>
@@ -1226,11 +1335,11 @@
 <section class="slide accent" data-layout="SWISS-COVER-ASCII" data-animate="hero" data-slide-id="cover">
   <div class="canvas-card" style="padding:0;display:flex;flex-direction:column">
     <canvas class="ascii-bg" aria-hidden="true"></canvas>
-    <div class="chrome-min" style="color:rgba(255,255,255,.9)">
+    <div class="chrome-min" style="color:rgba(255,255,255,.9);padding:2.6vh 5vw 0">
       <div class="l">Veridex 维学 · 青年创业基金委员会</div>
-      <div class="r">2026.10.16 · 01 / 20</div>
+      <div class="r">2026.10.16 · 01 / 17</div>
     </div>
-    <div style="flex:1;padding:0;display:grid;grid-template-rows:auto 1fr auto;gap:2.6vh;position:relative;z-index:1">
+    <div style="flex:1;padding:0 5vw 6.8vh;display:grid;grid-template-rows:auto 1fr auto;gap:2.6vh;position:relative;z-index:1;min-width:0">
       <div data-anim="kicker" class="t-meta" style="color:rgba(255,255,255,.78);letter-spacing:.22em">SECTION 00 · 封面</div>
       <h1 data-anim="title" style="align-self:center;font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(10.4vw,17vh);line-height:.98;letter-spacing:-.025em;color:#fff">为学习而生的<br/>AI学习平台</h1>
       <div data-anim="bottom" style="display:grid;grid-template-rows:auto auto;gap:1.6vh;border-top:1px solid rgba(255,255,255,.22);padding-top:2vh">
@@ -1242,10 +1351,14 @@
       </div>
     </div>
   </div>
+
+
+
 </section>
+
 <section class="slide" data-layout="S08" data-animate="duo-compare" data-slide-id="p2">
   <div class="canvas-card">
-    <div class="chrome-min"><div class="l">问题一 · 定制化课程</div><div class="r">02 / 20 · HS</div></div>
+    <div class="chrome-min"><div class="l">问题一 · 定制化课程</div><div class="r">02 / 17 · HS</div></div>
     <div data-anim="head" style="display:flex;flex-direction:column;gap:1.4vh;margin-top:5.4vh">
       <div class="t-cat accent">PROBLEM 01 · CUSTOMISATION</div>
       <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(5.4vw,9.4vh);line-height:1;letter-spacing:-.03em">传统课堂 VS AI课堂</h2>
@@ -1275,10 +1388,14 @@
       </div>
     </div>
   </div>
+
+
+
 </section>
+
 <section class="slide" data-layout="S05" data-animate="stack-row" data-slide-id="p3">
   <div class="canvas-card">
-    <div class="chrome-min"><div class="l">问题一 · 定制化课程</div><div class="r">03 / 20 · HJ</div></div>
+    <div class="chrome-min"><div class="l">问题一 · 定制化课程</div><div class="r">03 / 17 · HJ</div></div>
     <div style="flex:1;display:grid;grid-template-rows:auto 1fr auto;gap:0;margin-top:5.4vh">
       <div data-anim="head" style="display:grid;grid-template-columns:5fr 7fr;gap:3.4vw;align-items:end">
         <div style="display:flex;flex-direction:column;gap:1.4vh">
@@ -1306,14 +1423,18 @@
       </div>
 
       <div data-anim="shot" class="t-meta" style="border-top:1px solid var(--border-subtle);padding-top:1.6vh;margin-top:3vh;color:var(--text-helper)">
-        ［待放入课程页截图 — 需要你提供真实画面，这一格不能空著上台］
+        ［待放入课程页截图］
       </div>
     </div>
   </div>
+
+
+
 </section>
+
 <section class="slide" data-layout="S12" data-animate="split-statement" data-slide-id="p4">
-  <div class="canvas-card" style="padding-bottom:0">
-    <div class="chrome-min"><div class="l">问题一 · 定制化课程</div><div class="r">04 / 20 · HJ</div></div>
+  <div class="canvas-card" style="padding-bottom:6.8vh">
+    <div class="chrome-min"><div class="l">问题一 · 定制化课程</div><div class="r">04 / 17 · HJ</div></div>
     <div style="flex:1;display:grid;grid-template-rows:auto 1fr auto;gap:0;margin-top:5.4vh">
       <div data-anim="head" style="display:grid;grid-template-columns:7fr 5fr;gap:3.4vw;align-items:end">
         <div style="display:flex;flex-direction:column;gap:1.4vh">
@@ -1341,15 +1462,19 @@
         </div>
       </div>
 
-      <div data-anim="banner" class="half b-ink" style="margin:3.6vh -5vw 0;padding:2.8vh 5vw 2.6vh;flex-direction:column;justify-content:center">
+      <div data-anim="banner" class="half b-ink" style="margin:3.6vh -5vw 0;padding:3.2vh 5vw 5.4vh;display:flex;flex-direction:column;justify-content:center;background:var(--ink);color:var(--paper)">
         <div style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(3.4vw,6vh);line-height:1.1;letter-spacing:-.02em">课堂上可随意追问——学到完全懂为止</div>
       </div>
     </div>
   </div>
+
+
+
 </section>
+
 <section class="slide" data-layout="S07" data-animate="h-bar-chart" data-slide-id="p5">
   <div class="canvas-card">
-    <div class="chrome-min"><div class="l">问题二 · 有效的检验</div><div class="r">05 / 20 · HS</div></div>
+    <div class="chrome-min"><div class="l">问题二 · 有效的检验</div><div class="r">05 / 17 · HS</div></div>
     <div style="flex:1;display:grid;grid-template-columns:8fr 4fr;gap:3.4vw;margin-top:5.4vh">
       <div style="display:flex;flex-direction:column;min-width:0">
         <div data-anim="head" style="display:flex;flex-direction:column;gap:1.2vh">
@@ -1390,58 +1515,14 @@
       <div class="t-meta" style="color:var(--text-helper);text-align:right">六个能力里，<br/>能真正解决的只有两个</div>
     </div>
   </div>
+
+
+
 </section>
-<section class="slide" data-layout="S15" data-animate="matrix" data-slide-id="p6">
+
+<section class="slide" data-layout="S19" data-animate="four-cards" data-slide-id="p6">
   <div class="canvas-card">
-    <div class="chrome-min"><div class="l">问题二 · 有效的检验</div><div class="r">06 / 20 · HS</div></div>
-    <div style="flex:1;display:grid;grid-template-rows:auto auto auto auto;margin-top:4.4vh">
-      <div data-anim="head" style="display:flex;flex-direction:column;gap:1.2vh">
-        <div class="t-cat accent">PROBLEM 02 · HOW LEARNING IS ASSURED</div>
-        <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(4.4vw,7.6vh);line-height:1.02;letter-spacing:-.03em">自学平台如何<br/>保证学习效果？</h2>
-      </div>
-      <p class="lead" data-anim="lead" style="font-weight:300;max-width:62ch;margin-top:1.4vh">学习平台都把大量精力放在前两步——把知识讲清楚、让你看懂。但让人学会的是后两步，而恰恰是这两步最难被「做完」。</p>
-
-      <div data-anim="matrix" style="margin-top:2.6vh">
-        <div style="display:grid;grid-template-columns:12.5vw 1fr;border-top:2px solid var(--ink);padding:1.4vh 0 1.2vh"><div class="t-meta" style="color:var(--text-helper)">学习平台</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0 1vw"><div class="t-meta" style="padding-left:1vw;font-family:var(--sans),var(--sans-zh);font-size:max(15px,.95vw);font-weight:500;letter-spacing:0;text-transform:none;opacity:1;color:var(--text-primary)">唤起先备</div><div class="t-meta" style="padding-left:1vw;font-family:var(--sans),var(--sans-zh);font-size:max(15px,.95vw);font-weight:500;letter-spacing:0;text-transform:none;opacity:1;color:var(--text-primary)">示范</div><div class="t-meta" style="padding-left:1vw;font-family:var(--sans),var(--sans-zh);font-size:max(15px,.95vw);font-weight:500;letter-spacing:0;text-transform:none;opacity:1;color:var(--text-primary)">应用</div><div class="t-meta" style="padding-left:1vw;font-family:var(--sans),var(--sans-zh);font-size:max(15px,.95vw);font-weight:500;letter-spacing:0;text-transform:none;opacity:1;color:var(--text-primary)">整合</div></div></div>
-        <div style="display:grid;grid-template-columns:12.5vw 1fr;align-items:center;border-top:1px solid var(--border-subtle);padding:1.9vh 0"><div style="font-family:var(--sans),font-size:max(15px,.95vw);font-weight:500;line-height:1.25;padding-right:1vw;color:var(--text-primary)">DeepLearning.AI</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0 1vw"><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">01</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:88%;background:linear-gradient(90deg,var(--accent) 0%,color-mix(in srgb, var(--accent) 42%, transparent) 58%,color-mix(in srgb, var(--accent) 8%, transparent) 100%)"></div></div></div><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">02</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:92%;background:linear-gradient(90deg,var(--accent) 0%,color-mix(in srgb, var(--accent) 42%, transparent) 58%,color-mix(in srgb, var(--accent) 8%, transparent) 100%)"></div></div></div><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">03</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:22%;background:linear-gradient(90deg,var(--accent) 0%,color-mix(in srgb, var(--accent) 42%, transparent) 58%,color-mix(in srgb, var(--accent) 8%, transparent) 100%)"></div></div></div><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">04</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:12%;background:linear-gradient(90deg,var(--accent) 0%,color-mix(in srgb, var(--accent) 42%, transparent) 58%,color-mix(in srgb, var(--accent) 8%, transparent) 100%)"></div></div></div></div></div><div style="display:grid;grid-template-columns:12.5vw 1fr;align-items:center;border-top:1px solid var(--border-subtle);padding:1.9vh 0"><div style="font-family:var(--sans),font-size:max(15px,.95vw);font-weight:500;line-height:1.25;padding-right:1vw;color:var(--text-primary)">Coursera</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0 1vw"><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">01</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:80%;background:linear-gradient(90deg,var(--accent) 0%,color-mix(in srgb, var(--accent) 42%, transparent) 58%,color-mix(in srgb, var(--accent) 8%, transparent) 100%)"></div></div></div><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">02</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:88%;background:linear-gradient(90deg,var(--accent) 0%,color-mix(in srgb, var(--accent) 42%, transparent) 58%,color-mix(in srgb, var(--accent) 8%, transparent) 100%)"></div></div></div><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">03</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:32%;background:linear-gradient(90deg,var(--accent) 0%,color-mix(in srgb, var(--accent) 42%, transparent) 58%,color-mix(in srgb, var(--accent) 8%, transparent) 100%)"></div></div></div><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">04</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:16%;background:linear-gradient(90deg,var(--accent) 0%,color-mix(in srgb, var(--accent) 42%, transparent) 58%,color-mix(in srgb, var(--accent) 8%, transparent) 100%)"></div></div></div></div></div><div style="display:grid;grid-template-columns:12.5vw 1fr;align-items:center;border-top:1px solid var(--border-subtle);padding:1.9vh 0"><div style="font-family:var(--sans),font-size:max(15px,.95vw);font-weight:500;line-height:1.25;padding-right:1vw;color:var(--text-primary)">Hyperknow</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0 1vw"><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">01</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:66%;background:linear-gradient(90deg,var(--accent) 0%,color-mix(in srgb, var(--accent) 42%, transparent) 58%,color-mix(in srgb, var(--accent) 8%, transparent) 100%)"></div></div></div><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">02</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:72%;background:linear-gradient(90deg,var(--accent) 0%,color-mix(in srgb, var(--accent) 42%, transparent) 58%,color-mix(in srgb, var(--accent) 8%, transparent) 100%)"></div></div></div><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">03</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:46%;background:linear-gradient(90deg,var(--accent) 0%,color-mix(in srgb, var(--accent) 42%, transparent) 58%,color-mix(in srgb, var(--accent) 8%, transparent) 100%)"></div></div></div><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">04</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:26%;background:linear-gradient(90deg,var(--accent) 0%,color-mix(in srgb, var(--accent) 42%, transparent) 58%,color-mix(in srgb, var(--accent) 8%, transparent) 100%)"></div></div></div></div></div><div style="display:grid;grid-template-columns:12.5vw 1fr;align-items:center;border-top:2px solid var(--accent);padding:1.9vh 0"><div style="font-family:var(--sans),font-size:max(15px,.95vw);font-weight:500;line-height:1.25;padding-right:1vw;color:var(--accent)">Veridex<span style="color:var(--accent)"> · 设计中</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0 1vw"><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">01</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:92%;background:linear-gradient(90deg, var(--accent) 0%, color-mix(in srgb, var(--accent) 72%, transparent) 100%)"></div></div></div><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">02</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:92%;background:linear-gradient(90deg, var(--accent) 0%, color-mix(in srgb, var(--accent) 72%, transparent) 100%)"></div></div></div><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">03</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:90%;background:linear-gradient(90deg, var(--accent) 0%, color-mix(in srgb, var(--accent) 72%, transparent) 100%)"></div></div></div><div style="padding:0 0 0 1vw"><div class="t-meta" style="color:var(--text-helper);font-size:13px;margin-bottom:.7vh"><span style="font-weight:400">04</span></div><div style="height:15px;background:var(--grey-1);position:relative;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:88%;background:linear-gradient(90deg, var(--accent) 0%, color-mix(in srgb, var(--accent) 72%, transparent) 100%)"></div></div></div></div></div>
-      </div>
-
-      <div data-anim="foot" style="display:flex;justify-content:space-between;align-items:end;border-top:1px solid var(--border-subtle);padding-top:1.8vh;margin-top:2.4vh">
-        <div style="font-family:var(--sans),var(--sans-zh);font-weight:400;font-size:max(16px,1.15vw);line-height:1.4;max-width:58ch">
-          差别不在<b style="font-weight:500">讲得清不清楚</b>，而在<b style="font-weight:500;color:var(--accent)">有没有让你真的用起来</b>。
-        </div>
-        <div class="t-meta" style="text-align:right;color:var(--text-helper)">条形长度为定性示意，用于表达各步骤的相对强弱<br/><br/>Merrill (2002) First principles of instruction</div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="slide" data-layout="S09" data-animate="dot-matrix" data-slide-id="p7">
-  <div class="canvas-card" style="position:relative">
-    <div class="dot-mat" aria-hidden="true" style="position:absolute;right:4vw;top:16vh;opacity:.5;pointer-events:none"></div>
-    <div class="chrome-min"><div class="l">问题二 · 有效的检验</div><div class="r">07 / 20 · HJ</div></div>
-    <div style="flex:1;display:grid;grid-template-rows:auto 1fr auto;margin-top:5.4vh;position:relative;z-index:1">
-      <div data-anim="head" style="display:flex;flex-direction:column;gap:1.4vh">
-        <div class="t-cat accent">PROBLEM 02 · THE GAP</div>
-        <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(5.6vw,9.8vh);line-height:1;letter-spacing:-.03em">一题做错了，<br/>这四件事要有人回答</h2>
-      </div>
-
-      <div data-anim="up" style="display:flex;flex-direction:column;justify-content:center;gap:2.6vh">
-        <div style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(4vw,7vh);line-height:1.1;letter-spacing:-.02em">这题<b style="font-weight:400;border-bottom:2px solid var(--accent)">挂哪个</b>知识点？</div>
-        <div style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(4vw,7vh);line-height:1.1;letter-spacing:-.02em">为什么会<b style="font-weight:400;border-bottom:2px solid var(--accent)">错</b>？</div>
-        <div style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(4vw,7vh);line-height:1.1;letter-spacing:-.02em">该<b style="font-weight:400;border-bottom:2px solid var(--accent)">补</b>哪一块？</div>
-        <div style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(4vw,7vh);line-height:1.1;letter-spacing:-.02em"><b style="font-weight:400;border-bottom:2px solid var(--accent)">多久</b>再问一次？</div>
-      </div>
-
-      <div data-anim="foot" style="border-top:1px solid var(--border-subtle);padding-top:2.2vh;margin-top:4vh;display:flex;justify-content:space-between;align-items:end">
-        <div style="font-family:var(--sans),var(--sans-zh);font-weight:400;font-size:max(19px,1.8vw);line-height:1.3;max-width:50ch">现在的产品大多只回答第一个。我们回答四个。</div>
-        <div class="t-meta" style="color:var(--text-helper);text-align:right">→ 下一页：这四个问题，<br/>分别归谁决定</div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="slide" data-layout="S19" data-animate="four-cards" data-slide-id="p8">
-  <div class="canvas-card">
-    <div class="chrome-min"><div class="l">问题二 · 有效的检验</div><div class="r">08 / 20 · HS</div></div>
+    <div class="chrome-min"><div class="l">问题二 · 有效的检验</div><div class="r">06 / 17 · HS</div></div>
     <div style="flex:1;display:grid;grid-template-rows:auto auto 1fr auto;margin-top:5.4vh">
       <div data-anim="rule" style="height:2px;width:6.4vw;background:var(--accent)"></div>
       <div data-anim="head" style="display:flex;flex-direction:column;gap:1.4vh;margin-top:2.6vh">
@@ -1478,10 +1559,74 @@
       </div>
     </div>
   </div>
+
+
+
 </section>
-<section class="slide" data-layout="S04" data-animate="grid-reveal" data-slide-id="p9">
+
+<section class="slide" data-layout="S08" data-animate="duo-compare" data-slide-id="p7">
+  <div class="canvas-card" style="padding:0">
+    <div class="chrome-min" style="padding:5.4vh 5vw 1.4vh">
+      <div class="l">问题二 · 有效的检验</div>
+      <div class="r">07 / 17 · HJ</div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-rows:minmax(0,1fr) auto;min-height:0">
+      <div style="display:grid;grid-template-columns:1fr 1fr;min-height:0">
+
+        <div style="padding:0 5vw 0;display:flex;flex-direction:column;min-height:0">
+          <div data-anim="head" style="display:flex;align-items:baseline;gap:.9vw;border-bottom:2px solid var(--border-subtle);padding-bottom:.7vh">
+            <span style="font-family:var(--sans);font-size:max(19px,1.3vw);font-weight:500;letter-spacing:-.015em">DeepLearning.AI</span>
+            <span style="color:var(--grey-2);font-size:max(16px,1.1vw)">·</span>
+            <span style="font-family:var(--sans);font-size:max(19px,1.3vw);font-weight:500;letter-spacing:-.015em">Coursera</span>
+          </div>
+          <h2 data-anim="title" style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(3.3vw,5.4vh);line-height:1.06;letter-spacing:-.03em;margin-top:1.5vh;min-height:3.2em">已有的<br/>学习程式<br/>检测功能的现状</h2>
+          <div data-anim="cols" style="flex:1;display:flex;flex-direction:column;margin-top:1.3vh;min-height:0">
+            <div style="flex:1 1 0;display:flex;align-items:center;border-top:1px solid var(--border-subtle)">
+              <span style="font-family:var(--sans),var(--sans-zh);font-size:max(20px,1.6vw);font-weight:400;letter-spacing:-.01em">检测密度不均</span>
+            </div>
+            <div style="flex:1 1 0;display:flex;align-items:center;border-top:1px solid var(--border-subtle)">
+              <span style="font-family:var(--sans),var(--sans-zh);font-size:max(20px,1.6vw);font-weight:400;letter-spacing:-.01em">检测题型单一</span>
+            </div>
+            <div style="flex:1 1 0;display:flex;align-items:center;border-top:1px solid var(--border-subtle)">
+              <span style="font-family:var(--sans),var(--sans-zh);font-size:max(20px,1.6vw);font-weight:400;letter-spacing:-.01em">检测难度固定</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="border-left:1px solid var(--border-subtle);padding:0 5vw 0;display:flex;flex-direction:column;min-height:0">
+          <div data-anim="head" style="display:flex;align-items:baseline;gap:.9vw;border-bottom:2px solid var(--accent);padding-bottom:.7vh">
+            <span style="font-family:var(--sans);font-size:max(19px,1.3vw);font-weight:500;letter-spacing:-.015em;color:var(--accent)">Veridex</span>
+            <span style="font-family:var(--mono);font-size:max(12px,.85vw);color:var(--accent);opacity:.8">设计中</span>
+          </div>
+          <h2 data-anim="title" style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(3.3vw,5.4vh);line-height:1.06;letter-spacing:-.03em;color:var(--accent);margin-top:1.5vh;min-height:3.2em">同样做检测<br/>我们的优势</h2>
+          <div data-anim="cols" style="flex:1;display:flex;flex-direction:column;margin-top:1.3vh;min-height:0">
+            <div style="flex:1 1 0;display:flex;align-items:center;border-top:2px solid var(--accent)">
+              <span style="font-family:var(--sans),var(--sans-zh);font-size:max(20px,1.6vw);font-weight:400;letter-spacing:-.01em;color:var(--accent)">每节课都配练习</span>
+            </div>
+            <div style="flex:1 1 0;display:flex;align-items:center;border-top:1px solid var(--border-subtle)">
+              <span style="font-family:var(--sans),var(--sans-zh);font-size:max(20px,1.6vw);font-weight:400;letter-spacing:-.01em;color:var(--accent)">题型丰富</span>
+            </div>
+            <div style="flex:1 1 0;display:flex;align-items:center;border-top:1px solid var(--border-subtle)">
+              <span style="font-family:var(--sans),var(--sans-zh);font-size:max(20px,1.6vw);font-weight:400;letter-spacing:-.01em;color:var(--accent)">难度跟着人走</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div data-anim="foot" style="border-top:1px solid var(--border-subtle);padding:1.4vh 5vw 6.8vh;display:flex;justify-content:space-between;align-items:end;gap:3vw">
+        <div class="t-meta" style="color:var(--text-helper)">Module 2 零作业、10 分钟选择题测验：deeplearning.ai 课程页 [A]<br/>有互评作业的课占 17.4%、「过度使用选择题」：Class Central 2026 分析 [B]</div>
+        <div class="t-meta" style="color:var(--text-helper);text-align:right">题目与量表均为老师开课前定好：coursera.support [A]</div>
+      </div>
+    </div>
+  </div>
+
+
+
+</section>
+
+<section class="slide" data-layout="S04" data-animate="grid-reveal" data-slide-id="p8">
   <div class="canvas-card">
-    <div class="chrome-min"><div class="l">定位 · 竞争格局</div><div class="r">09 / 20 · HS</div></div>
+    <div class="chrome-min"><div class="l">定位 · 竞争格局</div><div class="r">08 / 17 · HS</div></div>
     <div style="flex:1;display:grid;grid-template-rows:auto 1fr auto;margin-top:5.4vh">
       <div data-anim="head" style="display:flex;flex-direction:column;gap:1.4vh">
         <div class="t-cat accent">POSITIONING · 01</div>
@@ -1503,10 +1648,14 @@
       </div>
     </div>
   </div>
+
+
+
 </section>
-<section class="slide" data-layout="S15" data-animate="matrix" data-slide-id="p10">
+
+<section class="slide" data-layout="S15" data-animate="matrix" data-slide-id="p9">
   <div class="canvas-card">
-    <div class="chrome-min"><div class="l">定位 · 竞争格局</div><div class="r">10 / 20 · HJ</div></div>
+    <div class="chrome-min"><div class="l">定位 · 竞争格局</div><div class="r">09 / 17 · HJ</div></div>
     <div style="flex:1;display:grid;grid-template-rows:auto auto 1fr auto;margin-top:4.4vh">
       <div data-anim="head" style="display:flex;flex-direction:column;gap:1.2vh">
         <div class="t-cat accent">POSITIONING · 02</div>
@@ -1533,77 +1682,19 @@
       </div>
     </div>
   </div>
+
+
+
 </section>
-<section class="slide" data-layout="S20" data-animate="stacked-ledger" data-slide-id="p11">
-  <div class="canvas-card">
-    <div class="chrome-min"><div class="l">定位 · 怎么计价</div><div class="r">11 / 20 · HS</div></div>
-    <div style="flex:1;display:grid;grid-template-columns:7fr 5fr;gap:3.4vw;margin-top:4.4vh">
-      <div style="display:flex;flex-direction:column;min-width:0">
-        <div data-anim="head" style="display:flex;flex-direction:column;gap:1.2vh">
-          <div class="t-cat accent">POSITIONING · 03</div>
-          <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(4.2vw,7.2vh);line-height:1.02;letter-spacing:-.03em">你要记住的只有一件事：<br/>一天能上几节课</h2>
-        </div>
 
-        <div data-anim="ledger" style="margin-top:3.4vh">
-          <div style="display:grid;grid-template-columns:5.4vw 13vw 1fr;gap:1.6vw;align-items:end;padding:2.2vh 0 1.4vh;border-top:2px solid var(--ink)">
-            <div class="t-meta">T 01</div>
-            <div class="t-meta" style="color:var(--text-helper)">免费</div>
-            <div style="font-family:var(--sans),var(--sans-zh);font-weight:300;font-size:max(17px,1.5vw);line-height:1.3">每天 <b style="font-weight:400">2 节</b>短讲解</div>
-          </div>
-          <div style="display:grid;grid-template-columns:5.4vw 13vw 1fr;gap:1.6vw;align-items:end;padding:2.2vh 0 1.4vh;border-top:1px solid var(--border-subtle)">
-            <div class="t-meta" style="color:var(--accent)">T 02</div>
-            <div style="font-family:var(--sans),var(--sans-zh);font-weight:300;font-size:min(3.4vw,5.8vh);line-height:1;color:var(--accent)">HK$148</div>
-            <div style="font-family:var(--sans),var(--sans-zh);font-size:max(16px,1.05vw);line-height:1.4;color:var(--text-secondary)">Pro · 每天 <b style="font-weight:400;color:var(--text-primary)">12 节</b>短讲解，或 <b style="font-weight:400;color:var(--text-primary)">5 节</b>完整课</div>
-          </div>
-          <div style="display:grid;grid-template-columns:5.4vw 13vw 1fr;gap:1.6vw;align-items:end;padding:2.2vh 0 1.4vh;border-top:1px solid var(--border-subtle)">
-            <div class="t-meta">T 03</div>
-            <div style="font-family:var(--sans),var(--sans-zh);font-weight:300;font-size:min(3.4vw,5.8vh);line-height:1">HK$388</div>
-            <div style="font-family:var(--sans),var(--sans-zh);font-size:max(16px,1.05vw);line-height:1.4;color:var(--text-secondary)">Max · 每天 <b style="font-weight:400;color:var(--text-primary)">25 节</b>短讲解，或 <b style="font-weight:400;color:var(--text-primary)">10 节</b>完整课</div>
-          </div>
-          <div class="t-meta" style="border-top:1px solid var(--border-subtle);padding-top:1.6vh;color:var(--text-helper)">额度每日发放，累积七天，不设窗口期，不月底清零——用不完不会因为你隔天没登入而消失。</div>
-          <div class="t-meta" style="padding-top:1.2vh;color:var(--text-helper)">购买单位是节数。计价单位不是节数——为什么，下一段讲。</div>
-        </div>
-      </div>
 
-      <div style="display:flex;flex-direction:column;border-left:1px solid var(--border-subtle);padding-left:2.4vw">
-        <div data-anim="head" class="t-cat" style="color:var(--text-helper)">同价位对照 · Hyperknow Pro</div>
-        <div style="margin-top:2.4vh;display:flex;flex-direction:column;gap:0">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:1.6vh 0;border-top:1px solid var(--border-subtle)">
-            <span class="t-meta" style="color:var(--text-helper)">月费</span>
-            <span style="font-family:var(--sans),var(--sans-zh);font-size:max(16px,1.05vw);line-height:1.3">US$18 ≈ HK$140 ／ HK$148</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:1.6vh 0;border-top:1px solid var(--border-subtle)">
-            <span class="t-meta" style="color:var(--text-helper)">额度怎么发</span>
-            <span style="font-family:var(--sans),var(--sans-zh);font-size:max(16px,1.05vw);line-height:1.3">窗口期重置，过期作废 ／ <b style="font-weight:400;color:var(--accent)">每日发放</b></span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:1.6vh 0;border-top:1px solid var(--border-subtle)">
-            <span class="t-meta" style="color:var(--text-helper)">用不完的额度</span>
-            <span style="font-family:var(--sans),var(--sans-zh);font-size:max(16px,1.05vw);line-height:1.3">不累积 ／ <b style="font-weight:400;color:var(--accent)">累积七天</b></span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:1.6vh 0;border-top:1px solid var(--border-subtle)">
-            <span class="t-meta" style="color:var(--text-helper)">课内追问</span>
-            <span style="font-family:var(--sans),var(--sans-zh);font-size:max(16px,1.05vw);line-height:1.3">扣额度 ／ <b style="font-weight:400;color:var(--accent)">0</b></span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:1.6vh 0;border-top:1px solid var(--border-subtle)">
-            <span class="t-meta" style="color:var(--text-helper)">上传自己的教材</span>
-            <span style="font-family:var(--sans),var(--sans-zh);font-size:max(16px,1.05vw);line-height:1.3">额度增加 ／ <b style="font-weight:400;color:var(--accent)">0</b></span>
-          </div>
-        </div>
-
-        <div data-anim="punch" style="margin-top:auto;padding-top:2.4vh;border-top:2px solid var(--accent)">
-          <div style="font-family:var(--sans),var(--sans-zh);font-weight:300;font-size:max(18px,1.45vw);line-height:1.35">价位几乎一样。差的是额度怎么发：它用不完就作废，我们的可以累积七天。</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="slide" data-layout="S03" data-animate="split-statement" data-slide-id="p12">
+<section class="slide" data-layout="S03" data-animate="split-statement" data-slide-id="p10">
   <div class="canvas-card" style="padding:0">
     <div class="split-half">
-      <div class="half" style="padding:5.6vh 3.4vw 4.4vh;justify-content:space-between">
+      <div class="half" style="padding:5.6vh 3.4vw 6.8vh;justify-content:space-between">
         <div class="chrome-min">
           <div class="l">定位 · 收束</div>
-          <div class="r">12 / 17 · 两人</div>
+          <div class="r">10 / 17 · 两人</div>
         </div>
         <div data-anim="manifesto" style="display:flex;flex-direction:column;gap:2vh">
           <div class="t-meta" style="letter-spacing:.22em;color:var(--text-helper)">SECTION 01 CLOSE</div>
@@ -1611,7 +1702,7 @@
         </div>
         <div data-anim="foot" class="t-meta" style="border-top:1px solid var(--border-subtle);padding-top:2vh;color:var(--text-helper)">黄浩然 · 黄羿捷</div>
       </div>
-      <div class="half b-grey r-border" style="padding:5.6vh 3.4vw 4.4vh;justify-content:space-between">
+      <div class="half b-grey r-border" style="padding:5.6vh 3.4vw 6.8vh;justify-content:space-between">
         <div class="chrome-min">
           <div class="l">NEXT</div>
           <div class="r">→ 生意</div>
@@ -1626,331 +1717,306 @@
       </div>
     </div>
   </div>
+
+
+
 </section>
-<section class="slide" data-layout="S04" data-animate="grid-reveal" data-slide-id="p13">
-  <div class="canvas-card">
-    <div class="chrome-min"><div class="l">商业模式 · 目标客群与市场窗口</div><div class="r">13 / 20 · HS</div></div>
-    <div style="flex:1;display:grid;grid-template-rows:auto auto auto;margin-top:4.4vh">
-      <div data-anim="head" style="display:flex;flex-direction:column;gap:1.2vh">
-        <div class="t-cat accent">BUSINESS · 01 · WHO</div>
-        <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(4.4vw,7.6vh);line-height:1.04;letter-spacing:-.03em">同一套机制，四类使用者；<br/>换的只是上传的档案</h2>
-      </div>
 
-      <div class="sub-grid-3-2" data-anim="cells" style="margin-top:2.6vh;flex:0 1 auto;min-height:0">
-        <div class="sub-card" style="border-radius:0"><span class="nb-corner">01</span><div class="ttl">小学生</div><div class="desc">语文、数学</div></div>
-        <div class="sub-card" style="border-radius:0"><span class="nb-corner">02</span><div class="ttl">中学生</div><div class="desc">DSE 公开考试</div></div>
-        <div class="sub-card" style="border-radius:0"><span class="nb-corner">03</span><div class="ttl">大学生</div><div class="desc">论文题目、课堂复习</div></div>
-        <div class="sub-card" style="border-radius:0"><span class="nb-corner">04</span><div class="ttl">在职进修</div><div class="desc">转行要用的技术</div></div>
-        <div class="sub-card accent" style="border-radius:0"><span class="nb-corner">05</span><div class="ttl">分寸感</div><div class="desc">学习之内不插手；学习之外（找课、备题、排程）全部包办</div></div>
-        <div class="sub-card" style="border-radius:0;background:transparent;border:1px dashed var(--grey-2)"><span class="nb-corner">06</span><div class="ttl">从哪开始</div><div class="desc">［待拍板：起始客群与切入科目］</div></div>
-      </div>
+<section class="slide" data-layout="S16" data-animate="grid-reveal" data-slide-id="p11">
+<div class="canvas-card">
+<div class="vx-chrome"><span>商业模式 · 卖给谁</span><span>11 / 17 · HS</span></div>
+  <div class="vx-fill">
+  <div style="margin-top:2.2vh">
+    <div class="vx-cat">Business · Who pays first</div>
+    <h2 class="vx-h" style="font-size:min(4.4vw,7.6vh);margin-top:1.2vh">任何有学习需求的人，<br/>都是我们的用户。</h2>
+    <p class="vx-lead" style="font-size:max(12px,.9vw);margin-top:1.4vh">能力是泛的。上传什么材料，就变成什么课——三类的差别只在上传的东西，不在产品。</p>
+  </div>
 
-      <div data-anim="market" style="border-top:2px solid var(--ink);padding-top:2vh;margin-top:2.4vh">
-        <div class="t-cat" style="color:var(--text-helper);margin-bottom:1.4vh">市场窗口 · 香港教育人口 [A] 教育局／考评局</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2.4vw">
-          <div>
-            <div style="font-family:var(--sans);font-weight:200;font-size:min(2.8vw,4.8vh);line-height:1;letter-spacing:-.03em;font-feature-settings:'tnum'">347,820</div>
-            <div class="t-body-sm" style="color:var(--text-secondary);margin-top:.8vh">中学生（2025-09），较 2022 谷底 +8.30%，连升三年</div>
-          </div>
-          <div>
-            <div style="font-family:var(--sans);font-weight:200;font-size:min(2.8vw,4.8vh);line-height:1;letter-spacing:-.03em;font-feature-settings:'tnum'">55,781</div>
-            <div class="t-body-sm" style="color:var(--text-secondary);margin-top:.8vh">DSE 2025 考生，2026 年近 57,000。评核标准统一、日期明确</div>
-          </div>
-          <div>
-            <div style="font-family:var(--sans);font-weight:200;font-size:min(2.8vw,4.8vh);line-height:1;letter-spacing:-.03em;color:var(--text-secondary);font-feature-settings:'tnum'">317,233</div>
-            <div class="t-body-sm" style="color:var(--text-secondary);margin-top:.8vh">小学生，连续下跌。**窗口是 3–5 年，不是无限**</div>
-          </div>
+  <div class="vx-cols3" style="margin-top:3.4vh">
+    <div class="vx-card"><b>小学生</b><p>语文、数学。基础没打牢，越早开始越省事。</p></div>
+    <div class="vx-card"><b>快要考试的人</b><p>DSE 有明确日期和统一评核标准，<strong style="font-weight:500;color:var(--ink)">有截止日期的需求最好卖</strong>。</p></div>
+    <div class="vx-card"><b>想学职业技能<br/>求就业的人</b><p>为了一个岗位、一个证书、一份作品集——付费意愿来自结果，不是来自课程。</p></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:3.4vw;margin-top:5.4vh;padding-top:3.4vh;border-top:1px solid var(--grey-2)">
+    <div>
+      <div class="vx-num" style="font-size:min(4.6vw,7.4vh)">55,781</div>
+      <div class="vx-lbl">DSE 2025 考生 <span class="vx-src vx-src--a">A</span></div>
+    </div>
+    <div>
+      <div class="vx-num" style="font-size:min(4.6vw,7.4vh);color:var(--grey-3)">317,233</div>
+      <div class="vx-lbl">小学生，连续下跌 <span class="vx-src vx-src--a">A</span></div>
+    </div>
+  </div>
+  </div>
+
+  <div class="vx-foot">
+    <div><b>能力是泛的，收费才要分档。</b>下一页讲按什么单位收。</div>
+    <div>窗口讲的是有截止日期的人，不是总人口<br/>教育局 TAB0402 · HKEAA</div>
+  </div>
+</div>
+</section>
+
+<section class="slide" data-layout="S21" data-animate="grid-reveal" data-slide-id="p12">
+<div class="canvas-card">
+<div class="vx-chrome"><span>商业模式 · 竞品定价</span><span>12 / 17 · HS</span></div>
+  <div class="vx-fill">
+  <div style="margin-top:2.2vh">
+    <div class="vx-cat">Business · What they charge today</div>
+    <h2 class="vx-h" style="font-size:min(4vw,6.8vh);margin-top:1.2vh">同一个月费，<br/>买到的东西完全不同。</h2>
+  </div>
+
+  <div style="margin-top:2.8vh">
+    <table class="vx-table" style="--row-pad:3.1vh">
+      <thead><tr>
+        <th style="width:24%">产品</th><th>入门</th><th>主力档</th><th>高阶</th><th style="width:26%">计费单位</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><b>Hyperknow</b></td>
+          <td class="vx-n">HK$0</td><td class="vx-n">HK$140</td><td class="vx-n">HK$390</td>
+          <td>积分（窗口期重置，过期作废）</td>
+        </tr>
+        <tr>
+          <td><b>Coursera</b></td>
+          <td class="vx-n">—</td><td class="vx-n">HK$460</td><td class="vx-n">—</td>
+          <td>无限订阅 · 2000+ 门课任上</td>
+        </tr>
+        <tr>
+          <td><b>DeepLearning.AI</b></td>
+          <td class="vx-n">—</td><td class="vx-n">HK$195 <span style="color:var(--grey-3);font-weight:400">／年付</span></td><td class="vx-n">HK$234 <span style="color:var(--grey-3);font-weight:400">／月付</span></td>
+          <td>无限订阅 · 130+ 门课任上</td>
+        </tr>
+        <tr>
+          <td><b>ChatGPT</b></td>
+          <td class="vx-n">HK$0</td>
+          <td class="vx-n">HK$156</td>
+          <td class="vx-n">HK$62 <span style="color:var(--grey-3);font-weight:400">／</span> HK$780 起</td>
+          <td>通用 AI 能力与使用量的梯度</td>
+        </tr>
+        <tr class="vx-us">
+          <td><b>Veridex</b> <span class="vx-src vx-src--own">设计中</span></td>
+          <td class="vx-n">HK$0</td><td class="vx-n">HK$148</td><td class="vx-n">HK$388</td>
+          <td><b>积分</b> · 每日发放，累积七天</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+
+  <div class="vx-foot">
+    <div>ChatGPT HK$156 与 Hyperknow HK$140、我们 HK$148 —— <b>三个人在同一条价格带上</b>。<br/>
+    差的是买到的单位：他们卖<b>能力和使用量</b>，我们卖<b>完成学习与验收</b>。</div>
+    <div>全部按 US$1 = HK$7.8 换算 · 抓取日 2026-10-03<br/>ChatGPT 取自 openai.com/chatgpt/pricing（Pro $200／$500 不列）</div>
+  </div>
+</div>
+</section>
+
+<section class="slide" data-layout="S20" data-animate="grid-reveal" data-slide-id="p13">
+<div class="canvas-card">
+<div class="vx-chrome"><span>商业模式 · 我们的定价</span><span>13 / 17 · HS</span></div>
+  <div style="margin-top:2.2vh">
+    <div class="vx-cat">Business · Our three tiers</div>
+    <h2 class="vx-h" style="font-size:min(4vw,6.8vh);margin-top:1.2vh">计费单位是积分。</h2>
+    <p class="vx-lead" style="font-size:max(12px,.9vw);margin-top:1.2vh">积分背后挂的是 token，而 <b style="font-weight:500">一个积分吃多少 token、token 单价多少，都会变</b>。<br/>
+    所以我们不把它换算成字数或时长交给用户——<b style="font-weight:500">积分是一个稳定的单位：底层价格怎么变，你每月付的数不变。</b></p>
+  </div>
+
+  <div style="margin-top:2.6vh">
+    <table class="vx-table">
+      <thead><tr><th style="width:22%"></th><th>普通</th><th style="color:var(--accent)">Pro</th><th style="color:var(--accent)">Max</th></tr></thead>
+      <tbody>
+        <tr class="vx-us"><td><b>月费</b></td><td class="vx-n">HK$0</td><td class="vx-n">HK$148</td><td class="vx-n">HK$388</td></tr>
+        <tr><td><b>每天</b></td><td>2 节短讲解</td><td>5 节完整课</td><td>10 节完整课</td></tr>
+        <tr><td><b>每月</b></td><td>24 节等值</td><td>150 节完整课</td><td>300 节完整课</td></tr>
+        <tr><td><b>模型档次</b></td><td>固定中档</td><td>可开启路由</td><td>疑难优先用强模型</td></tr>
+        <tr><td><b>云端空间</b></td><td>200 MB</td><td>5 GB</td><td>20 GB</td></tr>
+        <tr><td><b>连接器</b></td><td>1 个</td><td>5 个</td><td>不限</td></tr>
+        <tr><td><b>课内追问</b></td><td>照常计</td><td>0</td><td>0</td></tr>
+        <tr><td><b>高峰优先 / 客服</b></td><td>—</td><td>—</td><td>✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="vx-foot">
+    <div>额度<b>每日发放、累积七天</b>，不设窗口期，不月底清零。<br/>课内追问不另外计费——收费用的是「生成了一段新语音」。<br/><b>同价位对照</b> Hyperknow Pro US$18 ≈ HK$140：额度窗口期重置、过期作废、不累积。</div>
+    <div>价位几乎一样，差的是额度怎么发。<br/>积分与 token 的换算只在内部算成本，<b>不对外披露</b>。</div>
+  </div>
+</div>
+</section>
+
+<section class="slide" data-layout="S16" data-animate="grid-reveal" data-slide-id="p14">
+<div class="canvas-card">
+<div class="vx-chrome"><span>商业模式 · 成本结构</span><span>14 / 17 · HS</span></div>
+  <div class="vx-fill">
+  <div style="margin-top:2vh">
+    <div class="vx-cat">Business · What we actually pay for</div>
+    <h2 class="vx-h" style="font-size:min(3.5vw,6vh);margin-top:1vh">成本不是「每节课多少钱」。</h2>
+    <p class="vx-lead" style="font-size:max(12px,.88vw);margin-top:2vh">是<b style="font-weight:500">三个动作各付多少</b>。而其中只有一个会随用户数量增长。</p>
+  </div>
+
+  <div class="vx-acts">
+    <div class="vx-act vx-act--reuse">
+      <div class="vx-act-n">A</div>
+      <div class="vx-act-t">预设课程库</div>
+      <p class="vx-act-d">发布前把各学科的课程一次性做好——内容、语音、文字都已经生成完毕。</p>
+      <div class="vx-act-tag vx-act-tag--good">一次性投入 · 之后复用</div>
+      <div class="vx-act-f">随用户数增长？<b>不</b></div>
+    </div>
+
+    <div class="vx-act">
+      <div class="vx-act-n">B</div>
+      <div class="vx-act-t">上传教材 · 实时生成</div>
+      <p class="vx-act-d">用户传自己的讲义，每个人的内容都不一样，只能即时生成。</p>
+      <div class="vx-act-tag">每次上传 · 实时计费</div>
+      <div class="vx-act-f">随用户数增长？<b>是</b></div>
+    </div>
+
+    <div class="vx-act">
+      <div class="vx-act-n">C</div>
+      <div class="vx-act-t">自定义提问</div>
+      <p class="vx-act-d">打断、追问、要求换一种讲法——答案要现场生成。</p>
+      <div class="vx-act-tag">每次提问 · 实时计费</div>
+      <div class="vx-act-f">随用户数增长？<b>是</b></div>
+    </div>
+  </div>
+
+  <div class="vx-thesis">
+    <p>因为「上课」这个最高频的动作，大部分落在<b style="font-weight:500">可以复用的预设课程</b>上——<br/>
+    我们的<b style="font-weight:500">边际成本不随上课次数增长，只随「生成新内容」的次数增长</b>，而后者是最低频的动作。</p>
+  </div>
+  </div>
+
+  <div class="vx-foot">
+    <div>A／B／C 的实际比例<b>目前完全无数据</b>——预设课程覆盖了多少需求、用户多常上传与提问，要等真实课堂记录。<b>这里不猜，也不给单档成本数字。</b></div>
+    <div>课程库要随教材换版持续更新，是一条<b>持续投入线</b>，只是速率远低于重建全库。<br/>第一门课的分摊最重，之后逐门递减。</div>
+  </div>
+</div>
+</section>
+
+
+
+<section class="slide" data-layout="S07" data-animate="h-bar-chart" data-slide-id="p15">
+<div class="canvas-card">
+<div class="vx-chrome"><span>商业模式 · 客户结构与收入</span><span>15 / 17 · HS</span></div>
+  <div class="vx-fill">
+  <div style="margin-top:2vh">
+    <div class="vx-cat">Business · Who pays, and how much</div>
+    <h2 class="vx-h" style="font-size:min(3.4vw,5.8vh);margin-top:1vh">95% 的人不付钱。<br/>收入来自那十九分之一。</h2>
+  </div>
+
+  <div style="display:grid;grid-template-columns:7.4fr 4.6fr;gap:3.4vw;margin-top:3.2vh;flex:1 1 auto;min-height:0">
+
+    <div style="display:flex;flex-direction:column;min-width:0">
+      <div class="vx-mix">
+        <div class="vx-mix-row">
+          <div class="vx-mix-l">免费</div>
+          <div class="vx-mix-track"><div class="vx-mix-fill vx-mix-fill--grey" style="width:95.0%"></div></div>
+          <div class="vx-mix-v">95.0<span>%</span></div>
         </div>
+        <div class="vx-mix-row">
+          <div class="vx-mix-l">Pro</div>
+          <div class="vx-mix-track"><div class="vx-mix-fill" style="width:3.7%"></div></div>
+          <div class="vx-mix-v vx-mix-v--acc">3.7<span>%</span></div>
+        </div>
+        <div class="vx-mix-row">
+          <div class="vx-mix-l">Max</div>
+          <div class="vx-mix-track"><div class="vx-mix-fill vx-mix-fill--acc" style="width:1.3%"></div></div>
+          <div class="vx-mix-v vx-mix-v--acc">1.3<span>%</span></div>
+        </div>
+      </div>
+
+      <div class="vx-ratio">
+        <div class="vx-ratio-n">1 <span>:</span> 19</div>
+        <div class="vx-ratio-l">免费用户 : 付费用户<br/>M12 目标结构 · 总用户 17,894</div>
+      </div>
+
+      <div class="vx-note">
+        条形按真实比例绘制——Pro 与 Max 只占 5%，所以它们看起来就是这么细。<b>这个视觉落差本身就是结论</b>，不要为了好看把它们加宽。
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;border-left:1px solid var(--border-subtle);padding-left:2.4vw;min-width:0">
+      <div class="vx-sub">收入从哪来</div>
+      <div class="vx-item">
+        <p>只有 Pro 与 Max 收钱。<b>免费档不是折扣商品</b>，是让人第一次看见产品长什么样的入口。</p>
+      </div>
+      <div class="vx-item">
+        <p>Max 只占付费用户的四分之一，却贡献接近一半收入——<b>重度使用者必须有出口</b>，否则会压低 Pro 的转化。</p>
+      </div>
+
+      <div class="vx-sub vx-sub--sp">成本从哪来</div>
+      <div class="vx-item">
+        <p>只有<b>上传教材</b>与<b>自定义提问</b>随规模增长。<b>上课本身不产生新成本</b>，因为大部分落在可复用的预设课程上。</p>
+      </div>
+
+      <div class="vx-sub vx-sub--sp">所以关键变量是</div>
+      <div class="vx-item vx-item--acc">
+        <p>把付费比例从 5% 推上去，<b>而不是多拉几个免费用户</b>。前者收入涨、后者只涨成本。</p>
       </div>
     </div>
   </div>
-</section>
-<section class="slide" data-layout="S21" data-animate="tech-spec" data-slide-id="p14">
-  <div class="canvas-card">
-    <div class="chrome-min"><div class="l">商业模式 · 竞争位置</div><div class="r">14 / 20 · HJ</div></div>
-    <div style="flex:1;display:grid;grid-template-columns:5fr 7fr;gap:3.4vw;margin-top:4.4vh">
-      <div style="display:flex;flex-direction:column">
-        <div data-anim="head" style="display:flex;flex-direction:column;gap:1.2vh">
-          <div class="t-cat accent">BUSINESS · 02 · POSITION</div>
-          <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(3.8vw,6.4vh);line-height:1.04;letter-spacing:-.03em">先承认对手的强项，<br/>再讲结构性差异</h2>
-        </div>
-        <div data-anim="up" style="display:flex;flex-direction:column;margin-top:2.6vh">
-          <div style="display:grid;grid-template-columns:auto 1fr;gap:1.4vw;padding:1.6vh 0;border-top:1px solid var(--border-subtle)">
-            <div style="font-family:var(--sans);font-weight:200;font-size:min(2.4vw,4.2vh);line-height:1;color:var(--accent)">01</div>
-            <p class="t-body-sm" style="color:var(--text-secondary)">它们卖的是<b style="font-weight:500;color:var(--text-primary)">已经做好的课程库</b>。我们卖的是<b style="font-weight:500;color:var(--text-primary)">每天真的有人陪你学</b>。</p>
-          </div>
-          <div style="display:grid;grid-template-columns:auto 1fr;gap:1.4vw;padding:1.6vh 0;border-top:1px solid var(--border-subtle)">
-            <div style="font-family:var(--sans);font-weight:200;font-size:min(2.4vw,4.2vh);line-height:1;color:var(--accent)">02</div>
-            <p class="t-body-sm" style="color:var(--text-secondary)">它们靠<b style="font-weight:500;color:var(--text-primary)">课程数量</b>竞争。我们靠<b style="font-weight:500;color:var(--text-primary)">一道题错了之后怎么办</b>竞争。</p>
-          </div>
-          <div style="display:grid;grid-template-columns:auto 1fr;gap:1.4vw;padding:1.6vh 0;border-top:1px solid var(--border-subtle)">
-            <div style="font-family:var(--sans);font-weight:200;font-size:min(2.4vw,4.2vh);line-height:1;color:var(--accent)">03</div>
-            <p class="t-body-sm" style="color:var(--text-secondary)">通用模型的答案停在<b style="font-weight:500;color:var(--text-primary)">使用者资料之前</b>。我们的课在<b style="font-weight:500;color:var(--text-primary)">使用者资料里面</b>长出来。</p>
-          </div>
-        </div>
-        <div data-anim="confess" class="card-ink" style="margin-top:auto;padding:1.8vh 1.4vw">
-          <div class="t-meta" style="color:rgba(255,255,255,.6)">两个必须先讲的事</div>
-          <p class="t-body-sm" style="color:rgba(255,255,255,.86);margin-top:.8vh;font-size:max(13px,.78vw)">Coursera 已投资 <b>US$1 亿</b>于 LearnVector，官方描述目标是 one-to-one learning experiences。Hyperknow 有 <b>US$1M</b> 种子轮（真格领投）、Forbes 30 Under 30。</p>
-        </div>
-      </div>
+  </div>
 
-      <div style="display:flex;flex-direction:column;min-width:0">
-        <div class="t-cat" style="color:var(--text-helper)">四家 · 六个维度</div>
-        <div data-anim="matrix" style="margin-top:1.4vh">
-          <div style="display:grid;grid-template-columns:9.5vw repeat(4,1fr)">
-            <div class="t-meta" style="padding-bottom:1vh;color:var(--text-helper)">↓ 六维度</div>
-            <div class="t-meta" style="padding:0 1vw 1vh;border-left:1px solid var(--border-subtle);color:var(--text-primary)">Hyperknow</div>
-            <div class="t-meta" style="padding:0 1vw 1vh;border-left:1px solid var(--border-subtle);color:var(--text-primary)">Coursera</div>
-            <div class="t-meta" style="padding:0 1vw 1vh;border-left:1px solid var(--border-subtle);color:var(--text-primary)">DeepLearning.AI</div>
-            <div class="t-meta" style="padding:0 1vw 1vh;border-left:1px solid var(--border-subtle);color:var(--accent)">Veridex</div>
-          </div>
-          <div style="display:grid;grid-template-columns:9.5vw repeat(4,1fr);align-items:stretch"><div class="t-meta" style="padding:1.05vh 1vw 1.05vh 0;color:var(--text-helper)">月费</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">US$18 / 50</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">US$59</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">US$25</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:500;color:var(--accent)">HK$148 / 388</div></div><div style="display:grid;grid-template-columns:9.5vw repeat(4,1fr);align-items:stretch"><div class="t-meta" style="padding:1.05vh 1vw 1.05vh 0;color:var(--text-helper)">计价单位</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">积分（窗口期重置）</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">无限订阅</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">无限订阅</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:500;color:var(--accent)">语音合成量</div></div><div style="display:grid;grid-template-columns:9.5vw repeat(4,1fr);align-items:stretch"><div class="t-meta" style="padding:1.05vh 1vw 1.05vh 0;color:var(--text-helper)">语音对话</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">网页版可用</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">支援 17 种语言<br/>中文不在内</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">公开说明未见</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:500;color:var(--accent)">繁中・普通话</div></div><div style="display:grid;grid-template-columns:9.5vw repeat(4,1fr);align-items:stretch"><div class="t-meta" style="padding:1.05vh 1vw 1.05vh 0;color:var(--text-helper)">手机 App</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">没有</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">语音不支援 App</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">有</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:500;color:var(--accent)">有</div></div><div style="display:grid;grid-template-columns:9.5vw repeat(4,1fr);align-items:stretch"><div class="t-meta" style="padding:1.05vh 1vw 1.05vh 0;color:var(--text-helper)">课内追问</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">扣额度</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">预设情境内有限</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">无即时</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:500;color:var(--accent)">课内 0</div></div><div style="display:grid;grid-template-columns:9.5vw repeat(4,1fr);align-items:stretch"><div class="t-meta" style="padding:1.05vh 1vw 1.05vh 0;color:var(--text-helper)">额度作废</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">窗口期重置</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">单课 180 天</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:400;color:var(--text-secondary)">无</div><div style="padding:1.05vh 1vw;border-left:1px solid var(--border-subtle);font-family:var(--sans),var(--sans-zh);font-size:max(13px,.8vw);line-height:1.4;font-weight:500;color:var(--accent)">7 天结转</div></div>
-        </div>
-        <div class="t-meta" style="border-top:1px solid var(--border-subtle);padding-top:1.2vh;margin-top:1.6vh;color:var(--text-helper)">
-          价格取各官网公开页面，2026-10-02 撷取。DeepLearning.AI 以筛选器实际列出的 131 门为准，不采用其官方宣传口径的课程数。Hyperknow 内部额度数字仅来自登入后介面，非官网公开资讯。
-        </div>
+  <div class="vx-foot">
+    <div>本页为 <b>M12 目标结构与推算</b>，非实测：付费转化率、免费额度利用率、用户增长路径三者目前都无实测锚点。<br/>外部可查区间为 2.18%（Adapty 全球 freemium 中位数）–9%（Duolingo 付费占 MAU）。</div>
+    <div>因此<b>本页不给出月度盈利额</b>——在三个假设拿到真实账单之前，任何盈利数字都不可审核。<br/>首月校准后再对外承诺。</div>
+  </div>
+</div>
+</section>
+
+<section class="slide" data-layout="S08" data-animate="grid-reveal" data-slide-id="p16">
+<div class="canvas-card">
+<div class="vx-chrome"><span>商业模式 · 双轨并行</span><span>16 / 17 · 两人</span></div>
+  <div style="margin-top:2.2vh">
+    <div class="vx-cat">Business · Two tracks, running together</div>
+    <h2 class="vx-h" style="font-size:min(3.6vw,6.2vh);margin-top:1.2vh">社媒投放的同时，<br/>先请第一批人来内测。</h2>
+  </div>
+
+  <div class="vx-tracks">
+    <div class="vx-track vx-track--a">
+      <div class="vx-track-n">TRACK 01</div>
+      <b>社媒投放</b>
+      <ul>
+        <li>X、小红书等平台并行投放</li>
+        <li>验证的是<b>自然流量能不能带来注册</b></li>
+        <li>看的是注册转化与成本，不看播放量</li>
+      </ul>
+      <div class="vx-warn" style="border-left-color:var(--grey-3);background:var(--grey-1)">
+        <p>投放预算 <b>［待定，未上片］</b>。<br/>付费流量是否划算尚未实测——第 3 个月用实测 CPA 校准，不在这里先下结论。</p>
+      </div>
+    </div>
+
+    <div class="vx-track vx-track--b">
+      <div class="vx-track-n">TRACK 02</div>
+      <b>内测招募</b>
+      <ul>
+        <li>邀请第一批客户真实试用，给<b>补偿</b></li>
+        <li>换的是测试反馈与<b>可公开的评语</b></li>
+        <li>这些评语就是之后给学校看的第一个证据</li>
+      </ul>
+      <div class="vx-warn">
+        <p><b>补偿金额、目标内测人数：</b>［待定，未上片］<br/>
+        两条能变成收入的路径：<b>转介绍</b>（区间为估算，暂不上片）与<b>学校 B2B</b>——学校为「每生一笔钱」买 AI 辅助教学服务，钱是给学校的，不是我们的收入，两条线分开报。</p>
       </div>
     </div>
   </div>
-</section>
-<section class="slide" data-layout="S20" data-animate="stacked-ledger" data-slide-id="p15">
-  <div class="canvas-card">
-    <div class="chrome-min"><div class="l">商业模式 · 付费方案</div><div class="r">15 / 20 · HS</div></div>
-    <div style="flex:1;display:grid;grid-template-columns:7fr 5fr;gap:3.4vw;margin-top:4.4vh">
-      <div style="display:flex;flex-direction:column;min-width:0">
-        <div data-anim="head" style="display:flex;flex-direction:column;gap:1.2vh">
-          <div class="t-cat accent">BUSINESS · 03 · PRICING</div>
-          <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(4vw,6.8vh);line-height:1.04;letter-spacing:-.03em">三档定价，<br/>这是全部的核心</h2>
-        </div>
 
-        <div data-anim="ledger" style="margin-top:2.8vh">
-          <div class="ledger-row" style="display:grid;grid-template-columns:5vw 12vw 1fr;gap:1.6vw;align-items:end;padding:1.9vh 0 1.3vh;border-top:2px solid var(--ink)">
-            <div class="t-meta">T 01</div>
-            <div class="t-meta" style="color:var(--text-helper)">免费</div>
-            <div style="font-family:var(--sans),var(--sans-zh);font-size:max(16px,1.3vw);line-height:1.35;color:var(--text-secondary)">每天 <b style="font-weight:500;color:var(--text-primary)">2 节</b>短讲解 · 每月 24 节完整课等值</div>
-          </div>
-          <div class="ledger-row" style="display:grid;grid-template-columns:5vw 12vw 1fr;gap:1.6vw;align-items:end;padding:1.9vh 0 1.3vh;border-top:1px solid var(--border-subtle)">
-            <div class="t-meta" style="color:var(--accent)">T 02</div>
-            <div class="ledger-num" style="font-family:var(--sans),var(--sans-zh);font-weight:300;font-size:min(3.2vw,5.4vh);line-height:1;letter-spacing:-.03em;color:var(--accent)">HK$148</div>
-            <div style="font-family:var(--sans),var(--sans-zh);font-size:max(16px,1.3vw);line-height:1.35;color:var(--text-secondary)">Pro · 每天 <b style="font-weight:500;color:var(--text-primary)">5 节</b>完整课 · 每月 150 节</div>
-          </div>
-          <div class="ledger-row" style="display:grid;grid-template-columns:5vw 12vw 1fr;gap:1.6vw;align-items:end;padding:1.9vh 0 1.3vh;border-top:1px solid var(--border-subtle)">
-            <div class="t-meta">T 03</div>
-            <div class="ledger-num" style="font-family:var(--sans),var(--sans-zh);font-weight:300;font-size:min(3.2vw,5.4vh);line-height:1;letter-spacing:-.03em">HK$388</div>
-            <div style="font-family:var(--sans),var(--sans-zh);font-size:max(16px,1.3vw);line-height:1.35;color:var(--text-secondary)">Max · 每天 <b style="font-weight:500;color:var(--text-primary)">10 节</b>完整课 · 每月 300 节</div>
-          </div>
-          <div class="t-meta" style="border-top:1px solid var(--border-subtle);padding-top:1.4vh;color:var(--text-helper)">额度每日发放、累积七天，不设窗口期，不月底清零。</div>
-        </div>
-      </div>
-
-      <div style="display:flex;flex-direction:column;border-left:1px solid var(--border-subtle);padding-left:2.4vw">
-        <div class="t-cat" style="color:var(--text-helper)">计价逻辑</div>
-        <div style="margin-top:1.8vh;display:flex;flex-direction:column;gap:0">
-          <div style="padding:1.5vh 0;border-top:1px solid var(--border-subtle)">
-            <div style="font-family:var(--sans),var(--sans-zh);font-weight:400;font-size:max(16px,1.15vw);line-height:1.35">购买单位：一天能上几节课</div>
-            <p class="t-body-sm" style="color:var(--text-secondary);margin-top:.6vh">使用者感知得到的单位，也就是我们卖的东西本身。</p>
-          </div>
-          <div style="padding:1.5vh 0;border-top:1px solid var(--border-subtle)">
-            <div style="font-family:var(--sans),var(--sans-zh);font-weight:400;font-size:max(16px,1.15vw);line-height:1.35">计价单位：AI 真的生成了多少语音</div>
-            <p class="t-body-sm" style="color:var(--text-secondary);margin-top:.6vh">同一个「一节课」内容量可差 50 倍，所以「一节课」不能是固定价格。</p>
-          </div>
-          <div style="padding:1.5vh 0;border-top:1px solid var(--border-subtle)">
-            <div style="font-family:var(--sans),var(--sans-zh);font-weight:400;font-size:max(16px,1.15vw);line-height:1.35">课内追问不计费</div>
-            <p class="t-body-sm" style="color:var(--text-secondary);margin-top:.6vh">收费只对应「创造新东西」那一刻：生成、回看以外的新语音。</p>
-          </div>
-        </div>
-
-        <div data-anim="punch" style="margin-top:auto;padding-top:1.8vh;border-top:2px solid var(--accent)">
-          <div style="font-family:var(--sans),var(--sans-zh);font-weight:300;font-size:max(17px,1.35vw);line-height:1.35">同价位对照：Hyperknow Pro US$18 ≈ HK$140，额度用不完即作废、不累积。</div>
-        </div>
-      </div>
-    </div>
+  <div class="vx-foot">
+    <div>Sayo Academy 已在同一批政府拨款里，<b>我们不是先进入者</b>；<br/>竞争力靠产品形态证明，不自称吻合度最高。</div>
+    <div>智启学教 HK$5 亿 / 每校 HK$500,000 <span class="vx-src vx-src--a">A</span> 政府新闻公报 2025-12-16<br/>
+    已删除：YouTube 22h31m（只说明香港人看长视频，不是获客成本）</div>
   </div>
+</div>
 </section>
-<section class="slide" data-layout="S07" data-animate="bar-grow" data-slide-id="p16">
-  <div class="canvas-card">
-    <div class="chrome-min"><div class="l">商业模式 · 关键假设与锚点</div><div class="r">16 / 20 · HS</div></div>
-    <div style="flex:1;display:grid;grid-template-columns:8fr 4fr;gap:3.4vw;margin-top:4.4vh">
-      <div style="display:flex;flex-direction:column;min-width:0">
-        <div data-anim="head" style="display:flex;flex-direction:column;gap:1.2vh">
-          <div class="t-cat accent">BUSINESS · 04 · THE ASSUMPTION</div>
-          <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(4vw,6.8vh);line-height:1.04;letter-spacing:-.03em">整份模型最脆弱的一环：<br/>付费转化率</h2>
-        </div>
-        <div class="h-bar-chart" data-anim="bars" style="margin-top:2.6vh">
-          <div class="row-lbl">全球 freemium 中位数</div><div class="row-track"><div class="row-fill grey" style="width:21.8%"></div></div><div class="row-val">2.18<span class="unit">%</span></div>
-          <div class="row-lbl">本计划采用值</div><div class="row-track"><div class="row-fill accent" style="width:50.0%"></div></div><div class="row-val" style="color:var(--accent)">5.0<span class="unit">%</span></div>
-          <div class="row-lbl">Duolingo 付费占 MAU</div><div class="row-track"><div class="row-fill" style="width:90.0%"></div></div><div class="row-val">9.0<span class="unit">%</span></div>
-        </div>
-        <div class="t-meta" style="border-top:1px solid var(--border-subtle);padding-top:1.4vh;margin-top:2vh;color:var(--text-helper)">
-          三个数字口径不同，不能视为同类指标的区间：2.18% 是跨品类全球中位数 [B]；9% 是单一公司付费订户占活跃用户 [A]；5% 是我们的采用值 [C]。
-        </div>
-      </div>
 
-      <div style="display:flex;flex-direction:column;border-left:1px solid var(--border-subtle);padding-left:2.4vw">
-        <div class="t-cat" style="color:var(--text-helper)">另外两个假设</div>
-        <div style="margin-top:1.8vh">
-          <div style="font-family:var(--sans);font-weight:200;font-size:min(2.6vw,4.4vh);line-height:1;letter-spacing:-.025em;font-feature-settings:'tnum'">40<span style="font-size:.36em;font-weight:300;opacity:.6;margin-left:.1em">%</span></div>
-          <p class="t-body-sm" style="color:var(--text-secondary);margin-top:.7vh">免费额度利用率。<strong style="font-weight:500;color:var(--text-primary)">完全无外部锚点</strong>，是第一个月实测就会知道的第一个数字。</p>
-        </div>
-        <div style="margin-top:2.4vh;padding-top:1.8vh;border-top:1px solid var(--border-subtle)">
-          <div style="font-family:var(--sans);font-weight:200;font-size:min(2.6vw,4.4vh);line-height:1;letter-spacing:-.025em;color:var(--text-secondary)">用户增长</div>
-          <p class="t-body-sm" style="color:var(--text-secondary);margin-top:.7vh">同样无锚点。三个假设的共同点是：<strong style="font-weight:500;color:var(--text-primary)">都会在前几个月的真实数据里被逐项校准</strong>。</p>
-        </div>
-        <div data-anim="honest" class="card-ink" style="margin-top:auto;padding:1.6vh 1.3vw">
-          <div class="t-meta" style="color:rgba(255,255,255,.6)">措辞纪律</div>
-          <p class="t-body-sm" style="color:rgba(255,255,255,.86);margin-top:.6vh;font-size:max(13px,.78vw)">这一页与后续所有财务页都标「这是推算」。这是承诺边界，不是资料缺口——三个假设都会被上线后的实测逐项替换。</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="slide" data-layout="S17" data-animate="system-diagram" data-slide-id="p17">
-  <div class="canvas-card">
-    <div class="chrome-min"><div class="l">商业模式 · 收入结构（推算）</div><div class="r">17 / 20 · HS</div></div>
-    <div style="flex:1;display:grid;grid-template-columns:7fr 5fr;gap:3.4vw;margin-top:4.4vh">
-      <div style="display:flex;flex-direction:column;min-width:0">
-        <div data-anim="head" style="display:flex;flex-direction:column;gap:1.2vh">
-          <div class="t-cat accent">BUSINESS · 05 · REVENUE MIX</div>
-          <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(3.8vw,6.4vh);line-height:1.04;letter-spacing:-.03em">用户在免费档，<br/>收入在两个付费档</h2>
-        </div>
-        <div class="h-bar-chart" data-anim="bars" style="margin-top:2.4vh;grid-template-columns:13em minmax(0,1fr) 7em">
-          <div class="row-lbl">免费</div><div class="row-track"><div class="row-fill grey" style="width:95.0%"></div></div><div class="row-val">95.0<span class="unit">%</span></div>
-          <div class="row-lbl">Pro</div><div class="row-track"><div class="row-fill" style="width:3.7%"></div></div><div class="row-val">3.7<span class="unit">%</span></div>
-          <div class="row-lbl">Max</div><div class="row-track"><div class="row-fill accent" style="width:1.3%"></div></div><div class="row-val" style="color:var(--accent)">1.3<span class="unit">%</span></div>
-        </div>
-        <div class="t-meta" style="border-top:1px solid var(--border-subtle);padding-top:1.4vh;margin-top:1.8vh;color:var(--text-helper)">
-          占总用户 17,894 人（免费 17,000 · Pro 670 · Max 224）。这是**用户结构**，不是收入结构。
-        </div>
-      </div>
-
-      <div style="display:flex;flex-direction:column;border-left:1px solid var(--border-subtle);padding-left:2.4vw">
-        <div class="t-cat" style="color:var(--text-helper)">收入结构 · 第 12 个月（推算）</div>
-        <div data-anim="ring" style="position:relative;width:min(26vh,19vw);aspect-ratio:1;margin:2.4vh auto 0">
-          <svg viewBox="0 0 200 200" style="width:100%;height:100%" aria-label="收入结构环图：Pro 53%、Max 47%">
-            <circle cx="100" cy="100" r="78" fill="none" stroke="var(--grey-1)" stroke-width="26"/>
-            <path d="M 100 22 A 78 78 0 1 1 85.38 176.62" fill="none" stroke="var(--ink)" stroke-width="26" opacity="1.0"/>
-            <path d="M 100 22 A 78 78 0 0 1 114.62 176.62" fill="none" stroke="var(--accent)" stroke-width="26" opacity="1.0"/>
-          </svg>
-          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3vh">
-            <div style="font-family:var(--sans);font-weight:200;font-size:min(2.1vw,3.6vh);line-height:1;letter-spacing:-.03em;font-feature-settings:'tnum'">HK$177.6k</div>
-            <div class="t-meta" style="color:var(--text-helper)">M12 月收入</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:2.4vw;margin-top:1.8vh">
-          <div style="display:flex;align-items:center;gap:.7vw">
-            <span style="width:10px;height:10px;background:var(--ink);display:inline-block"></span>
-            <span class="t-body-sm">Pro <b style="font-weight:500">53%</b></span>
-          </div>
-          <div style="display:flex;align-items:center;gap:.7vw">
-            <span style="width:10px;height:10px;background:var(--accent);display:inline-block"></span>
-            <span class="t-body-sm">Max <b style="font-weight:500;color:var(--accent)">47%</b></span>
-          </div>
-        </div>
-        <div data-anim="punch" style="margin-top:auto;padding-top:1.8vh;border-top:2px solid var(--accent)">
-          <div style="font-family:var(--sans),var(--sans-zh);font-weight:300;font-size:max(16px,1.2vw);line-height:1.4">Max 占付费用户的 <b style="font-weight:500">25%</b>，贡献 <b style="font-weight:500;color:var(--accent)">47%</b> 收入。<br/><span style="color:var(--text-secondary);font-size:.85em">重度使用者有出口，就不会压低 Pro 的转化率——这是 Max 档存在的经济意义。</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="slide" data-layout="S11" data-animate="timeline-walk" data-slide-id="p18">
-  <div class="canvas-card">
-    <div class="chrome-min"><div class="l">商业模式 · 收入轨迹（推算）</div><div class="r">18 / 20 · HS</div></div>
-    <div style="flex:1;display:grid;grid-template-rows:auto 1fr auto;margin-top:4.4vh">
-      <div data-anim="line" style="display:flex;flex-direction:column;gap:1.2vh">
-        <div class="t-cat accent">BUSINESS · 06 · TRAJECTORY</div>
-        <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(4vw,6.8vh);line-height:1.04;letter-spacing:-.03em">四个时点，<br/>收入怎么长出来</h2>
-      </div>
-
-      <div class="timeline-h" data-anim="walk" style="margin-top:3vh">
-        <div class="tl-row">
-          <div class="th-node up"><span class="dot"></span>
-            <div class="label"><div class="yr">M1</div><div class="name">HK$0.8k</div><div class="desc">产品可用</div></div>
-          </div>
-          <div class="th-node down"><span class="dot"></span>
-            <div class="label"><div class="yr">M2</div><div class="name">HK$2.6k</div><div class="desc">首批付费用户</div></div>
-          </div>
-          <div class="th-node up"><span class="dot"></span>
-            <div class="label"><div class="yr">M4</div><div class="name">HK$9.3k</div><div class="desc">学校渠道出现</div></div>
-          </div>
-          <div class="th-node down"><span class="dot"></span>
-            <div class="label"><div class="yr">M12</div><div class="name">HK$177.6k</div><div class="desc">894 付费用户</div></div>
-          </div>
-          <div class="th-node up accent"><span class="dot"></span>
-            <div class="label"><div class="yr">M18</div><div class="name">HK$595.7k</div><div class="desc">3,000 付费用户</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div data-anim="foot" style="display:flex;justify-content:space-between;align-items:end;border-top:1px solid var(--border-subtle);padding-top:2vh;margin-top:3vh">
-        <div style="font-family:var(--sans),var(--sans-zh);font-weight:400;font-size:max(17px,1.3vw);line-height:1.4;max-width:52ch">
-          <strong style="font-weight:500">这是推算。</strong>三个假设同时成立才会走到这条线——它不是预测，是一个可以被逐项推翻的算式。
-        </div>
-        <div class="t-meta" style="text-align:right;color:var(--text-helper)">用户增长路径是三个假设中<br/>唯一零外部锚点的一个，也是唯一的瓶颈</div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="slide" data-layout="S02" data-animate="progression" data-slide-id="p19">
-  <div class="canvas-card">
-    <div class="chrome-min"><div class="l">商业模式 · 获客路径</div><div class="r">19 / 20 · HS</div></div>
-    <div style="flex:1;display:grid;grid-template-columns:6fr 5fr;gap:3.4vw;margin-top:4.4vh">
-      <div style="display:flex;flex-direction:column;min-width:0">
-        <div data-anim="head" style="display:flex;flex-direction:column;gap:1.2vh">
-          <div class="t-cat accent">BUSINESS · 07 · GO TO MARKET</div>
-          <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(3.8vw,6.4vh);line-height:1.04;letter-spacing:-.03em">不投付费广告，<br/>靠转介与学校渠道</h2>
-        </div>
-        <div class="timeline-v" data-anim="line" style="margin-top:1.8vh;--tl-axis-w:18px">
-          <div class="tl-node" style="grid-template-columns:var(--tl-axis-w) minmax(0,4.4em) minmax(0,8.6em) 1fr;padding:1.8vh 0">
-            <span class="dot"></span><span class="yr">渠道 01</span>
-            <span class="multi" style="font-size:min(1.9vw,3.2vh)">HK$100</span>
-            <span class="desc" style="font-size:max(13px,.8vw)">用户转介绍。香港教育市场的真实路径，学生把帐号分享出去，双方都省下广告费。<em style="font-style:normal;color:var(--text-helper)">［估算］</em></span>
-          </div>
-          <div class="tl-node accent" style="grid-template-columns:var(--tl-axis-w) minmax(0,4.4em) minmax(0,8.6em) 1fr;padding:1.8vh 0">
-            <span class="dot"></span><span class="yr">渠道 02</span>
-            <span class="multi" style="font-size:min(1.9vw,3.2vh)">HK$500K</span>
-            <span class="desc" style="font-size:max(13px,.8vw)">学校渠道。B2B 报价，不是 B2C 订阅——学校为「每生一笔钱」买 AI 辅助教学服务。[A] 政府新闻公报</span>
-          </div>
-          <div class="tl-node" style="grid-template-columns:var(--tl-axis-w) minmax(0,4.4em) minmax(0,8.6em) 1fr;padding:1.8vh 0">
-            <span class="dot"></span><span class="yr">渠道 03</span>
-            <span class="multi" style="font-size:min(1.9vw,3.2vh)">22h31m</span>
-            <span class="desc" style="font-size:max(13px,.8vw)">短影音内容。YouTube 香港每用户每月使用时间，长影音平台全港第一。[B] DataReportal 2025</span>
-          </div>
-        </div>
-      </div>
-
-      <div style="display:flex;flex-direction:column;border-left:1px solid var(--border-subtle);padding-left:2.4vw">
-        <div class="t-cat" style="color:var(--text-helper)">学校渠道的制度背景 [A]</div>
-        <div class="kpi-row-4" style="grid-template-columns:repeat(2,1fr);margin-top:1.8vh;padding-top:1.6vh">
-          <div class="kpi-cell">
-            <div class="lbl">三年拨款</div>
-            <div class="nb">HK$5<span class="unit">亿</span></div>
-            <div class="note">「智启学教」政府拨款计划</div>
-          </div>
-          <div class="kpi-cell">
-            <div class="lbl">每所学校</div>
-            <div class="nb">HK$500<span class="unit">K</span></div>
-            <div class="note">一笔过，用途明文包含 AI 辅助教学服务</div>
-          </div>
-        </div>
-        <div data-anim="confess" class="card-ink" style="margin-top:2.2vh;padding:1.6vh 1.3vw">
-          <div class="t-meta" style="color:rgba(255,255,255,.6)">必须先讲的事</div>
-          <p class="t-body-sm" style="color:rgba(255,255,255,.86);margin-top:.6vh;font-size:max(13px,.78vw)">这笔钱是给学校的（B2B），不是给家长的（B2C）。Sayo Academy 已在同一批拨款里——我们不是先进入者，但目前的产品形态与资助用途的吻合度最高。</p>
-        </div>
-        <div data-anim="foot" class="t-meta" style="margin-top:auto;padding-top:1.6vh;color:var(--text-helper)">
-          三条渠道的推算依据：转介绍为单一来源估算 [C]；学校渠道为政府公报 [A]；短影音为第三方平台统计 [B]。本页不含付费流量成本推算——那是内部估算且口径有争议，不作为计划基础。
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 <section class="slide split" data-layout="SWISS-CLOSING-ASCII" data-animate="split-statement" data-slide-id="closing">
   <div class="canvas-card">
     <div class="split-half">
-      <div class="half b-accent" style="padding:5.4vh 3.4vw 4.4vh;justify-content:space-between;position:relative;overflow:hidden">
+      <div class="half b-accent" style="padding:5.4vh 3.4vw 6.8vh;justify-content:space-between;position:relative;overflow:hidden">
         <canvas class="ascii-bg" aria-hidden="true"></canvas>
         <div class="chrome-min" style="margin-bottom:0;position:relative;z-index:1">
-          <div class="l">20 / 20</div>
+          <div class="l">17 / 17</div>
           <div class="r">THE ASK</div>
         </div>
         <div data-anim="manifesto" style="display:flex;flex-direction:column;gap:1.4vh;position:relative;z-index:1">
@@ -1968,7 +2034,7 @@
         </div>
       </div>
 
-      <div class="half" style="padding:5.4vh 3.4vw 4.4vh;justify-content:space-between">
+      <div class="half" style="padding:5.4vh 3.4vw 6.8vh;justify-content:space-between">
         <div class="chrome-min">
           <div class="l">MILESTONES</div>
           <div class="r">03 CHECKPOINTS</div>
@@ -2003,10 +2069,42 @@
     </div>
   </div>
 </section>
+</div>
 
 <div id="nav"></div>
 
-<!-- 演讲备注：替换示例页时同步替换，id 必须与 section[data-slide-id] 一致。 -->
+
+<script>
+// Windows 平台标记 — 雅黑没有 ExtraLight,需要字重补偿
+  if(/Win/i.test(navigator.platform || navigator.userAgentData?.platform || '')){
+    document.body.classList.add('is-win');
+  }
+  (function(){
+    const KEY = 'guizang-ppt-low-power';
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const stored = localStorage.getItem(KEY);
+    window.__lowPowerMode = stored === '1' || (stored === null && reduced);
+    function updateHint(){
+      const label = document.querySelector('.ppt-low-power-label');
+      if(label) label.textContent = window.__lowPowerMode ? '动态' : '静态';
+    }
+    window.__setLowPowerMode = function(on, opts={}){
+      window.__lowPowerMode = !!on;
+      document.body.classList.toggle('low-power', window.__lowPowerMode);
+      if(opts.persist !== false) localStorage.setItem(KEY, window.__lowPowerMode ? '1' : '0');
+      if(window.__lowPowerMode && document.getAnimations){
+        document.getAnimations().forEach(a=>a.cancel());
+      }
+      updateHint();
+      dispatchEvent(new CustomEvent('swiss-low-power-change', {detail:{on:window.__lowPowerMode}}));
+      if(window.__playSlide) window.__playSlide(window.__currentSlideIndex || 0);
+    };
+    document.body.classList.toggle('low-power', window.__lowPowerMode);
+    addEventListener('DOMContentLoaded', updateHint, {once:true});
+  })();
+
+</script>
+
 <script>
 const SPEAKER_NOTES = [
   {
@@ -2087,36 +2185,6 @@ const SPEAKER_NOTES = [
   },
   {
     "id": "p6",
-    "title": "学生不是学不会，是不知道自己哪里不会",
-    "section": "问题二 · 有效的检验",
-    "minutes": 1.0,
-    "purpose": "全份简报唯一的数据页。务必先讲清楚数字是什么、从哪来、不能证明什么。讲者：黄浩然",
-    "talk": [
-      "左边八项是学生做不到的事，右边三个数字是香港中学生用 AI 答题的行为",
-      "一定要补这句：以上是学生自陈行为，不是评测测量；中国中学生的比例远高于此",
-      "落点：八个能力里，能真正解决的只有两个——给有用提示、让学生解释",
-      "Q&A 弹药：若被问样本——HEPI 2026 n=975、Knof 2024 n=165，两份都是公开报告"
-    ],
-    "transition": "知道学生卡在哪，那这四个问题有谁在回答",
-    "cue": "交接给黄羿捷"
-  },
-  {
-    "id": "p7",
-    "title": "一题做错了，这四件事要有人回答",
-    "section": "问题二 · 有效的检验",
-    "minutes": 0.6,
-    "purpose": "把六格里最关键的一格拆开讲，过渡到对照表。讲者：黄羿捷",
-    "talk": [
-      "四个问题逐句念，这一页不解释，只把问题摆清楚",
-      "停顿。这是全篇最需要观众自己意识到问题的一页",
-      "口头补一句：现在的产品大多只回答第一个",
-      "不要在这页提解决方案，那是下一段的内容"
-    ],
-    "transition": "这四个问题，分别归谁决定",
-    "cue": "停顿 2 秒再翻页"
-  },
-  {
-    "id": "p8",
     "title": "检验不是问懂了吗，是四个可追问的动作",
     "section": "问题二 · 有效的检验",
     "minutes": 0.8,
@@ -2131,7 +2199,23 @@ const SPEAKER_NOTES = [
     "cue": "停顿，这是问题段的最后一页"
   },
   {
-    "id": "p9",
+    "id": "p7",
+    "title": "他们的检测 vs 我们的检测",
+    "section": "问题二 · 有效的检验",
+    "minutes": 0.9,
+    "purpose": "把三个共享问题讲成结构差异，不是优劣。讲者：黄羿捷",
+    "talk": [
+      "开场句先念：不是不做检测，是检测建在课里，不是建在你身上",
+      "左栏三条逐条念，每条都挂出处：Module 2 零作业是 DLAI 官网课程页，17.4% 是 Class Central 2026",
+      "题型那条要补一句：不是他们偷懒，是选择题好自动评分，所以被大量采用",
+      "难度那条落在「开课前定好」——题目和量表都是老师事先定的，同一门课能力不同的人做同一张卷",
+      "右栏三条对应讲：密度由产品保证、题型覆盖说清楚、难度跟着人走　Q&A 弹药：若被问我们有什么证据说自己能做到——产品原型未完成，这三行是设计，会在第 6 个月用真实课堂记录验证"
+    ],
+    "transition": "我们的检验具体是哪四个动作，下一页",
+    "cue": "先念左栏，再念右栏"
+  },
+  {
+    "id": "p8",
     "title": "六件事，每一件现在归谁决定",
     "section": "定位 · 竞争格局",
     "minutes": 0.9,
@@ -2146,7 +2230,7 @@ const SPEAKER_NOTES = [
     "cue": "交接给黄羿捷"
   },
   {
-    "id": "p10",
+    "id": "p9",
     "title": "错了之后，这四件事分别归谁",
     "section": "定位 · 竞争格局",
     "minutes": 1.0,
@@ -2161,23 +2245,7 @@ const SPEAKER_NOTES = [
     "cue": "交接给黄浩然"
   },
   {
-    "id": "p11",
-    "title": "三档定价 + 与 Hyperknow 同价位对照",
-    "section": "定位 · 怎么计价",
-    "minutes": 1.0,
-    "purpose": "让评审记住「一天能上几节课」，并用同价位对照证明价值差异。这一页埋一个钩子：购买单位是节数，但计价单位不是。讲者：黄浩然",
-    "talk": [
-      "对外只讲一天能上几节课，不讲积分——积分对用户没有直观意义",
-      "三档：免费每天 2 节短讲解、Pro 每天 5 节完整课、Max 每天 10 节完整课",
-      "右栏对照是重点，但**只讲额度怎么发**：它窗口期重置、用不完作废；我们每日发放、累积七天。学生是周末集中火力、考前突发需求的，这个机制不适合我们的用户",
-      "不要讲分钟数或小时数——那个换算靠的是一个我们还没实测的内部假设，被追问会很难看。分钟数留到 Q&A 再补",
-      "钩子要念出来：购买单位是节数，计价单位不是节数——下一段讲为什么。这页不出现积分数字、毛利、量折扣比较"
-    ],
-    "transition": "那计价单位到底是什么？下一页",
-    "cue": "两人同台"
-  },
-  {
-    "id": "p12",
+    "id": "p10",
     "title": "定制和检验，现在没有别人同时做得出来",
     "section": "定位 · 收束",
     "minutes": 0.5,
@@ -2192,115 +2260,99 @@ const SPEAKER_NOTES = [
     "cue": "停顿 2 秒"
   },
   {
-    "id": "p13",
-    "title": "目标客群与市场窗口",
-    "section": "商业模式 · 目标客群",
-    "minutes": 0.9,
-    "purpose": "回答「谁会买」，并用官方统计交出市场窗口的边界。讲者：黄浩然",
+    "title": "卖给谁 · 三类客群",
+    "section": "商业模式 · 卖给谁",
+    "minutes": 0.8,
+    "purpose": "能力是泛的，三类用户都能用；窗口要讲有截止日期的人。讲者：HS",
     "talk": [
-      "四类使用者各一句，重点在第五格：学习之内不插手，学习之外全部包办。这是我们的分寸感",
-      "第六格是空的——起始客群与切入科目还没拍板。若被追问就直说这是接下来要定的，不要临场编",
-      "下方三个数字是官方统计：中学生 347,820 连升三年、DSE 2025 考生 55,781、小学生 317,233 连续下跌",
-      "必须自己讲出小学生在跌，并说明窗口是 3–5 年。只讲上升的那个数字，一被追问就会失分",
-      "Q&A 弹药：为什么不锁定单一垂直？因为同一套机制换的只是上传的档案；锁死客群反而限制天花板"
+      "先念标题那句话：任何有学习需求的人都是我们的用户",
+      "三张卡各一句，重点在「三类的差别只在上传的东西，不在产品」",
+      "两个数只念不解释：55,781 是 DSE 2025 考生，317,233 是小学生且连续下跌",
+      "小学生连跌要自己讲出来，用来说明我们为什么不把小学当切口",
+      "下一页看别人怎么收，再看我们怎么定"
     ],
-    "transition": "知道谁会买，下一步是知道为什么是我们",
-    "cue": "交接给黄羿捷"
+    "transition": "先看同一条价格带上，别人卖的是什么单位",
+    "cue": "停顿",
+    "id": "p11"
   },
   {
-    "id": "p14",
-    "title": "竞争位置：四家 × 六维度",
-    "section": "商业模式 · 竞争位置",
-    "minutes": 1.0,
-    "purpose": "先承认对手强项，再讲三个结构性差异。讲者：黄羿捷",
+    "title": "竞品定价 · 同价位买到不同东西",
+    "section": "商业模式 · 竞品定价",
+    "minutes": 0.9,
+    "purpose": "用同价位带说明差别不在价钱，在买到的单位。讲者：HS",
     "talk": [
-      "先讲左下黑框：Coursera 已投资 US$1 亿于 LearnVector；Hyperknow 有 US$1M 种子轮与 Forbes 30 Under 30",
-      "再讲三个差异点，逐条念，不要展开",
-      "右表只点 Veridex 那一栏，其他三栏不逐格念",
-      "禁词提醒：不说「他们都没有语音」——Coursera 有语音对话，只是不支援中文与手机 App",
-      "Q&A 弹药：DeepLearning.AI 的课程数两个口径都不采用（官方宣传口径与筛选器实际列出的 131 门不一致）"
+      "四行依次念，美元已全部换算成港币，同单位计价",
+      "重点念这三个数：ChatGPT Plus HK$156、Hyperknow HK$140、我们 HK$148——三个人在同一条价格带上",
+      "计费单位那一列要念：他们卖能力和使用量，我们卖完成学习与验收",
+      "ChatGPT 的 Pro $200／$500 高强度档不列主页面，会分散评委注意力",
+      "Q&A 弹药：换算汇率 US$1 = HK$7.8，抓取日 2026-10-03"
     ],
-    "transition": "差异点讲完，回到最核心的问题：我们怎么收钱",
-    "cue": "停顿"
+    "transition": "那我们自己的怎么定",
+    "cue": "停顿",
+    "id": "p12"
+  },
+  {
+    "title": "我们的定价 · 积分是唯一单位",
+    "section": "商业模式 · 我们的定价",
+    "minutes": 0.9,
+    "purpose": "讲清三档权益与计费单位。讲者：HS",
+    "talk": [
+      "先念计费单位：积分。积分背后挂 token，而一个积分吃多少 token、token 单价多少都会变",
+      "所以我们不把它换算成字数或时长交给用户——底层价格怎么变，你每月付的数不变",
+      "三档权益从上到下念一遍，重点是课内追问 0 积分、额度每日发放累积七天",
+      "页脚那行要念：同价位 Hyperknow Pro US$18 ≈ HK$140，但它额度窗口期重置、过期作废、不累积——价位几乎一样，差的是额度怎么发",
+      "口径提醒：积分与 token 的换算只在内部算成本，不对外披露"
+    ],
+    "transition": "那这一笔账到底算不算得过来",
+    "cue": "停顿",
+    "id": "p13"
+  },
+  {
+    "title": "成本结构 · 三个动作",
+    "section": "商业模式 · 成本结构",
+    "minutes": 0.9,
+    "purpose": "把「成本」从每档金额表换成结构性论证——这是整份简报里最容易被追问的一页",
+    "talk": [
+      "先念标题：成本不是「每节课多少钱」，是三个动作各付多少",
+      "三栏从左到右讲：A 预设课程库是发布前一次性做好的，之后复用；B 上传教材每人的内容都不一样，只能即时生成；C 自定义提问答案要现场生成",
+      "重点是那行「随用户数增长？」——只有 A 回答「不」，B 和 C 都是「是」",
+      "收在那句结论：我们的边际成本不随上课次数增长，只随生成新内容的次数增长，而后者是最低频的动作",
+      "要主动说的：这三个动作的实际比例目前完全没数据，等真实课堂记录。这里不猜，也不给单档成本数字"
+    ],
+    "transition": "那这 95% 不付钱的人，结构上长什么样",
+    "cue": "若被追问单档成本：说明旧模型错在把一次性投入当成每次都付的边际成本，新模型还没有足够数据算单档数",
+    "id": "p14"
   },
   {
     "id": "p15",
-    "title": "三档定价：这是全部的核心",
-    "section": "商业模式 · 付费方案",
-    "minutes": 1.0,
-    "purpose": "整份商业模型的核心页。三个价格之外，其余都是衍生计算。讲者：黄浩然",
-    "talk": [
-      "三档：免费 HK$0、Pro HK$148、Max HK$388。购买单位是「一天能上几节课」",
-      "右栏两层要讲清楚：购买单位是节数（使用者感知），计价单位是 AI 真的生成了多少语音（内部结算）",
-      "桥接理由：同一个「一节课」内容量可差 50 倍，所以「一节课」不能是固定价格",
-      "第三条：课内追问不计费。收费只对应创造新东西那一刻",
-      "对照：Hyperknow Pro US$18 ≈ HK$140，价位贴齐，但额度用不完即作废、不累积"
-    ],
-    "transition": "价格定了。接下来主动讲出整个模型最脆弱的一环",
-    "cue": "停顿 2 秒，这是全段最重要的一页"
-  },
-  {
-    "id": "p16",
-    "title": "关键假设与锚点",
-    "section": "商业模式 · 关键假设",
-    "minutes": 1.0,
-    "purpose": "主动交出付费转化率这个最脆弱的假设，并给出外部锚点。讲者：黄浩然",
-    "talk": [
-      "先讲结论：整份模型最脆弱的一环是付费转化率，我们采用 5%",
-      "锚点：2.18% 是跨品类全球 freemium 中位数；9% 是 Duolingo 付费占活跃用户。必须补一句：这三个数字口径不同，不能视为同类指标的区间",
-      "另外两个假设：免费额度利用率 40%（完全无锚点）、用户增长路径（同样无锚点）",
-      "收尾：这是承诺边界不是资料缺口——三个假设都会在前几个月的真实数据里被逐项校准",
-      "Q&A 弹药：若被问为什么不是取 Duolingo 的一半——教育类用户的付费意愿与游戏化产品结构不同，5% 已接近同类产品上限"
-    ],
-    "transition": "假设讲清楚，现在看收入会长成什么形状",
-    "cue": "停顿，这是评委最可能追问的一页"
-  },
-  {
-    "id": "p17",
-    "title": "收入结构（推算）",
-    "section": "商业模式 · 收入结构",
+    "title": "客户结构 · 95% 不付钱",
+    "section": "商业模式",
     "minutes": 0.9,
-    "purpose": "用两张图说明用户结构与收入结构的落差，这是 Max 档存在的经济意义。讲者：黄浩然",
+    "purpose": "用真实比例的横条让评委自己看到 1:19 的落差，并指出真正的杠杆是付费率不是用户数",
     "talk": [
-      "左边是用户结构：95% 免费。这是 freemium 产品的正常形态，不是问题",
-      "右边环图是收入结构：Pro 53% / Max 47%，月收入 HK$177.6k",
-      "核心一句：Max 占付费用户的 25%，贡献 47% 收入。重度使用者有出口，就不会压低 Pro 的转化率",
-      "必须标明：左边是用户结构、右边是收入结构，两个分母不同，不要混",
-      "全页标「这是推算」"
+      "先念标题：95% 的人不付钱，收入来自那十九分之一",
+      "横条要指出来：Pro 与 Max 加起来只有 5%，条形就是这么细——这个落差本身就是结论，不要加宽度美化",
+      "念 1:19 这个比例，再说总用户 17,894 是 M12 目标结构；右栏三段：收入只来自 Pro 与 Max；成本只有上传教材和自定义提问随规模增长，上课本身不产生新成本",
+      "落到那句：关键变量是把付费比例从 5% 推上去，而不是多拉几个免费用户——前者收入涨，后者只涨成本",
+      "Q&A 弹药：本页是 M12 目标结构与推算，付费转化率外部可查区间 2.18%–9%，首月校准后才承诺"
     ],
-    "transition": "结构清楚了，看时间轴上的增长",
-    "cue": "停顿"
+    "transition": "结构讲完了，说说第一批人从哪来",
+    "cue": "若被追问月度盈利额：说明三个假设都无实测锚点，任何盈利数字都不可审核，首月账单后再给"
   },
   {
-    "id": "p18",
-    "title": "收入轨迹（推算）",
-    "section": "商业模式 · 收入轨迹",
+    "title": "双轨并行 · 社媒投放 + 内测招募",
+    "section": "商业模式 · 双轨并行",
     "minutes": 0.8,
-    "purpose": "把收入增长放在时间轴上，并诚实标明它是可被推翻的算式而非预测。讲者：黄浩然",
+    "purpose": "两条轨同时跑，不是备选关系。讲者：两人",
     "talk": [
-      "五个时点：M1 HK$0.8k → M2 HK$2.6k → M4 HK$9.3k → M12 HK$177.6k → M18 HK$595.7k",
-      "M4 的「学校渠道出现」和 M12 的「894 付费用户」是两个关键转折",
-      "必须自己讲完那句：这是推算，不是预测，是一个可以被逐项推翻的算式",
-      "主动指出：用户增长路径是三个假设中唯一零外部锚点的，也是唯一的瓶颈"
+      "标题要念完整：社媒投放的同时，先请第一批人来内测——两条轨并行",
+      "轨道 01 社媒：X 与小红书并行投放，验证的是自然流量能不能带来注册，看注册转化不看播放量",
+      "轨道 02 内测：给补偿换测试反馈与可公开评语，这些评语就是之后给学校看的第一个证据",
+      "必须先讲：Sayo Academy 已在同一批政府拨款里，我们不是先进入者　待定不上片：投放预算、内测补偿金额、目标内测人数、转介绍区间　Q&A 弹药：学校那条线的钱是给学校的，不是我们的收入，两条线分开报"
     ],
-    "transition": "收入长出来了，那人从哪来",
-    "cue": "停顿"
-  },
-  {
-    "id": "p19",
-    "title": "获客路径",
-    "section": "商业模式 · 获客路径",
-    "minutes": 0.9,
-    "purpose": "三条渠道 + 学校渠道的制度背景 + 必须先讲的坦白。讲者：黄浩然",
-    "talk": [
-      "三条渠道：转介绍 HK$100–300［估算］、学校 HK$500,000 [A] 政府公报、短影音 22h31m [B]",
-      "学校渠道是 B2B 不是 B2C——这笔钱是给学校的",
-      "坦白一定要讲：Sayo Academy 已在同一批拨款里，我们不是先进入者",
-      "本页不含付费流量成本推算。若被问「那广告呢」，就说那是内部估算且口径有争议，不作为计划基础；然后转到三条渠道",
-      "Q&A 弹药：为什么不主攻小学生——小学生人数连续下跌，窗口在关闭"
-    ],
-    "transition": "最后一页，请批什么",
-    "cue": "两人同台"
+    "transition": "所以这 44 万买的是哪三次验证",
+    "cue": "两人同时讲",
+    "id": "p16"
   },
   {
     "id": "closing",
@@ -2319,7 +2371,14 @@ const SPEAKER_NOTES = [
     "cue": "停顿 2 秒后致谢"
   }
 ];
+
+
+
+
+
+
 window.__SPEAKER_NOTES__ = SPEAKER_NOTES;
+
 </script>
 
 <script>
@@ -3070,15 +3129,16 @@ const initialSlideParam = new URLSearchParams(location.search).get('slide');
 const initialSlide = initialSlideParam ? Number(initialSlideParam) - 1 : 0;
 go(Number.isFinite(initialSlide) ? initialSlide : 0);
 window.__pptPresenter?.initMode();
-</script>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<script>lucide.createIcons();</script>
 
-<!-- Motion One 动效引擎 (与原模板一致) -->
-<script type="module">
+</script>
+
+<script>
 let motion;
 try {
-  motion = await import('./assets/motion.min.js');
+  const __src = Uint8Array.from(atob('LyoqCiAqIEJ1bmRsZWQgYnkganNEZWxpdnIgdXNpbmcgUm9sbHVwIHYyLjc5LjIgYW5kIFRlcnNlciB2NS4zOS4wLgogKiBPcmlnaW5hbCBmaWxlOiAvbnBtL21vdGlvbkAxMS4xMS4xNy9kaXN0L2VzL21vdGlvbi9saWIvaW5kZXgubWpzCiAqCiAqIERvIE5PVCB1c2UgU1JJIHdpdGggZHluYW1pY2FsbHkgZ2VuZXJhdGVkIGZpbGVzISBNb3JlIGluZm9ybWF0aW9uOiBodHRwczovL3d3dy5qc2RlbGl2ci5jb20vdXNpbmctc3JpLXdpdGgtZHluYW1pYy1maWxlcwogKi8KZnVuY3Rpb24gdCh0LGUpe2NvbnN0IG49dC5pbmRleE9mKGUpO24+LTEmJnQuc3BsaWNlKG4sMSl9Y2xhc3MgZXtjb25zdHJ1Y3Rvcigpe3RoaXMuc3Vic2NyaXB0aW9ucz1bXX1hZGQoZSl7dmFyIG4scztyZXR1cm4gbj10aGlzLnN1YnNjcmlwdGlvbnMscz1lLC0xPT09bi5pbmRleE9mKHMpJiZuLnB1c2gocyksKCk9PnQodGhpcy5zdWJzY3JpcHRpb25zLGUpfW5vdGlmeSh0LGUsbil7Y29uc3Qgcz10aGlzLnN1YnNjcmlwdGlvbnMubGVuZ3RoO2lmKHMpaWYoMT09PXMpdGhpcy5zdWJzY3JpcHRpb25zWzBdKHQsZSxuKTtlbHNlIGZvcihsZXQgaT0wO2k8cztpKyspe2NvbnN0IHM9dGhpcy5zdWJzY3JpcHRpb25zW2ldO3MmJnModCxlLG4pfX1nZXRTaXplKCl7cmV0dXJuIHRoaXMuc3Vic2NyaXB0aW9ucy5sZW5ndGh9Y2xlYXIoKXt0aGlzLnN1YnNjcmlwdGlvbnMubGVuZ3RoPTB9fWZ1bmN0aW9uIG4odCxlKXtyZXR1cm4gZT90KigxZTMvZSk6MH1jb25zdCBzPSExLGk9dD0+dDtjb25zdCByPVsicmVhZCIsInJlc29sdmVLZXlmcmFtZXMiLCJ1cGRhdGUiLCJwcmVSZW5kZXIiLCJyZW5kZXIiLCJwb3N0UmVuZGVyIl07Y29uc3R7c2NoZWR1bGU6byxjYW5jZWw6YSxzdGF0ZTpsLHN0ZXBzOnV9PWZ1bmN0aW9uKHQsZSl7bGV0IG49ITEscz0hMDtjb25zdCBpPXtkZWx0YTowLHRpbWVzdGFtcDowLGlzUHJvY2Vzc2luZzohMX0sbz0oKT0+bj0hMCxhPXIucmVkdWNlKCgodCxlKT0+KHRbZV09ZnVuY3Rpb24odCl7bGV0IGU9bmV3IFNldCxuPW5ldyBTZXQscz0hMSxpPSExO2NvbnN0IHI9bmV3IFdlYWtTZXQ7bGV0IG89e2RlbHRhOjAsdGltZXN0YW1wOjAsaXNQcm9jZXNzaW5nOiExfTtmdW5jdGlvbiBhKGUpe3IuaGFzKGUpJiYobC5zY2hlZHVsZShlKSx0KCkpLGUobyl9Y29uc3QgbD17c2NoZWR1bGU6KHQsaT0hMSxvPSExKT0+e2NvbnN0IGE9byYmcz9lOm47cmV0dXJuIGkmJnIuYWRkKHQpLGEuaGFzKHQpfHxhLmFkZCh0KSx0fSxjYW5jZWw6dD0+e24uZGVsZXRlKHQpLHIuZGVsZXRlKHQpfSxwcm9jZXNzOnQ9PntvPXQscz9pPSEwOihzPSEwLFtlLG5dPVtuLGVdLG4uY2xlYXIoKSxlLmZvckVhY2goYSkscz0hMSxpJiYoaT0hMSxsLnByb2Nlc3ModCkpKX19O3JldHVybiBsfShvKSx0KSkse30pLHtyZWFkOmwscmVzb2x2ZUtleWZyYW1lczp1LHVwZGF0ZTpjLHByZVJlbmRlcjpoLHJlbmRlcjpkLHBvc3RSZW5kZXI6cH09YSxmPSgpPT57Y29uc3Qgcj1wZXJmb3JtYW5jZS5ub3coKTtuPSExLGkuZGVsdGE9cz8xZTMvNjA6TWF0aC5tYXgoTWF0aC5taW4oci1pLnRpbWVzdGFtcCw0MCksMSksaS50aW1lc3RhbXA9cixpLmlzUHJvY2Vzc2luZz0hMCxsLnByb2Nlc3MoaSksdS5wcm9jZXNzKGkpLGMucHJvY2VzcyhpKSxoLnByb2Nlc3MoaSksZC5wcm9jZXNzKGkpLHAucHJvY2VzcyhpKSxpLmlzUHJvY2Vzc2luZz0hMSxuJiZlJiYocz0hMSx0KGYpKX07cmV0dXJue3NjaGVkdWxlOnIucmVkdWNlKCgoZSxyKT0+e2NvbnN0IG89YVtyXTtyZXR1cm4gZVtyXT0oZSxyPSExLGE9ITEpPT4obnx8KG49ITAscz0hMCxpLmlzUHJvY2Vzc2luZ3x8dChmKSksby5zY2hlZHVsZShlLHIsYSkpLGV9KSx7fSksY2FuY2VsOnQ9Pntmb3IobGV0IGU9MDtlPHIubGVuZ3RoO2UrKylhW3JbZV1dLmNhbmNlbCh0KX0sc3RhdGU6aSxzdGVwczphfX0oInVuZGVmaW5lZCIhPXR5cGVvZiByZXF1ZXN0QW5pbWF0aW9uRnJhbWU/cmVxdWVzdEFuaW1hdGlvbkZyYW1lOmksITApO2xldCBjO2Z1bmN0aW9uIGgoKXtjPXZvaWQgMH1jb25zdCBkPXtub3c6KCk9Pih2b2lkIDA9PT1jJiZkLnNldChsLmlzUHJvY2Vzc2luZ3x8cz9sLnRpbWVzdGFtcDpwZXJmb3JtYW5jZS5ub3coKSksYyksc2V0OnQ9PntjPXQscXVldWVNaWNyb3Rhc2soaCl9fTtjbGFzcyBwe2NvbnN0cnVjdG9yKHQsZT17fSl7dGhpcy52ZXJzaW9uPSIxMS4xMS4xNyIsdGhpcy5jYW5UcmFja1ZlbG9jaXR5PW51bGwsdGhpcy5ldmVudHM9e30sdGhpcy51cGRhdGVBbmROb3RpZnk9KHQsZT0hMCk9Pntjb25zdCBuPWQubm93KCk7dGhpcy51cGRhdGVkQXQhPT1uJiZ0aGlzLnNldFByZXZGcmFtZVZhbHVlKCksdGhpcy5wcmV2PXRoaXMuY3VycmVudCx0aGlzLnNldEN1cnJlbnQodCksdGhpcy5jdXJyZW50IT09dGhpcy5wcmV2JiZ0aGlzLmV2ZW50cy5jaGFuZ2UmJnRoaXMuZXZlbnRzLmNoYW5nZS5ub3RpZnkodGhpcy5jdXJyZW50KSxlJiZ0aGlzLmV2ZW50cy5yZW5kZXJSZXF1ZXN0JiZ0aGlzLmV2ZW50cy5yZW5kZXJSZXF1ZXN0Lm5vdGlmeSh0aGlzLmN1cnJlbnQpfSx0aGlzLmhhc0FuaW1hdGVkPSExLHRoaXMuc2V0Q3VycmVudCh0KSx0aGlzLm93bmVyPWUub3duZXJ9c2V0Q3VycmVudCh0KXt2YXIgZTt0aGlzLmN1cnJlbnQ9dCx0aGlzLnVwZGF0ZWRBdD1kLm5vdygpLG51bGw9PT10aGlzLmNhblRyYWNrVmVsb2NpdHkmJnZvaWQgMCE9PXQmJih0aGlzLmNhblRyYWNrVmVsb2NpdHk9KGU9dGhpcy5jdXJyZW50LCFpc05hTihwYXJzZUZsb2F0KGUpKSkpfXNldFByZXZGcmFtZVZhbHVlKHQ9dGhpcy5jdXJyZW50KXt0aGlzLnByZXZGcmFtZVZhbHVlPXQsdGhpcy5wcmV2VXBkYXRlZEF0PXRoaXMudXBkYXRlZEF0fW9uQ2hhbmdlKHQpe3JldHVybiB0aGlzLm9uKCJjaGFuZ2UiLHQpfW9uKHQsbil7dGhpcy5ldmVudHNbdF18fCh0aGlzLmV2ZW50c1t0XT1uZXcgZSk7Y29uc3Qgcz10aGlzLmV2ZW50c1t0XS5hZGQobik7cmV0dXJuImNoYW5nZSI9PT10PygpPT57cygpLG8ucmVhZCgoKCk9Pnt0aGlzLmV2ZW50cy5jaGFuZ2UuZ2V0U2l6ZSgpfHx0aGlzLnN0b3AoKX0pKX06c31jbGVhckxpc3RlbmVycygpe2Zvcihjb25zdCB0IGluIHRoaXMuZXZlbnRzKXRoaXMuZXZlbnRzW3RdLmNsZWFyKCl9YXR0YWNoKHQsZSl7dGhpcy5wYXNzaXZlRWZmZWN0PXQsdGhpcy5zdG9wUGFzc2l2ZUVmZmVjdD1lfXNldCh0LGU9ITApe2UmJnRoaXMucGFzc2l2ZUVmZmVjdD90aGlzLnBhc3NpdmVFZmZlY3QodCx0aGlzLnVwZGF0ZUFuZE5vdGlmeSk6dGhpcy51cGRhdGVBbmROb3RpZnkodCxlKX1zZXRXaXRoVmVsb2NpdHkodCxlLG4pe3RoaXMuc2V0KGUpLHRoaXMucHJldj12b2lkIDAsdGhpcy5wcmV2RnJhbWVWYWx1ZT10LHRoaXMucHJldlVwZGF0ZWRBdD10aGlzLnVwZGF0ZWRBdC1ufWp1bXAodCxlPSEwKXt0aGlzLnVwZGF0ZUFuZE5vdGlmeSh0KSx0aGlzLnByZXY9dCx0aGlzLnByZXZVcGRhdGVkQXQ9dGhpcy5wcmV2RnJhbWVWYWx1ZT12b2lkIDAsZSYmdGhpcy5zdG9wKCksdGhpcy5zdG9wUGFzc2l2ZUVmZmVjdCYmdGhpcy5zdG9wUGFzc2l2ZUVmZmVjdCgpfWdldCgpe3JldHVybiB0aGlzLmN1cnJlbnR9Z2V0UHJldmlvdXMoKXtyZXR1cm4gdGhpcy5wcmV2fWdldFZlbG9jaXR5KCl7Y29uc3QgdD1kLm5vdygpO2lmKCF0aGlzLmNhblRyYWNrVmVsb2NpdHl8fHZvaWQgMD09PXRoaXMucHJldkZyYW1lVmFsdWV8fHQtdGhpcy51cGRhdGVkQXQ+MzApcmV0dXJuIDA7Y29uc3QgZT1NYXRoLm1pbih0aGlzLnVwZGF0ZWRBdC10aGlzLnByZXZVcGRhdGVkQXQsMzApO3JldHVybiBuKHBhcnNlRmxvYXQodGhpcy5jdXJyZW50KS1wYXJzZUZsb2F0KHRoaXMucHJldkZyYW1lVmFsdWUpLGUpfXN0YXJ0KHQpe3JldHVybiB0aGlzLnN0b3AoKSxuZXcgUHJvbWlzZSgoZT0+e3RoaXMuaGFzQW5pbWF0ZWQ9ITAsdGhpcy5hbmltYXRpb249dChlKSx0aGlzLmV2ZW50cy5hbmltYXRpb25TdGFydCYmdGhpcy5ldmVudHMuYW5pbWF0aW9uU3RhcnQubm90aWZ5KCl9KSkudGhlbigoKCk9Pnt0aGlzLmV2ZW50cy5hbmltYXRpb25Db21wbGV0ZSYmdGhpcy5ldmVudHMuYW5pbWF0aW9uQ29tcGxldGUubm90aWZ5KCksdGhpcy5jbGVhckFuaW1hdGlvbigpfSkpfXN0b3AoKXt0aGlzLmFuaW1hdGlvbiYmKHRoaXMuYW5pbWF0aW9uLnN0b3AoKSx0aGlzLmV2ZW50cy5hbmltYXRpb25DYW5jZWwmJnRoaXMuZXZlbnRzLmFuaW1hdGlvbkNhbmNlbC5ub3RpZnkoKSksdGhpcy5jbGVhckFuaW1hdGlvbigpfWlzQW5pbWF0aW5nKCl7cmV0dXJuISF0aGlzLmFuaW1hdGlvbn1jbGVhckFuaW1hdGlvbigpe2RlbGV0ZSB0aGlzLmFuaW1hdGlvbn1kZXN0cm95KCl7dGhpcy5jbGVhckxpc3RlbmVycygpLHRoaXMuc3RvcCgpLHRoaXMuc3RvcFBhc3NpdmVFZmZlY3QmJnRoaXMuc3RvcFBhc3NpdmVFZmZlY3QoKX19ZnVuY3Rpb24gZih0LGUpe3JldHVybiBuZXcgcCh0LGUpfWZ1bmN0aW9uIG0odCl7bGV0IGU7cmV0dXJuKCk9Pih2b2lkIDA9PT1lJiYoZT10KCkpLGUpfWNvbnN0IGc9bSgoKCk9PnZvaWQgMCE9PXdpbmRvdy5TY3JvbGxUaW1lbGluZSkpO2NsYXNzIHl7Y29uc3RydWN0b3IodCl7dGhpcy5zdG9wPSgpPT50aGlzLnJ1bkFsbCgic3RvcCIpLHRoaXMuYW5pbWF0aW9ucz10LmZpbHRlcihCb29sZWFuKX10aGVuKHQsZSl7cmV0dXJuIFByb21pc2UuYWxsKHRoaXMuYW5pbWF0aW9ucykudGhlbih0KS5jYXRjaChlKX1nZXRBbGwodCl7cmV0dXJuIHRoaXMuYW5pbWF0aW9uc1swXVt0XX1zZXRBbGwodCxlKXtmb3IobGV0IG49MDtuPHRoaXMuYW5pbWF0aW9ucy5sZW5ndGg7bisrKXRoaXMuYW5pbWF0aW9uc1tuXVt0XT1lfWF0dGFjaFRpbWVsaW5lKHQsZSl7Y29uc3Qgbj10aGlzLmFuaW1hdGlvbnMubWFwKChuPT5nKCkmJm4uYXR0YWNoVGltZWxpbmU/bi5hdHRhY2hUaW1lbGluZSh0KTplKG4pKSk7cmV0dXJuKCk9PntuLmZvckVhY2goKCh0LGUpPT57dCYmdCgpLHRoaXMuYW5pbWF0aW9uc1tlXS5zdG9wKCl9KSl9fWdldCB0aW1lKCl7cmV0dXJuIHRoaXMuZ2V0QWxsKCJ0aW1lIil9c2V0IHRpbWUodCl7dGhpcy5zZXRBbGwoInRpbWUiLHQpfWdldCBzcGVlZCgpe3JldHVybiB0aGlzLmdldEFsbCgic3BlZWQiKX1zZXQgc3BlZWQodCl7dGhpcy5zZXRBbGwoInNwZWVkIix0KX1nZXQgc3RhcnRUaW1lKCl7cmV0dXJuIHRoaXMuZ2V0QWxsKCJzdGFydFRpbWUiKX1nZXQgZHVyYXRpb24oKXtsZXQgdD0wO2ZvcihsZXQgZT0wO2U8dGhpcy5hbmltYXRpb25zLmxlbmd0aDtlKyspdD1NYXRoLm1heCh0LHRoaXMuYW5pbWF0aW9uc1tlXS5kdXJhdGlvbik7cmV0dXJuIHR9cnVuQWxsKHQpe3RoaXMuYW5pbWF0aW9ucy5mb3JFYWNoKChlPT5lW3RdKCkpKX1mbGF0dGVuKCl7dGhpcy5ydW5BbGwoImZsYXR0ZW4iKX1wbGF5KCl7dGhpcy5ydW5BbGwoInBsYXkiKX1wYXVzZSgpe3RoaXMucnVuQWxsKCJwYXVzZSIpfWNhbmNlbCgpe3RoaXMucnVuQWxsKCJjYW5jZWwiKX1jb21wbGV0ZSgpe3RoaXMucnVuQWxsKCJjb21wbGV0ZSIpfX1jb25zdCB2PXQ9PjFlMyp0LHc9dD0+dC8xZTM7ZnVuY3Rpb24gYih0LGUscyl7Y29uc3QgaT1NYXRoLm1heChlLTUsMCk7cmV0dXJuIG4ocy10KGkpLGUtaSl9bGV0IFQ9aSx4PWk7Y29uc3QgUz0odCxlLG4pPT5uPmU/ZTpuPHQ/dDpuLFY9LjAwMTtmdW5jdGlvbiBBKHtkdXJhdGlvbjp0PTgwMCxib3VuY2U6ZT0uMjUsdmVsb2NpdHk6bj0wLG1hc3M6cz0xfSl7bGV0IGkscixvPTEtZTtvPVMoLjA1LDEsbyksdD1TKC4wMSwxMCx3KHQpKSxvPDE/KGk9ZT0+e2NvbnN0IHM9ZSpvLGk9cyp0LHI9cy1uLGE9UChlLG8pLGw9TWF0aC5leHAoLWkpO3JldHVybiBWLXIvYSpsfSxyPWU9Pntjb25zdCBzPWUqbyp0LHI9cypuK24sYT1NYXRoLnBvdyhvLDIpKk1hdGgucG93KGUsMikqdCxsPU1hdGguZXhwKC1zKSx1PVAoTWF0aC5wb3coZSwyKSxvKTtyZXR1cm4oLWkoZSkrVj4wPy0xOjEpKigoci1hKSpsKS91fSk6KGk9ZT0+TWF0aC5leHAoLWUqdCkqKChlLW4pKnQrMSktLjAwMSxyPWU9Pk1hdGguZXhwKC1lKnQpKih0KnQqKG4tZSkpKTtjb25zdCBhPWZ1bmN0aW9uKHQsZSxuKXtsZXQgcz1uO2ZvcihsZXQgbj0xO248TTtuKyspcy09dChzKS9lKHMpO3JldHVybiBzfShpLHIsNS90KTtpZih0PXYodCksaXNOYU4oYSkpcmV0dXJue3N0aWZmbmVzczoxMDAsZGFtcGluZzoxMCxkdXJhdGlvbjp0fTt7Y29uc3QgZT1NYXRoLnBvdyhhLDIpKnM7cmV0dXJue3N0aWZmbmVzczplLGRhbXBpbmc6MipvKk1hdGguc3FydChzKmUpLGR1cmF0aW9uOnR9fX1jb25zdCBNPTEyO2Z1bmN0aW9uIFAodCxlKXtyZXR1cm4gdCpNYXRoLnNxcnQoMS1lKmUpfWNvbnN0IGs9WyJkdXJhdGlvbiIsImJvdW5jZSJdLEY9WyJzdGlmZm5lc3MiLCJkYW1waW5nIiwibWFzcyJdO2Z1bmN0aW9uIEModCxlKXtyZXR1cm4gZS5zb21lKChlPT52b2lkIDAhPT10W2VdKSl9ZnVuY3Rpb24gRSh7a2V5ZnJhbWVzOnQscmVzdERlbHRhOmUscmVzdFNwZWVkOm4sLi4uc30pe2NvbnN0IGk9dFswXSxyPXRbdC5sZW5ndGgtMV0sbz17ZG9uZTohMSx2YWx1ZTppfSx7c3RpZmZuZXNzOmEsZGFtcGluZzpsLG1hc3M6dSxkdXJhdGlvbjpjLHZlbG9jaXR5OmgsaXNSZXNvbHZlZEZyb21EdXJhdGlvbjpkfT1mdW5jdGlvbih0KXtsZXQgZT17dmVsb2NpdHk6MCxzdGlmZm5lc3M6MTAwLGRhbXBpbmc6MTAsbWFzczoxLGlzUmVzb2x2ZWRGcm9tRHVyYXRpb246ITEsLi4udH07aWYoIUModCxGKSYmQyh0LGspKXtjb25zdCBuPUEodCk7ZT17Li4uZSwuLi5uLG1hc3M6MX0sZS5pc1Jlc29sdmVkRnJvbUR1cmF0aW9uPSEwfXJldHVybiBlfSh7Li4ucyx2ZWxvY2l0eTotdyhzLnZlbG9jaXR5fHwwKX0pLHA9aHx8MCxmPWwvKDIqTWF0aC5zcXJ0KGEqdSkpLG09ci1pLGc9dyhNYXRoLnNxcnQoYS91KSkseT1NYXRoLmFicyhtKTw1O2xldCBUO2lmKG58fChuPXk/LjAxOjIpLGV8fChlPXk/LjAwNTouNSksZjwxKXtjb25zdCB0PVAoZyxmKTtUPWU9Pntjb25zdCBuPU1hdGguZXhwKC1mKmcqZSk7cmV0dXJuIHItbiooKHArZipnKm0pL3QqTWF0aC5zaW4odCplKSttKk1hdGguY29zKHQqZSkpfX1lbHNlIGlmKDE9PT1mKVQ9dD0+ci1NYXRoLmV4cCgtZyp0KSoobSsocCtnKm0pKnQpO2Vsc2V7Y29uc3QgdD1nKk1hdGguc3FydChmKmYtMSk7VD1lPT57Y29uc3Qgbj1NYXRoLmV4cCgtZipnKmUpLHM9TWF0aC5taW4odCplLDMwMCk7cmV0dXJuIHItbiooKHArZipnKm0pKk1hdGguc2luaChzKSt0Km0qTWF0aC5jb3NoKHMpKS90fX1yZXR1cm57Y2FsY3VsYXRlZER1cmF0aW9uOmQmJmN8fG51bGwsbmV4dDp0PT57Y29uc3Qgcz1UKHQpO2lmKGQpby5kb25lPXQ+PWM7ZWxzZXtsZXQgaT0wO2Y8MSYmKGk9MD09PXQ/dihwKTpiKFQsdCxzKSk7Y29uc3QgYT1NYXRoLmFicyhpKTw9bixsPU1hdGguYWJzKHItcyk8PWU7by5kb25lPWEmJmx9cmV0dXJuIG8udmFsdWU9by5kb25lP3I6cyxvfX19Y29uc3QgTz0yZTQ7ZnVuY3Rpb24gUih0KXtsZXQgZT0wO2xldCBuPXQubmV4dChlKTtmb3IoOyFuLmRvbmUmJmU8TzspZSs9NTAsbj10Lm5leHQoZSk7cmV0dXJuIGU+PU8/MS8wOmV9ZnVuY3Rpb24gQih0LGU9MTAwLG4pe2NvbnN0IHM9bih7Li4udCxrZXlmcmFtZXM6WzAsZV19KSxpPU1hdGgubWluKFIocyksTyk7cmV0dXJue3R5cGU6ImtleWZyYW1lcyIsZWFzZTp0PT5zLm5leHQoaSp0KS52YWx1ZS9lLGR1cmF0aW9uOncoaSl9fWNvbnN0IEk9KHQsZSxuKT0+dCsoZS10KSpuLEw9KHQsZSxuKT0+e2NvbnN0IHM9ZS10O3JldHVybiAwPT09cz8xOihuLXQpL3N9O2Z1bmN0aW9uIFcodCxlKXtjb25zdCBuPXRbdC5sZW5ndGgtMV07Zm9yKGxldCBzPTE7czw9ZTtzKyspe2NvbnN0IGk9TCgwLGUscyk7dC5wdXNoKEkobiwxLGkpKX19ZnVuY3Rpb24gRCh0KXtjb25zdCBlPVswXTtyZXR1cm4gVyhlLHQubGVuZ3RoLTEpLGV9Y29uc3QgTj10PT5Cb29sZWFuKHQmJnQuZ2V0VmVsb2NpdHkpO2Z1bmN0aW9uIEsodCxlLG4pe3ZhciBzO2lmKCJzdHJpbmciPT10eXBlb2YgdCl7bGV0IGk9ZG9jdW1lbnQ7ZSYmKHgoQm9vbGVhbihlLmN1cnJlbnQpKSxpPWUuY3VycmVudCksbj8obnVsbCE9PShzPW5bdF0pJiZ2b2lkIDAhPT1zfHwoblt0XT1pLnF1ZXJ5U2VsZWN0b3JBbGwodCkpLHQ9blt0XSk6dD1pLnF1ZXJ5U2VsZWN0b3JBbGwodCl9ZWxzZSB0IGluc3RhbmNlb2YgRWxlbWVudCYmKHQ9W3RdKTtyZXR1cm4gQXJyYXkuZnJvbSh0fHxbXSl9ZnVuY3Rpb24gJCh0KXtyZXR1cm4ib2JqZWN0Ij09dHlwZW9mIHQmJiFBcnJheS5pc0FycmF5KHQpfWZ1bmN0aW9uIGoodCxlLG4scyl7cmV0dXJuInN0cmluZyI9PXR5cGVvZiB0JiYkKGUpP0sodCxuLHMpOnQgaW5zdGFuY2VvZiBOb2RlTGlzdD9BcnJheS5mcm9tKHQpOkFycmF5LmlzQXJyYXkodCk/dDpbdF19ZnVuY3Rpb24geih0KXtyZXR1cm4iZnVuY3Rpb24iPT10eXBlb2YgdH1mdW5jdGlvbiBIKHQsZSxuLHMpe3ZhciBpO3JldHVybiJudW1iZXIiPT10eXBlb2YgZT9lOmUuc3RhcnRzV2l0aCgiLSIpfHxlLnN0YXJ0c1dpdGgoIisiKT9NYXRoLm1heCgwLHQrcGFyc2VGbG9hdChlKSk6IjwiPT09ZT9uOm51bGwhPT0oaT1zLmdldChlKSkmJnZvaWQgMCE9PWk/aTp0fWNvbnN0IFU9KHQsZSxuKT0+e2NvbnN0IHM9ZS10O3JldHVybigobi10KSVzK3MpJXMrdH0sWT10PT5BcnJheS5pc0FycmF5KHQpJiYibnVtYmVyIiE9dHlwZW9mIHRbMF07ZnVuY3Rpb24gcSh0LGUpe3JldHVybiBZKHQpP3RbVSgwLHQubGVuZ3RoLGUpXTp0fWZ1bmN0aW9uIFgoZSxuLHMsaSxyLG8peyFmdW5jdGlvbihlLG4scyl7Zm9yKGxldCBpPTA7aTxlLmxlbmd0aDtpKyspe2NvbnN0IHI9ZVtpXTtyLmF0Pm4mJnIuYXQ8cyYmKHQoZSxyKSxpLS0pfX0oZSxyLG8pO2ZvcihsZXQgdD0wO3Q8bi5sZW5ndGg7dCsrKWUucHVzaCh7dmFsdWU6blt0XSxhdDpJKHIsbyxpW3RdKSxlYXNpbmc6cShzLHQpfSl9ZnVuY3Rpb24gRyh0LGUpe3JldHVybiB0LmF0PT09ZS5hdD9udWxsPT09dC52YWx1ZT8xOm51bGw9PT1lLnZhbHVlPy0xOjA6dC5hdC1lLmF0fWZ1bmN0aW9uIFoodCxlKXtyZXR1cm4hZS5oYXModCkmJmUuc2V0KHQse30pLGUuZ2V0KHQpfWZ1bmN0aW9uIF8odCxlKXtyZXR1cm4gZVt0XXx8KGVbdF09W10pLGVbdF19ZnVuY3Rpb24gSih0KXtyZXR1cm4gQXJyYXkuaXNBcnJheSh0KT90Olt0XX1mdW5jdGlvbiBRKHQsZSl7cmV0dXJuIHQmJnRbZV0/ey4uLnQsLi4udFtlXX06ey4uLnR9fWNvbnN0IHR0PXQ9PiJudW1iZXIiPT10eXBlb2YgdCxldD10PT50LmV2ZXJ5KHR0KSxudD1uZXcgV2Vha01hcCxzdD1bInRyYW5zZm9ybVBlcnNwZWN0aXZlIiwieCIsInkiLCJ6IiwidHJhbnNsYXRlWCIsInRyYW5zbGF0ZVkiLCJ0cmFuc2xhdGVaIiwic2NhbGUiLCJzY2FsZVgiLCJzY2FsZVkiLCJyb3RhdGUiLCJyb3RhdGVYIiwicm90YXRlWSIsInJvdGF0ZVoiLCJza2V3Iiwic2tld1giLCJza2V3WSJdLGl0PW5ldyBTZXQoc3QpLHJ0PXt0eXBlOiJzcHJpbmciLHN0aWZmbmVzczo1MDAsZGFtcGluZzoyNSxyZXN0U3BlZWQ6MTB9LG90PXt0eXBlOiJrZXlmcmFtZXMiLGR1cmF0aW9uOi44fSxhdD17dHlwZToia2V5ZnJhbWVzIixlYXNlOlsuMjUsLjEsLjM1LDFdLGR1cmF0aW9uOi4zfSxsdD0odCx7a2V5ZnJhbWVzOmV9KT0+ZS5sZW5ndGg+Mj9vdDppdC5oYXModCk/dC5zdGFydHNXaXRoKCJzY2FsZSIpP3t0eXBlOiJzcHJpbmciLHN0aWZmbmVzczo1NTAsZGFtcGluZzowPT09ZVsxXT8yKk1hdGguc3FydCg1NTApOjMwLHJlc3RTcGVlZDoxMH06cnQ6YXQ7ZnVuY3Rpb24gdXQodCxlKXtyZXR1cm4gdD90W2VdfHx0LmRlZmF1bHR8fHQ6dm9pZCAwfWNvbnN0IGN0PXQ9Pm51bGwhPT10O2Z1bmN0aW9uIGh0KHQse3JlcGVhdDplLHJlcGVhdFR5cGU6bj0ibG9vcCJ9LHMpe2NvbnN0IGk9dC5maWx0ZXIoY3QpLHI9ZSYmImxvb3AiIT09biYmZSUyPT0xPzA6aS5sZW5ndGgtMTtyZXR1cm4gciYmdm9pZCAwIT09cz9zOmlbcl19Y29uc3QgZHQ9KHQsZSxuKT0+KCgoMS0zKm4rMyplKSp0KygzKm4tNiplKSkqdCszKmUpKnQ7ZnVuY3Rpb24gcHQodCxlLG4scyl7aWYodD09PWUmJm49PT1zKXJldHVybiBpO2NvbnN0IHI9ZT0+ZnVuY3Rpb24odCxlLG4scyxpKXtsZXQgcixvLGE9MDtkb3tvPWUrKG4tZSkvMixyPWR0KG8scyxpKS10LHI+MD9uPW86ZT1vfXdoaWxlKE1hdGguYWJzKHIpPjFlLTcmJisrYTwxMik7cmV0dXJuIG99KGUsMCwxLHQsbik7cmV0dXJuIHQ9PjA9PT10fHwxPT09dD90OmR0KHIodCksZSxzKX1jb25zdCBmdD10PT5lPT5lPD0uNT90KDIqZSkvMjooMi10KDIqKDEtZSkpKS8yLG10PXQ9PmU9PjEtdCgxLWUpLGd0PXB0KC4zMywxLjUzLC42OSwuOTkpLHl0PW10KGd0KSx2dD1mdCh5dCksd3Q9dD0+KHQqPTIpPDE/LjUqeXQodCk6LjUqKDItTWF0aC5wb3coMiwtMTAqKHQtMSkpKSxidD10PT4xLU1hdGguc2luKE1hdGguYWNvcyh0KSksVHQ9bXQoYnQpLHh0PWZ0KGJ0KSxTdD10PT4vXjBbXi5cc10rJC91LnRlc3QodCk7Y29uc3QgVnQ9dD0+L14tPyg/OlxkKyg/OlwuXGQrKT98XC5cZCspJC91LnRlc3QodCksQXQ9dD0+ZT0+InN0cmluZyI9PXR5cGVvZiBlJiZlLnN0YXJ0c1dpdGgodCksTXQ9QXQoIi0tIiksUHQ9QXQoInZhcigtLSIpLGt0PXQ9PiEhUHQodCkmJkZ0LnRlc3QodC5zcGxpdCgiLyoiKVswXS50cmltKCkpLEZ0PS92YXJcKC0tKD86W1x3LV0rXHMqfFtcdy1dK1xzKiwoPzpccypbXikoXHNdfFxzKlwoKD86W14pKF18XChbXikoXSpcKSkqXCkpK1xzKilcKSQvaXUsQ3Q9L152YXJcKC0tKD86KFtcdy1dKyl8KFtcdy1dKyksID8oW2EtekEtWlxkICgpJSMuLC1dKykpXCkvdTtmdW5jdGlvbiBFdCh0LGUsbj0xKXtjb25zdFtzLGldPWZ1bmN0aW9uKHQpe2NvbnN0IGU9Q3QuZXhlYyh0KTtpZighZSlyZXR1cm5bLF07Y29uc3RbLG4scyxpXT1lO3JldHVybltgLS0ke251bGwhPW4/bjpzfWAsaV19KHQpO2lmKCFzKXJldHVybjtjb25zdCByPXdpbmRvdy5nZXRDb21wdXRlZFN0eWxlKGUpLmdldFByb3BlcnR5VmFsdWUocyk7aWYocil7Y29uc3QgdD1yLnRyaW0oKTtyZXR1cm4gVnQodCk/cGFyc2VGbG9hdCh0KTp0fXJldHVybiBrdChpKT9FdChpLGUsbisxKTppfWNvbnN0IE90PXt0ZXN0OnQ9PiJudW1iZXIiPT10eXBlb2YgdCxwYXJzZTpwYXJzZUZsb2F0LHRyYW5zZm9ybTp0PT50fSxSdD17Li4uT3QsdHJhbnNmb3JtOnQ9PlMoMCwxLHQpfSxCdD17Li4uT3QsZGVmYXVsdDoxfSxJdD10PT4oe3Rlc3Q6ZT0+InN0cmluZyI9PXR5cGVvZiBlJiZlLmVuZHNXaXRoKHQpJiYxPT09ZS5zcGxpdCgiICIpLmxlbmd0aCxwYXJzZTpwYXJzZUZsb2F0LHRyYW5zZm9ybTplPT5gJHtlfSR7dH1gfSksTHQ9SXQoImRlZyIpLFd0PUl0KCIlIiksRHQ9SXQoInB4IiksTnQ9SXQoInZoIiksS3Q9SXQoInZ3IiksJHQ9ey4uLld0LHBhcnNlOnQ9Pld0LnBhcnNlKHQpLzEwMCx0cmFuc2Zvcm06dD0+V3QudHJhbnNmb3JtKDEwMCp0KX0sanQ9bmV3IFNldChbIndpZHRoIiwiaGVpZ2h0IiwidG9wIiwibGVmdCIsInJpZ2h0IiwiYm90dG9tIiwieCIsInkiLCJ0cmFuc2xhdGVYIiwidHJhbnNsYXRlWSJdKSx6dD10PT50PT09T3R8fHQ9PT1EdCxIdD0odCxlKT0+cGFyc2VGbG9hdCh0LnNwbGl0KCIsICIpW2VdKSxVdD0odCxlKT0+KG4se3RyYW5zZm9ybTpzfSk9PntpZigibm9uZSI9PT1zfHwhcylyZXR1cm4gMDtjb25zdCBpPXMubWF0Y2goL15tYXRyaXgzZFwoKC4rKVwpJC91KTtpZihpKXJldHVybiBIdChpWzFdLGUpO3tjb25zdCBlPXMubWF0Y2goL15tYXRyaXhcKCguKylcKSQvdSk7cmV0dXJuIGU/SHQoZVsxXSx0KTowfX0sWXQ9bmV3IFNldChbIngiLCJ5IiwieiJdKSxxdD1zdC5maWx0ZXIoKHQ9PiFZdC5oYXModCkpKTtjb25zdCBYdD17d2lkdGg6KHt4OnR9LHtwYWRkaW5nTGVmdDplPSIwIixwYWRkaW5nUmlnaHQ6bj0iMCJ9KT0+dC5tYXgtdC5taW4tcGFyc2VGbG9hdChlKS1wYXJzZUZsb2F0KG4pLGhlaWdodDooe3k6dH0se3BhZGRpbmdUb3A6ZT0iMCIscGFkZGluZ0JvdHRvbTpuPSIwIn0pPT50Lm1heC10Lm1pbi1wYXJzZUZsb2F0KGUpLXBhcnNlRmxvYXQobiksdG9wOih0LHt0b3A6ZX0pPT5wYXJzZUZsb2F0KGUpLGxlZnQ6KHQse2xlZnQ6ZX0pPT5wYXJzZUZsb2F0KGUpLGJvdHRvbTooe3k6dH0se3RvcDplfSk9PnBhcnNlRmxvYXQoZSkrKHQubWF4LXQubWluKSxyaWdodDooe3g6dH0se2xlZnQ6ZX0pPT5wYXJzZUZsb2F0KGUpKyh0Lm1heC10Lm1pbikseDpVdCg0LDEzKSx5OlV0KDUsMTQpfTtYdC50cmFuc2xhdGVYPVh0LngsWHQudHJhbnNsYXRlWT1YdC55O2NvbnN0IEd0PXQ9PmU9PmUudGVzdCh0KSxadD1bT3QsRHQsV3QsTHQsS3QsTnQse3Rlc3Q6dD0+ImF1dG8iPT09dCxwYXJzZTp0PT50fV0sX3Q9dD0+WnQuZmluZChHdCh0KSksSnQ9bmV3IFNldDtsZXQgUXQ9ITEsdGU9ITE7ZnVuY3Rpb24gZWUoKXtpZih0ZSl7Y29uc3QgdD1BcnJheS5mcm9tKEp0KS5maWx0ZXIoKHQ9PnQubmVlZHNNZWFzdXJlbWVudCkpLGU9bmV3IFNldCh0Lm1hcCgodD0+dC5lbGVtZW50KSkpLG49bmV3IE1hcDtlLmZvckVhY2goKHQ9Pntjb25zdCBlPWZ1bmN0aW9uKHQpe2NvbnN0IGU9W107cmV0dXJuIHF0LmZvckVhY2goKG49Pntjb25zdCBzPXQuZ2V0VmFsdWUobik7dm9pZCAwIT09cyYmKGUucHVzaChbbixzLmdldCgpXSkscy5zZXQobi5zdGFydHNXaXRoKCJzY2FsZSIpPzE6MCkpfSkpLGV9KHQpO2UubGVuZ3RoJiYobi5zZXQodCxlKSx0LnJlbmRlcigpKX0pKSx0LmZvckVhY2goKHQ9PnQubWVhc3VyZUluaXRpYWxTdGF0ZSgpKSksZS5mb3JFYWNoKCh0PT57dC5yZW5kZXIoKTtjb25zdCBlPW4uZ2V0KHQpO2UmJmUuZm9yRWFjaCgoKFtlLG5dKT0+e3ZhciBzO251bGw9PT0ocz10LmdldFZhbHVlKGUpKXx8dm9pZCAwPT09c3x8cy5zZXQobil9KSl9KSksdC5mb3JFYWNoKCh0PT50Lm1lYXN1cmVFbmRTdGF0ZSgpKSksdC5mb3JFYWNoKCh0PT57dm9pZCAwIT09dC5zdXNwZW5kZWRTY3JvbGxZJiZ3aW5kb3cuc2Nyb2xsVG8oMCx0LnN1c3BlbmRlZFNjcm9sbFkpfSkpfXRlPSExLFF0PSExLEp0LmZvckVhY2goKHQ9PnQuY29tcGxldGUoKSkpLEp0LmNsZWFyKCl9ZnVuY3Rpb24gbmUoKXtKdC5mb3JFYWNoKCh0PT57dC5yZWFkS2V5ZnJhbWVzKCksdC5uZWVkc01lYXN1cmVtZW50JiYodGU9ITApfSkpfWNsYXNzIHNle2NvbnN0cnVjdG9yKHQsZSxuLHMsaSxyPSExKXt0aGlzLmlzQ29tcGxldGU9ITEsdGhpcy5pc0FzeW5jPSExLHRoaXMubmVlZHNNZWFzdXJlbWVudD0hMSx0aGlzLmlzU2NoZWR1bGVkPSExLHRoaXMudW5yZXNvbHZlZEtleWZyYW1lcz1bLi4udF0sdGhpcy5vbkNvbXBsZXRlPWUsdGhpcy5uYW1lPW4sdGhpcy5tb3Rpb25WYWx1ZT1zLHRoaXMuZWxlbWVudD1pLHRoaXMuaXNBc3luYz1yfXNjaGVkdWxlUmVzb2x2ZSgpe3RoaXMuaXNTY2hlZHVsZWQ9ITAsdGhpcy5pc0FzeW5jPyhKdC5hZGQodGhpcyksUXR8fChRdD0hMCxvLnJlYWQobmUpLG8ucmVzb2x2ZUtleWZyYW1lcyhlZSkpKToodGhpcy5yZWFkS2V5ZnJhbWVzKCksdGhpcy5jb21wbGV0ZSgpKX1yZWFkS2V5ZnJhbWVzKCl7Y29uc3R7dW5yZXNvbHZlZEtleWZyYW1lczp0LG5hbWU6ZSxlbGVtZW50Om4sbW90aW9uVmFsdWU6c309dGhpcztmb3IobGV0IGk9MDtpPHQubGVuZ3RoO2krKylpZihudWxsPT09dFtpXSlpZigwPT09aSl7Y29uc3QgaT1udWxsPT1zP3ZvaWQgMDpzLmdldCgpLHI9dFt0Lmxlbmd0aC0xXTtpZih2b2lkIDAhPT1pKXRbMF09aTtlbHNlIGlmKG4mJmUpe2NvbnN0IHM9bi5yZWFkVmFsdWUoZSxyKTtudWxsIT1zJiYodFswXT1zKX12b2lkIDA9PT10WzBdJiYodFswXT1yKSxzJiZ2b2lkIDA9PT1pJiZzLnNldCh0WzBdKX1lbHNlIHRbaV09dFtpLTFdfXNldEZpbmFsS2V5ZnJhbWUoKXt9bWVhc3VyZUluaXRpYWxTdGF0ZSgpe31yZW5kZXJFbmRTdHlsZXMoKXt9bWVhc3VyZUVuZFN0YXRlKCl7fWNvbXBsZXRlKCl7dGhpcy5pc0NvbXBsZXRlPSEwLHRoaXMub25Db21wbGV0ZSh0aGlzLnVucmVzb2x2ZWRLZXlmcmFtZXMsdGhpcy5maW5hbEtleWZyYW1lKSxKdC5kZWxldGUodGhpcyl9Y2FuY2VsKCl7dGhpcy5pc0NvbXBsZXRlfHwodGhpcy5pc1NjaGVkdWxlZD0hMSxKdC5kZWxldGUodGhpcykpfXJlc3VtZSgpe3RoaXMuaXNDb21wbGV0ZXx8dGhpcy5zY2hlZHVsZVJlc29sdmUoKX19Y29uc3QgaWU9dD0+TWF0aC5yb3VuZCgxZTUqdCkvMWU1LHJlPS8tPyg/OlxkKyg/OlwuXGQrKT98XC5cZCspL2d1O2NvbnN0IG9lPS9eKD86I1tcZGEtZl17Myw4fXwoPzpyZ2J8aHNsKWE/XCgoPzotP1tcZC5dKyU/Wyxcc10rKXsyfS0/W1xkLl0rJT9ccyooPzpbLC9dXHMqKT8oPzpcYlxkKyg/OlwuXGQrKT98XC5cZCspPyU/XCkpJC9pdSxhZT0odCxlKT0+bj0+Qm9vbGVhbigic3RyaW5nIj09dHlwZW9mIG4mJm9lLnRlc3QobikmJm4uc3RhcnRzV2l0aCh0KXx8ZSYmIWZ1bmN0aW9uKHQpe3JldHVybiBudWxsPT10fShuKSYmT2JqZWN0LnByb3RvdHlwZS5oYXNPd25Qcm9wZXJ0eS5jYWxsKG4sZSkpLGxlPSh0LGUsbik9PnM9PntpZigic3RyaW5nIiE9dHlwZW9mIHMpcmV0dXJuIHM7Y29uc3RbaSxyLG8sYV09cy5tYXRjaChyZSk7cmV0dXJue1t0XTpwYXJzZUZsb2F0KGkpLFtlXTpwYXJzZUZsb2F0KHIpLFtuXTpwYXJzZUZsb2F0KG8pLGFscGhhOnZvaWQgMCE9PWE/cGFyc2VGbG9hdChhKToxfX0sdWU9ey4uLk90LHRyYW5zZm9ybTp0PT5NYXRoLnJvdW5kKCh0PT5TKDAsMjU1LHQpKSh0KSl9LGNlPXt0ZXN0OmFlKCJyZ2IiLCJyZWQiKSxwYXJzZTpsZSgicmVkIiwiZ3JlZW4iLCJibHVlIiksdHJhbnNmb3JtOih7cmVkOnQsZ3JlZW46ZSxibHVlOm4sYWxwaGE6cz0xfSk9PiJyZ2JhKCIrdWUudHJhbnNmb3JtKHQpKyIsICIrdWUudHJhbnNmb3JtKGUpKyIsICIrdWUudHJhbnNmb3JtKG4pKyIsICIraWUoUnQudHJhbnNmb3JtKHMpKSsiKSJ9O2NvbnN0IGhlPXt0ZXN0OmFlKCIjIikscGFyc2U6ZnVuY3Rpb24odCl7bGV0IGU9IiIsbj0iIixzPSIiLGk9IiI7cmV0dXJuIHQubGVuZ3RoPjU/KGU9dC5zdWJzdHJpbmcoMSwzKSxuPXQuc3Vic3RyaW5nKDMsNSkscz10LnN1YnN0cmluZyg1LDcpLGk9dC5zdWJzdHJpbmcoNyw5KSk6KGU9dC5zdWJzdHJpbmcoMSwyKSxuPXQuc3Vic3RyaW5nKDIsMykscz10LnN1YnN0cmluZygzLDQpLGk9dC5zdWJzdHJpbmcoNCw1KSxlKz1lLG4rPW4scys9cyxpKz1pKSx7cmVkOnBhcnNlSW50KGUsMTYpLGdyZWVuOnBhcnNlSW50KG4sMTYpLGJsdWU6cGFyc2VJbnQocywxNiksYWxwaGE6aT9wYXJzZUludChpLDE2KS8yNTU6MX19LHRyYW5zZm9ybTpjZS50cmFuc2Zvcm19LGRlPXt0ZXN0OmFlKCJoc2wiLCJodWUiKSxwYXJzZTpsZSgiaHVlIiwic2F0dXJhdGlvbiIsImxpZ2h0bmVzcyIpLHRyYW5zZm9ybTooe2h1ZTp0LHNhdHVyYXRpb246ZSxsaWdodG5lc3M6bixhbHBoYTpzPTF9KT0+ImhzbGEoIitNYXRoLnJvdW5kKHQpKyIsICIrV3QudHJhbnNmb3JtKGllKGUpKSsiLCAiK1d0LnRyYW5zZm9ybShpZShuKSkrIiwgIitpZShSdC50cmFuc2Zvcm0ocykpKyIpIn0scGU9e3Rlc3Q6dD0+Y2UudGVzdCh0KXx8aGUudGVzdCh0KXx8ZGUudGVzdCh0KSxwYXJzZTp0PT5jZS50ZXN0KHQpP2NlLnBhcnNlKHQpOmRlLnRlc3QodCk/ZGUucGFyc2UodCk6aGUucGFyc2UodCksdHJhbnNmb3JtOnQ9PiJzdHJpbmciPT10eXBlb2YgdD90OnQuaGFzT3duUHJvcGVydHkoInJlZCIpP2NlLnRyYW5zZm9ybSh0KTpkZS50cmFuc2Zvcm0odCl9LGZlPS8oPzojW1xkYS1mXXszLDh9fCg/OnJnYnxoc2wpYT9cKCg/Oi0/W1xkLl0rJT9bLFxzXSspezJ9LT9bXGQuXSslP1xzKig/OlssL11ccyopPyg/OlxiXGQrKD86XC5cZCspP3xcLlxkKyk/JT9cKSkvZ2l1O2NvbnN0IG1lPSJudW1iZXIiLGdlPSJjb2xvciIseWU9L3ZhclxzKlwoXHMqLS0oPzpbXHctXStccyp8W1x3LV0rXHMqLCg/OlxzKlteKShcc118XHMqXCgoPzpbXikoXXxcKFteKShdKlwpKSpcKSkrXHMqKVwpfCNbXGRhLWZdezMsOH18KD86cmdifGhzbClhP1woKD86LT9bXGQuXSslP1ssXHNdKyl7Mn0tP1tcZC5dKyU/XHMqKD86WywvXVxzKik/KD86XGJcZCsoPzpcLlxkKyk/fFwuXGQrKT8lP1wpfC0/KD86XGQrKD86XC5cZCspP3xcLlxkKykvZ2l1O2Z1bmN0aW9uIHZlKHQpe2NvbnN0IGU9dC50b1N0cmluZygpLG49W10scz17Y29sb3I6W10sbnVtYmVyOltdLHZhcjpbXX0saT1bXTtsZXQgcj0wO2NvbnN0IG89ZS5yZXBsYWNlKHllLCh0PT4ocGUudGVzdCh0KT8ocy5jb2xvci5wdXNoKHIpLGkucHVzaChnZSksbi5wdXNoKHBlLnBhcnNlKHQpKSk6dC5zdGFydHNXaXRoKCJ2YXIoIik/KHMudmFyLnB1c2gociksaS5wdXNoKCJ2YXIiKSxuLnB1c2godCkpOihzLm51bWJlci5wdXNoKHIpLGkucHVzaChtZSksbi5wdXNoKHBhcnNlRmxvYXQodCkpKSwrK3IsIiR7fSIpKSkuc3BsaXQoIiR7fSIpO3JldHVybnt2YWx1ZXM6bixzcGxpdDpvLGluZGV4ZXM6cyx0eXBlczppfX1mdW5jdGlvbiB3ZSh0KXtyZXR1cm4gdmUodCkudmFsdWVzfWZ1bmN0aW9uIGJlKHQpe2NvbnN0e3NwbGl0OmUsdHlwZXM6bn09dmUodCkscz1lLmxlbmd0aDtyZXR1cm4gdD0+e2xldCBpPSIiO2ZvcihsZXQgcj0wO3I8cztyKyspaWYoaSs9ZVtyXSx2b2lkIDAhPT10W3JdKXtjb25zdCBlPW5bcl07aSs9ZT09PW1lP2llKHRbcl0pOmU9PT1nZT9wZS50cmFuc2Zvcm0odFtyXSk6dFtyXX1yZXR1cm4gaX19Y29uc3QgVGU9dD0+Im51bWJlciI9PXR5cGVvZiB0PzA6dDtjb25zdCB4ZT17dGVzdDpmdW5jdGlvbih0KXt2YXIgZSxuO3JldHVybiBpc05hTih0KSYmInN0cmluZyI9PXR5cGVvZiB0JiYoKG51bGw9PT0oZT10Lm1hdGNoKHJlKSl8fHZvaWQgMD09PWU/dm9pZCAwOmUubGVuZ3RoKXx8MCkrKChudWxsPT09KG49dC5tYXRjaChmZSkpfHx2b2lkIDA9PT1uP3ZvaWQgMDpuLmxlbmd0aCl8fDApPjB9LHBhcnNlOndlLGNyZWF0ZVRyYW5zZm9ybWVyOmJlLGdldEFuaW1hdGFibGVOb25lOmZ1bmN0aW9uKHQpe2NvbnN0IGU9d2UodCk7cmV0dXJuIGJlKHQpKGUubWFwKFRlKSl9fSxTZT1uZXcgU2V0KFsiYnJpZ2h0bmVzcyIsImNvbnRyYXN0Iiwic2F0dXJhdGUiLCJvcGFjaXR5Il0pO2Z1bmN0aW9uIFZlKHQpe2NvbnN0W2Usbl09dC5zbGljZSgwLC0xKS5zcGxpdCgiKCIpO2lmKCJkcm9wLXNoYWRvdyI9PT1lKXJldHVybiB0O2NvbnN0W3NdPW4ubWF0Y2gocmUpfHxbXTtpZighcylyZXR1cm4gdDtjb25zdCBpPW4ucmVwbGFjZShzLCIiKTtsZXQgcj1TZS5oYXMoZSk/MTowO3JldHVybiBzIT09biYmKHIqPTEwMCksZSsiKCIrcitpKyIpIn1jb25zdCBBZT0vXGIoW2Etei1dKilcKC4qP1wpL2d1LE1lPXsuLi54ZSxnZXRBbmltYXRhYmxlTm9uZTp0PT57Y29uc3QgZT10Lm1hdGNoKEFlKTtyZXR1cm4gZT9lLm1hcChWZSkuam9pbigiICIpOnR9fSxQZT17Ym9yZGVyV2lkdGg6RHQsYm9yZGVyVG9wV2lkdGg6RHQsYm9yZGVyUmlnaHRXaWR0aDpEdCxib3JkZXJCb3R0b21XaWR0aDpEdCxib3JkZXJMZWZ0V2lkdGg6RHQsYm9yZGVyUmFkaXVzOkR0LHJhZGl1czpEdCxib3JkZXJUb3BMZWZ0UmFkaXVzOkR0LGJvcmRlclRvcFJpZ2h0UmFkaXVzOkR0LGJvcmRlckJvdHRvbVJpZ2h0UmFkaXVzOkR0LGJvcmRlckJvdHRvbUxlZnRSYWRpdXM6RHQsd2lkdGg6RHQsbWF4V2lkdGg6RHQsaGVpZ2h0OkR0LG1heEhlaWdodDpEdCx0b3A6RHQscmlnaHQ6RHQsYm90dG9tOkR0LGxlZnQ6RHQscGFkZGluZzpEdCxwYWRkaW5nVG9wOkR0LHBhZGRpbmdSaWdodDpEdCxwYWRkaW5nQm90dG9tOkR0LHBhZGRpbmdMZWZ0OkR0LG1hcmdpbjpEdCxtYXJnaW5Ub3A6RHQsbWFyZ2luUmlnaHQ6RHQsbWFyZ2luQm90dG9tOkR0LG1hcmdpbkxlZnQ6RHQsYmFja2dyb3VuZFBvc2l0aW9uWDpEdCxiYWNrZ3JvdW5kUG9zaXRpb25ZOkR0fSxrZT17cm90YXRlOkx0LHJvdGF0ZVg6THQscm90YXRlWTpMdCxyb3RhdGVaOkx0LHNjYWxlOkJ0LHNjYWxlWDpCdCxzY2FsZVk6QnQsc2NhbGVaOkJ0LHNrZXc6THQsc2tld1g6THQsc2tld1k6THQsZGlzdGFuY2U6RHQsdHJhbnNsYXRlWDpEdCx0cmFuc2xhdGVZOkR0LHRyYW5zbGF0ZVo6RHQseDpEdCx5OkR0LHo6RHQscGVyc3BlY3RpdmU6RHQsdHJhbnNmb3JtUGVyc3BlY3RpdmU6RHQsb3BhY2l0eTpSdCxvcmlnaW5YOiR0LG9yaWdpblk6JHQsb3JpZ2luWjpEdH0sRmU9ey4uLk90LHRyYW5zZm9ybTpNYXRoLnJvdW5kfSxDZT17Li4uUGUsLi4ua2UsekluZGV4OkZlLHNpemU6RHQsZmlsbE9wYWNpdHk6UnQsc3Ryb2tlT3BhY2l0eTpSdCxudW1PY3RhdmVzOkZlfSxFZT17Li4uQ2UsY29sb3I6cGUsYmFja2dyb3VuZENvbG9yOnBlLG91dGxpbmVDb2xvcjpwZSxmaWxsOnBlLHN0cm9rZTpwZSxib3JkZXJDb2xvcjpwZSxib3JkZXJUb3BDb2xvcjpwZSxib3JkZXJSaWdodENvbG9yOnBlLGJvcmRlckJvdHRvbUNvbG9yOnBlLGJvcmRlckxlZnRDb2xvcjpwZSxmaWx0ZXI6TWUsV2Via2l0RmlsdGVyOk1lfSxPZT10PT5FZVt0XTtmdW5jdGlvbiBSZSh0LGUpe2xldCBuPU9lKHQpO3JldHVybiBuIT09TWUmJihuPXhlKSxuLmdldEFuaW1hdGFibGVOb25lP24uZ2V0QW5pbWF0YWJsZU5vbmUoZSk6dm9pZCAwfWNvbnN0IEJlPW5ldyBTZXQoWyJhdXRvIiwibm9uZSIsIjAiXSk7Y2xhc3MgSWUgZXh0ZW5kcyBzZXtjb25zdHJ1Y3Rvcih0LGUsbixzLGkpe3N1cGVyKHQsZSxuLHMsaSwhMCl9cmVhZEtleWZyYW1lcygpe2NvbnN0e3VucmVzb2x2ZWRLZXlmcmFtZXM6dCxlbGVtZW50OmUsbmFtZTpufT10aGlzO2lmKCFlfHwhZS5jdXJyZW50KXJldHVybjtzdXBlci5yZWFkS2V5ZnJhbWVzKCk7Zm9yKGxldCBuPTA7bjx0Lmxlbmd0aDtuKyspe2xldCBzPXRbbl07aWYoInN0cmluZyI9PXR5cGVvZiBzJiYocz1zLnRyaW0oKSxrdChzKSkpe2NvbnN0IGk9RXQocyxlLmN1cnJlbnQpO3ZvaWQgMCE9PWkmJih0W25dPWkpLG49PT10Lmxlbmd0aC0xJiYodGhpcy5maW5hbEtleWZyYW1lPXMpfX1pZih0aGlzLnJlc29sdmVOb25lS2V5ZnJhbWVzKCksIWp0LmhhcyhuKXx8MiE9PXQubGVuZ3RoKXJldHVybjtjb25zdFtzLGldPXQscj1fdChzKSxvPV90KGkpO2lmKHIhPT1vKWlmKHp0KHIpJiZ6dChvKSlmb3IobGV0IGU9MDtlPHQubGVuZ3RoO2UrKyl7Y29uc3Qgbj10W2VdOyJzdHJpbmciPT10eXBlb2YgbiYmKHRbZV09cGFyc2VGbG9hdChuKSl9ZWxzZSB0aGlzLm5lZWRzTWVhc3VyZW1lbnQ9ITB9cmVzb2x2ZU5vbmVLZXlmcmFtZXMoKXtjb25zdHt1bnJlc29sdmVkS2V5ZnJhbWVzOnQsbmFtZTplfT10aGlzLG49W107Zm9yKGxldCBlPTA7ZTx0Lmxlbmd0aDtlKyspKCJudW1iZXIiPT10eXBlb2Yocz10W2VdKT8wPT09czpudWxsPT09c3x8Im5vbmUiPT09c3x8IjAiPT09c3x8U3QocykpJiZuLnB1c2goZSk7dmFyIHM7bi5sZW5ndGgmJmZ1bmN0aW9uKHQsZSxuKXtsZXQgcyxpPTA7Zm9yKDtpPHQubGVuZ3RoJiYhczspe2NvbnN0IGU9dFtpXTsic3RyaW5nIj09dHlwZW9mIGUmJiFCZS5oYXMoZSkmJnZlKGUpLnZhbHVlcy5sZW5ndGgmJihzPXRbaV0pLGkrK31pZihzJiZuKWZvcihjb25zdCBpIG9mIGUpdFtpXT1SZShuLHMpfSh0LG4sZSl9bWVhc3VyZUluaXRpYWxTdGF0ZSgpe2NvbnN0e2VsZW1lbnQ6dCx1bnJlc29sdmVkS2V5ZnJhbWVzOmUsbmFtZTpufT10aGlzO2lmKCF0fHwhdC5jdXJyZW50KXJldHVybjsiaGVpZ2h0Ij09PW4mJih0aGlzLnN1c3BlbmRlZFNjcm9sbFk9d2luZG93LnBhZ2VZT2Zmc2V0KSx0aGlzLm1lYXN1cmVkT3JpZ2luPVh0W25dKHQubWVhc3VyZVZpZXdwb3J0Qm94KCksd2luZG93LmdldENvbXB1dGVkU3R5bGUodC5jdXJyZW50KSksZVswXT10aGlzLm1lYXN1cmVkT3JpZ2luO2NvbnN0IHM9ZVtlLmxlbmd0aC0xXTt2b2lkIDAhPT1zJiZ0LmdldFZhbHVlKG4scykuanVtcChzLCExKX1tZWFzdXJlRW5kU3RhdGUoKXt2YXIgdDtjb25zdHtlbGVtZW50OmUsbmFtZTpuLHVucmVzb2x2ZWRLZXlmcmFtZXM6c309dGhpcztpZighZXx8IWUuY3VycmVudClyZXR1cm47Y29uc3QgaT1lLmdldFZhbHVlKG4pO2kmJmkuanVtcCh0aGlzLm1lYXN1cmVkT3JpZ2luLCExKTtjb25zdCByPXMubGVuZ3RoLTEsbz1zW3JdO3Nbcl09WHRbbl0oZS5tZWFzdXJlVmlld3BvcnRCb3goKSx3aW5kb3cuZ2V0Q29tcHV0ZWRTdHlsZShlLmN1cnJlbnQpKSxudWxsIT09byYmdm9pZCAwPT09dGhpcy5maW5hbEtleWZyYW1lJiYodGhpcy5maW5hbEtleWZyYW1lPW8pLChudWxsPT09KHQ9dGhpcy5yZW1vdmVkVHJhbnNmb3Jtcyl8fHZvaWQgMD09PXQ/dm9pZCAwOnQubGVuZ3RoKSYmdGhpcy5yZW1vdmVkVHJhbnNmb3Jtcy5mb3JFYWNoKCgoW3Qsbl0pPT57ZS5nZXRWYWx1ZSh0KS5zZXQobil9KSksdGhpcy5yZXNvbHZlTm9uZUtleWZyYW1lcygpfX1jb25zdCBMZT0odCxlKT0+InpJbmRleCIhPT1lJiYoISgibnVtYmVyIiE9dHlwZW9mIHQmJiFBcnJheS5pc0FycmF5KHQpKXx8ISgic3RyaW5nIiE9dHlwZW9mIHR8fCF4ZS50ZXN0KHQpJiYiMCIhPT10fHx0LnN0YXJ0c1dpdGgoInVybCgiKSkpO2Z1bmN0aW9uIFdlKHQsZSxuLHMpe2NvbnN0IGk9dFswXTtpZihudWxsPT09aSlyZXR1cm4hMTtpZigiZGlzcGxheSI9PT1lfHwidmlzaWJpbGl0eSI9PT1lKXJldHVybiEwO2NvbnN0IHI9dFt0Lmxlbmd0aC0xXSxvPUxlKGksZSksYT1MZShyLGUpO3JldHVybiEoIW98fCFhKSYmKGZ1bmN0aW9uKHQpe2NvbnN0IGU9dFswXTtpZigxPT09dC5sZW5ndGgpcmV0dXJuITA7Zm9yKGxldCBuPTA7bjx0Lmxlbmd0aDtuKyspaWYodFtuXSE9PWUpcmV0dXJuITB9KHQpfHwoInNwcmluZyI9PT1ufHx6KG4pKSYmcyl9Y2xhc3MgRGV7Y29uc3RydWN0b3Ioe2F1dG9wbGF5OnQ9ITAsZGVsYXk6ZT0wLHR5cGU6bj0ia2V5ZnJhbWVzIixyZXBlYXQ6cz0wLHJlcGVhdERlbGF5Omk9MCxyZXBlYXRUeXBlOnI9Imxvb3AiLC4uLm99KXt0aGlzLmlzU3RvcHBlZD0hMSx0aGlzLmhhc0F0dGVtcHRlZFJlc29sdmU9ITEsdGhpcy5jcmVhdGVkQXQ9ZC5ub3coKSx0aGlzLm9wdGlvbnM9e2F1dG9wbGF5OnQsZGVsYXk6ZSx0eXBlOm4scmVwZWF0OnMscmVwZWF0RGVsYXk6aSxyZXBlYXRUeXBlOnIsLi4ub30sdGhpcy51cGRhdGVGaW5pc2hlZFByb21pc2UoKX1jYWxjU3RhcnRUaW1lKCl7cmV0dXJuIHRoaXMucmVzb2x2ZWRBdCYmdGhpcy5yZXNvbHZlZEF0LXRoaXMuY3JlYXRlZEF0PjQwP3RoaXMucmVzb2x2ZWRBdDp0aGlzLmNyZWF0ZWRBdH1nZXQgcmVzb2x2ZWQoKXtyZXR1cm4gdGhpcy5fcmVzb2x2ZWR8fHRoaXMuaGFzQXR0ZW1wdGVkUmVzb2x2ZXx8KG5lKCksZWUoKSksdGhpcy5fcmVzb2x2ZWR9b25LZXlmcmFtZXNSZXNvbHZlZCh0LGUpe3RoaXMucmVzb2x2ZWRBdD1kLm5vdygpLHRoaXMuaGFzQXR0ZW1wdGVkUmVzb2x2ZT0hMDtjb25zdHtuYW1lOm4sdHlwZTpzLHZlbG9jaXR5OmksZGVsYXk6cixvbkNvbXBsZXRlOm8sb25VcGRhdGU6YSxpc0dlbmVyYXRvcjpsfT10aGlzLm9wdGlvbnM7aWYoIWwmJiFXZSh0LG4scyxpKSl7aWYoIXIpcmV0dXJuIG51bGw9PWF8fGEoaHQodCx0aGlzLm9wdGlvbnMsZSkpLG51bGw9PW98fG8oKSx2b2lkIHRoaXMucmVzb2x2ZUZpbmlzaGVkUHJvbWlzZSgpO3RoaXMub3B0aW9ucy5kdXJhdGlvbj0wfWNvbnN0IHU9dGhpcy5pbml0UGxheWJhY2sodCxlKTshMSE9PXUmJih0aGlzLl9yZXNvbHZlZD17a2V5ZnJhbWVzOnQsZmluYWxLZXlmcmFtZTplLC4uLnV9LHRoaXMub25Qb3N0UmVzb2x2ZWQoKSl9b25Qb3N0UmVzb2x2ZWQoKXt9dGhlbih0LGUpe3JldHVybiB0aGlzLmN1cnJlbnRGaW5pc2hlZFByb21pc2UudGhlbih0LGUpfWZsYXR0ZW4oKXt0aGlzLm9wdGlvbnMudHlwZT0ia2V5ZnJhbWVzIix0aGlzLm9wdGlvbnMuZWFzZT0ibGluZWFyIn11cGRhdGVGaW5pc2hlZFByb21pc2UoKXt0aGlzLmN1cnJlbnRGaW5pc2hlZFByb21pc2U9bmV3IFByb21pc2UoKHQ9Pnt0aGlzLnJlc29sdmVGaW5pc2hlZFByb21pc2U9dH0pKX19ZnVuY3Rpb24gTmUoe2tleWZyYW1lczp0LHZlbG9jaXR5OmU9MCxwb3dlcjpuPS44LHRpbWVDb25zdGFudDpzPTMyNSxib3VuY2VEYW1waW5nOmk9MTAsYm91bmNlU3RpZmZuZXNzOnI9NTAwLG1vZGlmeVRhcmdldDpvLG1pbjphLG1heDpsLHJlc3REZWx0YTp1PS41LHJlc3RTcGVlZDpjfSl7Y29uc3QgaD10WzBdLGQ9e2RvbmU6ITEsdmFsdWU6aH0scD10PT52b2lkIDA9PT1hP2w6dm9pZCAwPT09bHx8TWF0aC5hYnMoYS10KTxNYXRoLmFicyhsLXQpP2E6bDtsZXQgZj1uKmU7Y29uc3QgbT1oK2YsZz12b2lkIDA9PT1vP206byhtKTtnIT09bSYmKGY9Zy1oKTtjb25zdCB5PXQ9Pi1mKk1hdGguZXhwKC10L3MpLHY9dD0+Zyt5KHQpLHc9dD0+e2NvbnN0IGU9eSh0KSxuPXYodCk7ZC5kb25lPU1hdGguYWJzKGUpPD11LGQudmFsdWU9ZC5kb25lP2c6bn07bGV0IFQseDtjb25zdCBTPXQ9Pnt2YXIgZTsoZT1kLnZhbHVlLHZvaWQgMCE9PWEmJmU8YXx8dm9pZCAwIT09bCYmZT5sKSYmKFQ9dCx4PUUoe2tleWZyYW1lczpbZC52YWx1ZSxwKGQudmFsdWUpXSx2ZWxvY2l0eTpiKHYsdCxkLnZhbHVlKSxkYW1waW5nOmksc3RpZmZuZXNzOnIscmVzdERlbHRhOnUscmVzdFNwZWVkOmN9KSl9O3JldHVybiBTKDApLHtjYWxjdWxhdGVkRHVyYXRpb246bnVsbCxuZXh0OnQ9PntsZXQgZT0hMTtyZXR1cm4geHx8dm9pZCAwIT09VHx8KGU9ITAsdyh0KSxTKHQpKSx2b2lkIDAhPT1UJiZ0Pj1UP3gubmV4dCh0LVQpOighZSYmdyh0KSxkKX19fWNvbnN0IEtlPXB0KC40MiwwLDEsMSksJGU9cHQoMCwwLC41OCwxKSxqZT1wdCguNDIsMCwuNTgsMSksemU9dD0+QXJyYXkuaXNBcnJheSh0KSYmIm51bWJlciI9PXR5cGVvZiB0WzBdLEhlPXtsaW5lYXI6aSxlYXNlSW46S2UsZWFzZUluT3V0OmplLGVhc2VPdXQ6JGUsY2lyY0luOmJ0LGNpcmNJbk91dDp4dCxjaXJjT3V0OlR0LGJhY2tJbjp5dCxiYWNrSW5PdXQ6dnQsYmFja091dDpndCxhbnRpY2lwYXRlOnd0fSxVZT10PT57aWYoemUodCkpe3goND09PXQubGVuZ3RoKTtjb25zdFtlLG4scyxpXT10O3JldHVybiBwdChlLG4scyxpKX1yZXR1cm4ic3RyaW5nIj09dHlwZW9mIHQ/SGVbdF06dH0sWWU9KHQsZSk9Pm49PmUodChuKSkscWU9KC4uLnQpPT50LnJlZHVjZShZZSk7ZnVuY3Rpb24gWGUodCxlLG4pe3JldHVybiBuPDAmJihuKz0xKSxuPjEmJihuLT0xKSxuPDEvNj90KzYqKGUtdCkqbjpuPC41P2U6bjwyLzM/dCsoZS10KSooMi8zLW4pKjY6dH1mdW5jdGlvbiBHZSh0LGUpe3JldHVybiBuPT5uPjA/ZTp0fWNvbnN0IFplPSh0LGUsbik9Pntjb25zdCBzPXQqdCxpPW4qKGUqZS1zKStzO3JldHVybiBpPDA/MDpNYXRoLnNxcnQoaSl9LF9lPVtoZSxjZSxkZV07ZnVuY3Rpb24gSmUodCl7Y29uc3QgZT0obj10LF9lLmZpbmQoKHQ9PnQudGVzdChuKSkpKTt2YXIgbjtpZighQm9vbGVhbihlKSlyZXR1cm4hMTtsZXQgcz1lLnBhcnNlKHQpO3JldHVybiBlPT09ZGUmJihzPWZ1bmN0aW9uKHtodWU6dCxzYXR1cmF0aW9uOmUsbGlnaHRuZXNzOm4sYWxwaGE6c30pe3QvPTM2MCxuLz0xMDA7bGV0IGk9MCxyPTAsbz0wO2lmKGUvPTEwMCl7Y29uc3Qgcz1uPC41P24qKDErZSk6bitlLW4qZSxhPTIqbi1zO2k9WGUoYSxzLHQrMS8zKSxyPVhlKGEscyx0KSxvPVhlKGEscyx0LTEvMyl9ZWxzZSBpPXI9bz1uO3JldHVybntyZWQ6TWF0aC5yb3VuZCgyNTUqaSksZ3JlZW46TWF0aC5yb3VuZCgyNTUqciksYmx1ZTpNYXRoLnJvdW5kKDI1NSpvKSxhbHBoYTpzfX0ocykpLHN9Y29uc3QgUWU9KHQsZSk9Pntjb25zdCBuPUplKHQpLHM9SmUoZSk7aWYoIW58fCFzKXJldHVybiBHZSh0LGUpO2NvbnN0IGk9ey4uLm59O3JldHVybiB0PT4oaS5yZWQ9WmUobi5yZWQscy5yZWQsdCksaS5ncmVlbj1aZShuLmdyZWVuLHMuZ3JlZW4sdCksaS5ibHVlPVplKG4uYmx1ZSxzLmJsdWUsdCksaS5hbHBoYT1JKG4uYWxwaGEscy5hbHBoYSx0KSxjZS50cmFuc2Zvcm0oaSkpfSx0bj1uZXcgU2V0KFsibm9uZSIsImhpZGRlbiJdKTtmdW5jdGlvbiBlbih0LGUpe3JldHVybiBuPT5JKHQsZSxuKX1mdW5jdGlvbiBubih0KXtyZXR1cm4ibnVtYmVyIj09dHlwZW9mIHQ/ZW46InN0cmluZyI9PXR5cGVvZiB0P2t0KHQpP0dlOnBlLnRlc3QodCk/UWU6b246QXJyYXkuaXNBcnJheSh0KT9zbjoib2JqZWN0Ij09dHlwZW9mIHQ/cGUudGVzdCh0KT9RZTpybjpHZX1mdW5jdGlvbiBzbih0LGUpe2NvbnN0IG49Wy4uLnRdLHM9bi5sZW5ndGgsaT10Lm1hcCgoKHQsbik9Pm5uKHQpKHQsZVtuXSkpKTtyZXR1cm4gdD0+e2ZvcihsZXQgZT0wO2U8cztlKyspbltlXT1pW2VdKHQpO3JldHVybiBufX1mdW5jdGlvbiBybih0LGUpe2NvbnN0IG49ey4uLnQsLi4uZX0scz17fTtmb3IoY29uc3QgaSBpbiBuKXZvaWQgMCE9PXRbaV0mJnZvaWQgMCE9PWVbaV0mJihzW2ldPW5uKHRbaV0pKHRbaV0sZVtpXSkpO3JldHVybiB0PT57Zm9yKGNvbnN0IGUgaW4gcyluW2VdPXNbZV0odCk7cmV0dXJuIG59fWNvbnN0IG9uPSh0LGUpPT57Y29uc3Qgbj14ZS5jcmVhdGVUcmFuc2Zvcm1lcihlKSxzPXZlKHQpLGk9dmUoZSk7cmV0dXJuIHMuaW5kZXhlcy52YXIubGVuZ3RoPT09aS5pbmRleGVzLnZhci5sZW5ndGgmJnMuaW5kZXhlcy5jb2xvci5sZW5ndGg9PT1pLmluZGV4ZXMuY29sb3IubGVuZ3RoJiZzLmluZGV4ZXMubnVtYmVyLmxlbmd0aD49aS5pbmRleGVzLm51bWJlci5sZW5ndGg/dG4uaGFzKHQpJiYhaS52YWx1ZXMubGVuZ3RofHx0bi5oYXMoZSkmJiFzLnZhbHVlcy5sZW5ndGg/ZnVuY3Rpb24odCxlKXtyZXR1cm4gdG4uaGFzKHQpP249Pm48PTA/dDplOm49Pm4+PTE/ZTp0fSh0LGUpOnFlKHNuKGZ1bmN0aW9uKHQsZSl7dmFyIG47Y29uc3Qgcz1bXSxpPXtjb2xvcjowLHZhcjowLG51bWJlcjowfTtmb3IobGV0IHI9MDtyPGUudmFsdWVzLmxlbmd0aDtyKyspe2NvbnN0IG89ZS50eXBlc1tyXSxhPXQuaW5kZXhlc1tvXVtpW29dXSxsPW51bGwhPT0obj10LnZhbHVlc1thXSkmJnZvaWQgMCE9PW4/bjowO3Nbcl09bCxpW29dKyt9cmV0dXJuIHN9KHMsaSksaS52YWx1ZXMpLG4pOkdlKHQsZSl9O2Z1bmN0aW9uIGFuKHQsZSxuKXtpZigibnVtYmVyIj09dHlwZW9mIHQmJiJudW1iZXIiPT10eXBlb2YgZSYmIm51bWJlciI9PXR5cGVvZiBuKXJldHVybiBJKHQsZSxuKTtyZXR1cm4gbm4odCkodCxlKX1mdW5jdGlvbiBsbih0LGUse2NsYW1wOm49ITAsZWFzZTpzLG1peGVyOnJ9PXt9KXtjb25zdCBvPXQubGVuZ3RoO2lmKHgobz09PWUubGVuZ3RoKSwxPT09bylyZXR1cm4oKT0+ZVswXTtpZigyPT09byYmdFswXT09PXRbMV0pcmV0dXJuKCk9PmVbMV07dFswXT50W28tMV0mJih0PVsuLi50XS5yZXZlcnNlKCksZT1bLi4uZV0ucmV2ZXJzZSgpKTtjb25zdCBhPWZ1bmN0aW9uKHQsZSxuKXtjb25zdCBzPVtdLHI9bnx8YW4sbz10Lmxlbmd0aC0xO2ZvcihsZXQgbj0wO248bztuKyspe2xldCBvPXIodFtuXSx0W24rMV0pO2lmKGUpe2NvbnN0IHQ9QXJyYXkuaXNBcnJheShlKT9lW25dfHxpOmU7bz1xZSh0LG8pfXMucHVzaChvKX1yZXR1cm4gc30oZSxzLHIpLGw9YS5sZW5ndGgsdT1lPT57bGV0IG49MDtpZihsPjEpZm9yKDtuPHQubGVuZ3RoLTImJiEoZTx0W24rMV0pO24rKyk7Y29uc3Qgcz1MKHRbbl0sdFtuKzFdLGUpO3JldHVybiBhW25dKHMpfTtyZXR1cm4gbj9lPT51KFModFswXSx0W28tMV0sZSkpOnV9ZnVuY3Rpb24gdW4oe2R1cmF0aW9uOnQ9MzAwLGtleWZyYW1lczplLHRpbWVzOm4sZWFzZTpzPSJlYXNlSW5PdXQifSl7Y29uc3QgaT1ZKHMpP3MubWFwKFVlKTpVZShzKSxyPXtkb25lOiExLHZhbHVlOmVbMF19LG89ZnVuY3Rpb24odCxlKXtyZXR1cm4gdC5tYXAoKHQ9PnQqZSkpfShuJiZuLmxlbmd0aD09PWUubGVuZ3RoP246RChlKSx0KSxhPWxuKG8sZSx7ZWFzZTpBcnJheS5pc0FycmF5KGkpP2k6KGw9ZSx1PWksbC5tYXAoKCgpPT51fHxqZSkpLnNwbGljZSgwLGwubGVuZ3RoLTEpKX0pO3ZhciBsLHU7cmV0dXJue2NhbGN1bGF0ZWREdXJhdGlvbjp0LG5leHQ6ZT0+KHIudmFsdWU9YShlKSxyLmRvbmU9ZT49dCxyKX19Y29uc3QgY249dD0+e2NvbnN0IGU9KHt0aW1lc3RhbXA6ZX0pPT50KGUpO3JldHVybntzdGFydDooKT0+by51cGRhdGUoZSwhMCksc3RvcDooKT0+YShlKSxub3c6KCk9PmwuaXNQcm9jZXNzaW5nP2wudGltZXN0YW1wOmQubm93KCl9fSxobj17ZGVjYXk6TmUsaW5lcnRpYTpOZSx0d2Vlbjp1bixrZXlmcmFtZXM6dW4sc3ByaW5nOkV9LGRuPXQ9PnQvMTAwO2NsYXNzIHBuIGV4dGVuZHMgRGV7Y29uc3RydWN0b3IodCl7c3VwZXIodCksdGhpcy5ob2xkVGltZT1udWxsLHRoaXMuY2FuY2VsVGltZT1udWxsLHRoaXMuY3VycmVudFRpbWU9MCx0aGlzLnBsYXliYWNrU3BlZWQ9MSx0aGlzLnBlbmRpbmdQbGF5U3RhdGU9InJ1bm5pbmciLHRoaXMuc3RhcnRUaW1lPW51bGwsdGhpcy5zdGF0ZT0iaWRsZSIsdGhpcy5zdG9wPSgpPT57aWYodGhpcy5yZXNvbHZlci5jYW5jZWwoKSx0aGlzLmlzU3RvcHBlZD0hMCwiaWRsZSI9PT10aGlzLnN0YXRlKXJldHVybjt0aGlzLnRlYXJkb3duKCk7Y29uc3R7b25TdG9wOnR9PXRoaXMub3B0aW9uczt0JiZ0KCl9O2NvbnN0e25hbWU6ZSxtb3Rpb25WYWx1ZTpuLGVsZW1lbnQ6cyxrZXlmcmFtZXM6aX09dGhpcy5vcHRpb25zLHI9KG51bGw9PXM/dm9pZCAwOnMuS2V5ZnJhbWVSZXNvbHZlcil8fHNlO3RoaXMucmVzb2x2ZXI9bmV3IHIoaSwoKHQsZSk9PnRoaXMub25LZXlmcmFtZXNSZXNvbHZlZCh0LGUpKSxlLG4scyksdGhpcy5yZXNvbHZlci5zY2hlZHVsZVJlc29sdmUoKX1mbGF0dGVuKCl7c3VwZXIuZmxhdHRlbigpLHRoaXMuX3Jlc29sdmVkJiZPYmplY3QuYXNzaWduKHRoaXMuX3Jlc29sdmVkLHRoaXMuaW5pdFBsYXliYWNrKHRoaXMuX3Jlc29sdmVkLmtleWZyYW1lcykpfWluaXRQbGF5YmFjayh0KXtjb25zdHt0eXBlOmU9ImtleWZyYW1lcyIscmVwZWF0Om49MCxyZXBlYXREZWxheTpzPTAscmVwZWF0VHlwZTppLHZlbG9jaXR5OnI9MH09dGhpcy5vcHRpb25zLG89eihlKT9lOmhuW2VdfHx1bjtsZXQgYSxsO28hPT11biYmIm51bWJlciIhPXR5cGVvZiB0WzBdJiYoYT1xZShkbixhbih0WzBdLHRbMV0pKSx0PVswLDEwMF0pO2NvbnN0IHU9byh7Li4udGhpcy5vcHRpb25zLGtleWZyYW1lczp0fSk7Im1pcnJvciI9PT1pJiYobD1vKHsuLi50aGlzLm9wdGlvbnMsa2V5ZnJhbWVzOlsuLi50XS5yZXZlcnNlKCksdmVsb2NpdHk6LXJ9KSksbnVsbD09PXUuY2FsY3VsYXRlZER1cmF0aW9uJiYodS5jYWxjdWxhdGVkRHVyYXRpb249Uih1KSk7Y29uc3R7Y2FsY3VsYXRlZER1cmF0aW9uOmN9PXUsaD1jK3M7cmV0dXJue2dlbmVyYXRvcjp1LG1pcnJvcmVkR2VuZXJhdG9yOmwsbWFwUGVyY2VudFRvS2V5ZnJhbWVzOmEsY2FsY3VsYXRlZER1cmF0aW9uOmMscmVzb2x2ZWREdXJhdGlvbjpoLHRvdGFsRHVyYXRpb246aCoobisxKS1zfX1vblBvc3RSZXNvbHZlZCgpe2NvbnN0e2F1dG9wbGF5OnQ9ITB9PXRoaXMub3B0aW9uczt0aGlzLnBsYXkoKSwicGF1c2VkIiE9PXRoaXMucGVuZGluZ1BsYXlTdGF0ZSYmdD90aGlzLnN0YXRlPXRoaXMucGVuZGluZ1BsYXlTdGF0ZTp0aGlzLnBhdXNlKCl9dGljayh0LGU9ITEpe2NvbnN0e3Jlc29sdmVkOm59PXRoaXM7aWYoIW4pe2NvbnN0e2tleWZyYW1lczp0fT10aGlzLm9wdGlvbnM7cmV0dXJue2RvbmU6ITAsdmFsdWU6dFt0Lmxlbmd0aC0xXX19Y29uc3R7ZmluYWxLZXlmcmFtZTpzLGdlbmVyYXRvcjppLG1pcnJvcmVkR2VuZXJhdG9yOnIsbWFwUGVyY2VudFRvS2V5ZnJhbWVzOm8sa2V5ZnJhbWVzOmEsY2FsY3VsYXRlZER1cmF0aW9uOmwsdG90YWxEdXJhdGlvbjp1LHJlc29sdmVkRHVyYXRpb246Y309bjtpZihudWxsPT09dGhpcy5zdGFydFRpbWUpcmV0dXJuIGkubmV4dCgwKTtjb25zdHtkZWxheTpoLHJlcGVhdDpkLHJlcGVhdFR5cGU6cCxyZXBlYXREZWxheTpmLG9uVXBkYXRlOm19PXRoaXMub3B0aW9uczt0aGlzLnNwZWVkPjA/dGhpcy5zdGFydFRpbWU9TWF0aC5taW4odGhpcy5zdGFydFRpbWUsdCk6dGhpcy5zcGVlZDwwJiYodGhpcy5zdGFydFRpbWU9TWF0aC5taW4odC11L3RoaXMuc3BlZWQsdGhpcy5zdGFydFRpbWUpKSxlP3RoaXMuY3VycmVudFRpbWU9dDpudWxsIT09dGhpcy5ob2xkVGltZT90aGlzLmN1cnJlbnRUaW1lPXRoaXMuaG9sZFRpbWU6dGhpcy5jdXJyZW50VGltZT1NYXRoLnJvdW5kKHQtdGhpcy5zdGFydFRpbWUpKnRoaXMuc3BlZWQ7Y29uc3QgZz10aGlzLmN1cnJlbnRUaW1lLWgqKHRoaXMuc3BlZWQ+PTA/MTotMSkseT10aGlzLnNwZWVkPj0wP2c8MDpnPnU7dGhpcy5jdXJyZW50VGltZT1NYXRoLm1heChnLDApLCJmaW5pc2hlZCI9PT10aGlzLnN0YXRlJiZudWxsPT09dGhpcy5ob2xkVGltZSYmKHRoaXMuY3VycmVudFRpbWU9dSk7bGV0IHY9dGhpcy5jdXJyZW50VGltZSx3PWk7aWYoZCl7Y29uc3QgdD1NYXRoLm1pbih0aGlzLmN1cnJlbnRUaW1lLHUpL2M7bGV0IGU9TWF0aC5mbG9vcih0KSxuPXQlMTshbiYmdD49MSYmKG49MSksMT09PW4mJmUtLSxlPU1hdGgubWluKGUsZCsxKTtCb29sZWFuKGUlMikmJigicmV2ZXJzZSI9PT1wPyhuPTEtbixmJiYobi09Zi9jKSk6Im1pcnJvciI9PT1wJiYodz1yKSksdj1TKDAsMSxuKSpjfWNvbnN0IGI9eT97ZG9uZTohMSx2YWx1ZTphWzBdfTp3Lm5leHQodik7byYmKGIudmFsdWU9byhiLnZhbHVlKSk7bGV0e2RvbmU6VH09Yjt5fHxudWxsPT09bHx8KFQ9dGhpcy5zcGVlZD49MD90aGlzLmN1cnJlbnRUaW1lPj11OnRoaXMuY3VycmVudFRpbWU8PTApO2NvbnN0IHg9bnVsbD09PXRoaXMuaG9sZFRpbWUmJigiZmluaXNoZWQiPT09dGhpcy5zdGF0ZXx8InJ1bm5pbmciPT09dGhpcy5zdGF0ZSYmVCk7cmV0dXJuIHgmJnZvaWQgMCE9PXMmJihiLnZhbHVlPWh0KGEsdGhpcy5vcHRpb25zLHMpKSxtJiZtKGIudmFsdWUpLHgmJnRoaXMuZmluaXNoKCksYn1nZXQgZHVyYXRpb24oKXtjb25zdHtyZXNvbHZlZDp0fT10aGlzO3JldHVybiB0P3codC5jYWxjdWxhdGVkRHVyYXRpb24pOjB9Z2V0IHRpbWUoKXtyZXR1cm4gdyh0aGlzLmN1cnJlbnRUaW1lKX1zZXQgdGltZSh0KXt0PXYodCksdGhpcy5jdXJyZW50VGltZT10LG51bGwhPT10aGlzLmhvbGRUaW1lfHwwPT09dGhpcy5zcGVlZD90aGlzLmhvbGRUaW1lPXQ6dGhpcy5kcml2ZXImJih0aGlzLnN0YXJ0VGltZT10aGlzLmRyaXZlci5ub3coKS10L3RoaXMuc3BlZWQpfWdldCBzcGVlZCgpe3JldHVybiB0aGlzLnBsYXliYWNrU3BlZWR9c2V0IHNwZWVkKHQpe2NvbnN0IGU9dGhpcy5wbGF5YmFja1NwZWVkIT09dDt0aGlzLnBsYXliYWNrU3BlZWQ9dCxlJiYodGhpcy50aW1lPXcodGhpcy5jdXJyZW50VGltZSkpfXBsYXkoKXtpZih0aGlzLnJlc29sdmVyLmlzU2NoZWR1bGVkfHx0aGlzLnJlc29sdmVyLnJlc3VtZSgpLCF0aGlzLl9yZXNvbHZlZClyZXR1cm4gdm9pZCh0aGlzLnBlbmRpbmdQbGF5U3RhdGU9InJ1bm5pbmciKTtpZih0aGlzLmlzU3RvcHBlZClyZXR1cm47Y29uc3R7ZHJpdmVyOnQ9Y24sb25QbGF5OmUsc3RhcnRUaW1lOm59PXRoaXMub3B0aW9uczt0aGlzLmRyaXZlcnx8KHRoaXMuZHJpdmVyPXQoKHQ9PnRoaXMudGljayh0KSkpKSxlJiZlKCk7Y29uc3Qgcz10aGlzLmRyaXZlci5ub3coKTtudWxsIT09dGhpcy5ob2xkVGltZT90aGlzLnN0YXJ0VGltZT1zLXRoaXMuaG9sZFRpbWU6dGhpcy5zdGFydFRpbWU/ImZpbmlzaGVkIj09PXRoaXMuc3RhdGUmJih0aGlzLnN0YXJ0VGltZT1zKTp0aGlzLnN0YXJ0VGltZT1udWxsIT1uP246dGhpcy5jYWxjU3RhcnRUaW1lKCksImZpbmlzaGVkIj09PXRoaXMuc3RhdGUmJnRoaXMudXBkYXRlRmluaXNoZWRQcm9taXNlKCksdGhpcy5jYW5jZWxUaW1lPXRoaXMuc3RhcnRUaW1lLHRoaXMuaG9sZFRpbWU9bnVsbCx0aGlzLnN0YXRlPSJydW5uaW5nIix0aGlzLmRyaXZlci5zdGFydCgpfXBhdXNlKCl7dmFyIHQ7dGhpcy5fcmVzb2x2ZWQ/KHRoaXMuc3RhdGU9InBhdXNlZCIsdGhpcy5ob2xkVGltZT1udWxsIT09KHQ9dGhpcy5jdXJyZW50VGltZSkmJnZvaWQgMCE9PXQ/dDowKTp0aGlzLnBlbmRpbmdQbGF5U3RhdGU9InBhdXNlZCJ9Y29tcGxldGUoKXsicnVubmluZyIhPT10aGlzLnN0YXRlJiZ0aGlzLnBsYXkoKSx0aGlzLnBlbmRpbmdQbGF5U3RhdGU9dGhpcy5zdGF0ZT0iZmluaXNoZWQiLHRoaXMuaG9sZFRpbWU9bnVsbH1maW5pc2goKXt0aGlzLnRlYXJkb3duKCksdGhpcy5zdGF0ZT0iZmluaXNoZWQiO2NvbnN0e29uQ29tcGxldGU6dH09dGhpcy5vcHRpb25zO3QmJnQoKX1jYW5jZWwoKXtudWxsIT09dGhpcy5jYW5jZWxUaW1lJiZ0aGlzLnRpY2sodGhpcy5jYW5jZWxUaW1lKSx0aGlzLnRlYXJkb3duKCksdGhpcy51cGRhdGVGaW5pc2hlZFByb21pc2UoKX10ZWFyZG93bigpe3RoaXMuc3RhdGU9ImlkbGUiLHRoaXMuc3RvcERyaXZlcigpLHRoaXMucmVzb2x2ZUZpbmlzaGVkUHJvbWlzZSgpLHRoaXMudXBkYXRlRmluaXNoZWRQcm9taXNlKCksdGhpcy5zdGFydFRpbWU9dGhpcy5jYW5jZWxUaW1lPW51bGwsdGhpcy5yZXNvbHZlci5jYW5jZWwoKX1zdG9wRHJpdmVyKCl7dGhpcy5kcml2ZXImJih0aGlzLmRyaXZlci5zdG9wKCksdGhpcy5kcml2ZXI9dm9pZCAwKX1zYW1wbGUodCl7cmV0dXJuIHRoaXMuc3RhcnRUaW1lPTAsdGhpcy50aWNrKHQsITApfX1jb25zdCBmbj1uZXcgU2V0KFsib3BhY2l0eSIsImNsaXBQYXRoIiwiZmlsdGVyIiwidHJhbnNmb3JtIl0pLG1uPXtsaW5lYXJFYXNpbmc6dm9pZCAwfTtmdW5jdGlvbiBnbih0LGUpe2NvbnN0IG49bSh0KTtyZXR1cm4oKT0+e3ZhciB0O3JldHVybiBudWxsIT09KHQ9bW5bZV0pJiZ2b2lkIDAhPT10P3Q6bigpfX1jb25zdCB5bj1nbigoKCk9Pnt0cnl7ZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgiZGl2IikuYW5pbWF0ZSh7b3BhY2l0eTowfSx7ZWFzaW5nOiJsaW5lYXIoMCwgMSkifSl9Y2F0Y2godCl7cmV0dXJuITF9cmV0dXJuITB9KSwibGluZWFyRWFzaW5nIik7ZnVuY3Rpb24gdm4odCl7cmV0dXJuIEJvb2xlYW4oImZ1bmN0aW9uIj09dHlwZW9mIHQmJnluKCl8fCF0fHwic3RyaW5nIj09dHlwZW9mIHQmJih0IGluIGJufHx5bigpKXx8emUodCl8fEFycmF5LmlzQXJyYXkodCkmJnQuZXZlcnkodm4pKX1jb25zdCB3bj0oW3QsZSxuLHNdKT0+YGN1YmljLWJlemllcigke3R9LCAke2V9LCAke259LCAke3N9KWAsYm49e2xpbmVhcjoibGluZWFyIixlYXNlOiJlYXNlIixlYXNlSW46ImVhc2UtaW4iLGVhc2VPdXQ6ImVhc2Utb3V0IixlYXNlSW5PdXQ6ImVhc2UtaW4tb3V0IixjaXJjSW46d24oWzAsLjY1LC41NSwxXSksY2lyY091dDp3bihbLjU1LDAsMSwuNDVdKSxiYWNrSW46d24oWy4zMSwuMDEsLjY2LC0uNTldKSxiYWNrT3V0OnduKFsuMzMsMS41MywuNjksLjk5XSl9O2Z1bmN0aW9uIFRuKHQsZSl7cmV0dXJuIHQ/ImZ1bmN0aW9uIj09dHlwZW9mIHQmJnluKCk/KCh0LGUpPT57bGV0IG49IiI7Y29uc3Qgcz1NYXRoLm1heChNYXRoLnJvdW5kKGUvMTApLDIpO2ZvcihsZXQgZT0wO2U8cztlKyspbis9dChMKDAscy0xLGUpKSsiLCAiO3JldHVybmBsaW5lYXIoJHtuLnN1YnN0cmluZygwLG4ubGVuZ3RoLTIpfSlgfSkodCxlKTp6ZSh0KT93bih0KTpBcnJheS5pc0FycmF5KHQpP3QubWFwKCh0PT5Ubih0LGUpfHxibi5lYXNlT3V0KSk6Ym5bdF06dm9pZCAwfWZ1bmN0aW9uIHhuKHQsZSxuLHtkZWxheTpzPTAsZHVyYXRpb246aT0zMDAscmVwZWF0OnI9MCxyZXBlYXRUeXBlOm89Imxvb3AiLGVhc2U6YT0iZWFzZUluT3V0Iix0aW1lczpsfT17fSl7Y29uc3QgdT17W2VdOm59O2wmJih1Lm9mZnNldD1sKTtjb25zdCBjPVRuKGEsaSk7cmV0dXJuIEFycmF5LmlzQXJyYXkoYykmJih1LmVhc2luZz1jKSx0LmFuaW1hdGUodSx7ZGVsYXk6cyxkdXJhdGlvbjppLGVhc2luZzpBcnJheS5pc0FycmF5KGMpPyJsaW5lYXIiOmMsZmlsbDoiYm90aCIsaXRlcmF0aW9uczpyKzEsZGlyZWN0aW9uOiJyZXZlcnNlIj09PW8/ImFsdGVybmF0ZSI6Im5vcm1hbCJ9KX1mdW5jdGlvbiBTbih0LGUpe3QudGltZWxpbmU9ZSx0Lm9uZmluaXNoPW51bGx9Y29uc3QgVm49bSgoKCk9Pk9iamVjdC5oYXNPd25Qcm9wZXJ0eS5jYWxsKEVsZW1lbnQucHJvdG90eXBlLCJhbmltYXRlIikpKTtjb25zdCBBbj17YW50aWNpcGF0ZTp3dCxiYWNrSW5PdXQ6dnQsY2lyY0luT3V0Onh0fTtjbGFzcyBNbiBleHRlbmRzIERle2NvbnN0cnVjdG9yKHQpe3N1cGVyKHQpO2NvbnN0e25hbWU6ZSxtb3Rpb25WYWx1ZTpuLGVsZW1lbnQ6cyxrZXlmcmFtZXM6aX09dGhpcy5vcHRpb25zO3RoaXMucmVzb2x2ZXI9bmV3IEllKGksKCh0LGUpPT50aGlzLm9uS2V5ZnJhbWVzUmVzb2x2ZWQodCxlKSksZSxuLHMpLHRoaXMucmVzb2x2ZXIuc2NoZWR1bGVSZXNvbHZlKCl9aW5pdFBsYXliYWNrKHQsZSl7dmFyIG47bGV0e2R1cmF0aW9uOnM9MzAwLHRpbWVzOmksZWFzZTpyLHR5cGU6byxtb3Rpb25WYWx1ZTphLG5hbWU6bCxzdGFydFRpbWU6dX09dGhpcy5vcHRpb25zO2lmKCEobnVsbD09PShuPWEub3duZXIpfHx2b2lkIDA9PT1uP3ZvaWQgMDpuLmN1cnJlbnQpKXJldHVybiExO3ZhciBjO2lmKCJzdHJpbmciPT10eXBlb2YgciYmeW4oKSYmciBpbiBBbiYmKHI9QW5bcl0pLHooKGM9dGhpcy5vcHRpb25zKS50eXBlKXx8InNwcmluZyI9PT1jLnR5cGV8fCF2bihjLmVhc2UpKXtjb25zdHtvbkNvbXBsZXRlOmUsb25VcGRhdGU6bixtb3Rpb25WYWx1ZTphLGVsZW1lbnQ6bCwuLi51fT10aGlzLm9wdGlvbnMsYz1mdW5jdGlvbih0LGUpe2NvbnN0IG49bmV3IHBuKHsuLi5lLGtleWZyYW1lczp0LHJlcGVhdDowLGRlbGF5OjAsaXNHZW5lcmF0b3I6ITB9KTtsZXQgcz17ZG9uZTohMSx2YWx1ZTp0WzBdfTtjb25zdCBpPVtdO2xldCByPTA7Zm9yKDshcy5kb25lJiZyPDJlNDspcz1uLnNhbXBsZShyKSxpLnB1c2gocy52YWx1ZSkscis9MTA7cmV0dXJue3RpbWVzOnZvaWQgMCxrZXlmcmFtZXM6aSxkdXJhdGlvbjpyLTEwLGVhc2U6ImxpbmVhciJ9fSh0LHUpOzE9PT0odD1jLmtleWZyYW1lcykubGVuZ3RoJiYodFsxXT10WzBdKSxzPWMuZHVyYXRpb24saT1jLnRpbWVzLHI9Yy5lYXNlLG89ImtleWZyYW1lcyJ9Y29uc3QgaD14bihhLm93bmVyLmN1cnJlbnQsbCx0LHsuLi50aGlzLm9wdGlvbnMsZHVyYXRpb246cyx0aW1lczppLGVhc2U6cn0pO3JldHVybiBoLnN0YXJ0VGltZT1udWxsIT11P3U6dGhpcy5jYWxjU3RhcnRUaW1lKCksdGhpcy5wZW5kaW5nVGltZWxpbmU/KFNuKGgsdGhpcy5wZW5kaW5nVGltZWxpbmUpLHRoaXMucGVuZGluZ1RpbWVsaW5lPXZvaWQgMCk6aC5vbmZpbmlzaD0oKT0+e2NvbnN0e29uQ29tcGxldGU6bn09dGhpcy5vcHRpb25zO2Euc2V0KGh0KHQsdGhpcy5vcHRpb25zLGUpKSxuJiZuKCksdGhpcy5jYW5jZWwoKSx0aGlzLnJlc29sdmVGaW5pc2hlZFByb21pc2UoKX0se2FuaW1hdGlvbjpoLGR1cmF0aW9uOnMsdGltZXM6aSx0eXBlOm8sZWFzZTpyLGtleWZyYW1lczp0fX1nZXQgZHVyYXRpb24oKXtjb25zdHtyZXNvbHZlZDp0fT10aGlzO2lmKCF0KXJldHVybiAwO2NvbnN0e2R1cmF0aW9uOmV9PXQ7cmV0dXJuIHcoZSl9Z2V0IHRpbWUoKXtjb25zdHtyZXNvbHZlZDp0fT10aGlzO2lmKCF0KXJldHVybiAwO2NvbnN0e2FuaW1hdGlvbjplfT10O3JldHVybiB3KGUuY3VycmVudFRpbWV8fDApfXNldCB0aW1lKHQpe2NvbnN0e3Jlc29sdmVkOmV9PXRoaXM7aWYoIWUpcmV0dXJuO2NvbnN0e2FuaW1hdGlvbjpufT1lO24uY3VycmVudFRpbWU9dih0KX1nZXQgc3BlZWQoKXtjb25zdHtyZXNvbHZlZDp0fT10aGlzO2lmKCF0KXJldHVybiAxO2NvbnN0e2FuaW1hdGlvbjplfT10O3JldHVybiBlLnBsYXliYWNrUmF0ZX1zZXQgc3BlZWQodCl7Y29uc3R7cmVzb2x2ZWQ6ZX09dGhpcztpZighZSlyZXR1cm47Y29uc3R7YW5pbWF0aW9uOm59PWU7bi5wbGF5YmFja1JhdGU9dH1nZXQgc3RhdGUoKXtjb25zdHtyZXNvbHZlZDp0fT10aGlzO2lmKCF0KXJldHVybiJpZGxlIjtjb25zdHthbmltYXRpb246ZX09dDtyZXR1cm4gZS5wbGF5U3RhdGV9Z2V0IHN0YXJ0VGltZSgpe2NvbnN0e3Jlc29sdmVkOnR9PXRoaXM7aWYoIXQpcmV0dXJuIG51bGw7Y29uc3R7YW5pbWF0aW9uOmV9PXQ7cmV0dXJuIGUuc3RhcnRUaW1lfWF0dGFjaFRpbWVsaW5lKHQpe2lmKHRoaXMuX3Jlc29sdmVkKXtjb25zdHtyZXNvbHZlZDplfT10aGlzO2lmKCFlKXJldHVybiBpO2NvbnN0e2FuaW1hdGlvbjpufT1lO1NuKG4sdCl9ZWxzZSB0aGlzLnBlbmRpbmdUaW1lbGluZT10O3JldHVybiBpfXBsYXkoKXtpZih0aGlzLmlzU3RvcHBlZClyZXR1cm47Y29uc3R7cmVzb2x2ZWQ6dH09dGhpcztpZighdClyZXR1cm47Y29uc3R7YW5pbWF0aW9uOmV9PXQ7ImZpbmlzaGVkIj09PWUucGxheVN0YXRlJiZ0aGlzLnVwZGF0ZUZpbmlzaGVkUHJvbWlzZSgpLGUucGxheSgpfXBhdXNlKCl7Y29uc3R7cmVzb2x2ZWQ6dH09dGhpcztpZighdClyZXR1cm47Y29uc3R7YW5pbWF0aW9uOmV9PXQ7ZS5wYXVzZSgpfXN0b3AoKXtpZih0aGlzLnJlc29sdmVyLmNhbmNlbCgpLHRoaXMuaXNTdG9wcGVkPSEwLCJpZGxlIj09PXRoaXMuc3RhdGUpcmV0dXJuO3RoaXMucmVzb2x2ZUZpbmlzaGVkUHJvbWlzZSgpLHRoaXMudXBkYXRlRmluaXNoZWRQcm9taXNlKCk7Y29uc3R7cmVzb2x2ZWQ6dH09dGhpcztpZighdClyZXR1cm47Y29uc3R7YW5pbWF0aW9uOmUsa2V5ZnJhbWVzOm4sZHVyYXRpb246cyx0eXBlOmksZWFzZTpyLHRpbWVzOm99PXQ7aWYoImlkbGUiPT09ZS5wbGF5U3RhdGV8fCJmaW5pc2hlZCI9PT1lLnBsYXlTdGF0ZSlyZXR1cm47aWYodGhpcy50aW1lKXtjb25zdHttb3Rpb25WYWx1ZTp0LG9uVXBkYXRlOmUsb25Db21wbGV0ZTphLGVsZW1lbnQ6bCwuLi51fT10aGlzLm9wdGlvbnMsYz1uZXcgcG4oey4uLnUsa2V5ZnJhbWVzOm4sZHVyYXRpb246cyx0eXBlOmksZWFzZTpyLHRpbWVzOm8saXNHZW5lcmF0b3I6ITB9KSxoPXYodGhpcy50aW1lKTt0LnNldFdpdGhWZWxvY2l0eShjLnNhbXBsZShoLTEwKS52YWx1ZSxjLnNhbXBsZShoKS52YWx1ZSwxMCl9Y29uc3R7b25TdG9wOmF9PXRoaXMub3B0aW9uczthJiZhKCksdGhpcy5jYW5jZWwoKX1jb21wbGV0ZSgpe2NvbnN0e3Jlc29sdmVkOnR9PXRoaXM7dCYmdC5hbmltYXRpb24uZmluaXNoKCl9Y2FuY2VsKCl7Y29uc3R7cmVzb2x2ZWQ6dH09dGhpczt0JiZ0LmFuaW1hdGlvbi5jYW5jZWwoKX1zdGF0aWMgc3VwcG9ydHModCl7Y29uc3R7bW90aW9uVmFsdWU6ZSxuYW1lOm4scmVwZWF0RGVsYXk6cyxyZXBlYXRUeXBlOmksZGFtcGluZzpyLHR5cGU6b309dDtyZXR1cm4gVm4oKSYmbiYmZm4uaGFzKG4pJiZlJiZlLm93bmVyJiZlLm93bmVyLmN1cnJlbnQgaW5zdGFuY2VvZiBIVE1MRWxlbWVudCYmIWUub3duZXIuZ2V0UHJvcHMoKS5vblVwZGF0ZSYmIXMmJiJtaXJyb3IiIT09aSYmMCE9PXImJiJpbmVydGlhIiE9PW99fWNvbnN0IFBuPSh0LGUsbixzPXt9LGkscik9PmE9Pntjb25zdCBsPXV0KHMsdCl8fHt9LHU9bC5kZWxheXx8cy5kZWxheXx8MDtsZXR7ZWxhcHNlZDpjPTB9PXM7Yy09dih1KTtsZXQgaD17a2V5ZnJhbWVzOkFycmF5LmlzQXJyYXkobik/bjpbbnVsbCxuXSxlYXNlOiJlYXNlT3V0Iix2ZWxvY2l0eTplLmdldFZlbG9jaXR5KCksLi4ubCxkZWxheTotYyxvblVwZGF0ZTp0PT57ZS5zZXQodCksbC5vblVwZGF0ZSYmbC5vblVwZGF0ZSh0KX0sb25Db21wbGV0ZTooKT0+e2EoKSxsLm9uQ29tcGxldGUmJmwub25Db21wbGV0ZSgpfSxuYW1lOnQsbW90aW9uVmFsdWU6ZSxlbGVtZW50OnI/dm9pZCAwOml9OyhmdW5jdGlvbih7d2hlbjp0LGRlbGF5OmUsZGVsYXlDaGlsZHJlbjpuLHN0YWdnZXJDaGlsZHJlbjpzLHN0YWdnZXJEaXJlY3Rpb246aSxyZXBlYXQ6cixyZXBlYXRUeXBlOm8scmVwZWF0RGVsYXk6YSxmcm9tOmwsZWxhcHNlZDp1LC4uLmN9KXtyZXR1cm4hIU9iamVjdC5rZXlzKGMpLmxlbmd0aH0pKGwpfHwoaD17Li4uaCwuLi5sdCh0LGgpfSksaC5kdXJhdGlvbiYmKGguZHVyYXRpb249dihoLmR1cmF0aW9uKSksaC5yZXBlYXREZWxheSYmKGgucmVwZWF0RGVsYXk9dihoLnJlcGVhdERlbGF5KSksdm9pZCAwIT09aC5mcm9tJiYoaC5rZXlmcmFtZXNbMF09aC5mcm9tKTtsZXQgZD0hMTtpZigoITE9PT1oLnR5cGV8fDA9PT1oLmR1cmF0aW9uJiYhaC5yZXBlYXREZWxheSkmJihoLmR1cmF0aW9uPTAsMD09PWguZGVsYXkmJihkPSEwKSksZCYmIXImJnZvaWQgMCE9PWUuZ2V0KCkpe2NvbnN0IHQ9aHQoaC5rZXlmcmFtZXMsbCk7aWYodm9pZCAwIT09dClyZXR1cm4gby51cGRhdGUoKCgpPT57aC5vblVwZGF0ZSh0KSxoLm9uQ29tcGxldGUoKX0pKSxuZXcgeShbXSl9cmV0dXJuIXImJk1uLnN1cHBvcnRzKGgpP25ldyBNbihoKTpuZXcgcG4oaCl9LGtuPXQ9Pih0PT5BcnJheS5pc0FycmF5KHQpKSh0KT90W3QubGVuZ3RoLTFdfHwwOnQ7ZnVuY3Rpb24gRm4odCl7Y29uc3QgZT1be30se31dO3JldHVybiBudWxsPT10fHx0LnZhbHVlcy5mb3JFYWNoKCgodCxuKT0+e2VbMF1bbl09dC5nZXQoKSxlWzFdW25dPXQuZ2V0VmVsb2NpdHkoKX0pKSxlfWZ1bmN0aW9uIENuKHQsZSxuLHMpe2lmKCJmdW5jdGlvbiI9PXR5cGVvZiBlKXtjb25zdFtpLHJdPUZuKHMpO2U9ZSh2b2lkIDAhPT1uP246dC5jdXN0b20saSxyKX1pZigic3RyaW5nIj09dHlwZW9mIGUmJihlPXQudmFyaWFudHMmJnQudmFyaWFudHNbZV0pLCJmdW5jdGlvbiI9PXR5cGVvZiBlKXtjb25zdFtpLHJdPUZuKHMpO2U9ZSh2b2lkIDAhPT1uP246dC5jdXN0b20saSxyKX1yZXR1cm4gZX1mdW5jdGlvbiBFbih0LGUsbil7dC5oYXNWYWx1ZShlKT90LmdldFZhbHVlKGUpLnNldChuKTp0LmFkZFZhbHVlKGUsZihuKSl9ZnVuY3Rpb24gT24odCxlKXtjb25zdCBuPWZ1bmN0aW9uKHQsZSxuKXtjb25zdCBzPXQuZ2V0UHJvcHMoKTtyZXR1cm4gQ24ocyxlLHZvaWQgMCE9PW4/bjpzLmN1c3RvbSx0KX0odCxlKTtsZXR7dHJhbnNpdGlvbkVuZDpzPXt9LHRyYW5zaXRpb246aT17fSwuLi5yfT1ufHx7fTtyPXsuLi5yLC4uLnN9O2Zvcihjb25zdCBlIGluIHIpe0VuKHQsZSxrbihyW2VdKSl9fWNvbnN0IFJuPXQ9PnQucmVwbGFjZSgvKFthLXpdKShbQS1aXSkvZ3UsIiQxLSQyIikudG9Mb3dlckNhc2UoKSxCbj0iZGF0YS0iK1JuKCJmcmFtZXJBcHBlYXJJZCIpO2Z1bmN0aW9uIEluKHQpe3JldHVybiB0LnByb3BzW0JuXX1mdW5jdGlvbiBMbih0LGUpe2NvbnN0IG49dC5nZXRWYWx1ZSgid2lsbENoYW5nZSIpO2lmKHM9bixCb29sZWFuKE4ocykmJnMuYWRkKSlyZXR1cm4gbi5hZGQoZSk7dmFyIHN9ZnVuY3Rpb24gV24oe3Byb3RlY3RlZEtleXM6dCxuZWVkc0FuaW1hdGluZzplfSxuKXtjb25zdCBzPXQuaGFzT3duUHJvcGVydHkobikmJiEwIT09ZVtuXTtyZXR1cm4gZVtuXT0hMSxzfWZ1bmN0aW9uIERuKHQsZSx7ZGVsYXk6bj0wLHRyYW5zaXRpb25PdmVycmlkZTpzLHR5cGU6aX09e30pe3ZhciByO2xldHt0cmFuc2l0aW9uOmE9dC5nZXREZWZhdWx0VHJhbnNpdGlvbigpLHRyYW5zaXRpb25FbmQ6bCwuLi51fT1lO3MmJihhPXMpO2NvbnN0IGM9W10saD1pJiZ0LmFuaW1hdGlvblN0YXRlJiZ0LmFuaW1hdGlvblN0YXRlLmdldFN0YXRlKClbaV07Zm9yKGNvbnN0IGUgaW4gdSl7Y29uc3Qgcz10LmdldFZhbHVlKGUsbnVsbCE9PShyPXQubGF0ZXN0VmFsdWVzW2VdKSYmdm9pZCAwIT09cj9yOm51bGwpLGk9dVtlXTtpZih2b2lkIDA9PT1pfHxoJiZXbihoLGUpKWNvbnRpbnVlO2NvbnN0IGw9e2RlbGF5Om4sLi4udXQoYXx8e30sZSl9O2xldCBkPSExO2lmKHdpbmRvdy5Nb3Rpb25IYW5kb2ZmQW5pbWF0aW9uKXtjb25zdCBuPUluKHQpO2lmKG4pe2NvbnN0IHQ9d2luZG93Lk1vdGlvbkhhbmRvZmZBbmltYXRpb24obixlLG8pO251bGwhPT10JiYobC5zdGFydFRpbWU9dCxkPSEwKX19TG4odCxlKSxzLnN0YXJ0KFBuKGUscyxpLHQuc2hvdWxkUmVkdWNlTW90aW9uJiZpdC5oYXMoZSk/e3R5cGU6ITF9OmwsdCxkKSk7Y29uc3QgcD1zLmFuaW1hdGlvbjtwJiZjLnB1c2gocCl9cmV0dXJuIGwmJlByb21pc2UuYWxsKGMpLnRoZW4oKCgpPT57by51cGRhdGUoKCgpPT57bCYmT24odCxsKX0pKX0pKSxjfWNvbnN0IE5uPXt9O2Z1bmN0aW9uIEtuKHQse2xheW91dDplLGxheW91dElkOm59KXtyZXR1cm4gaXQuaGFzKHQpfHx0LnN0YXJ0c1dpdGgoIm9yaWdpbiIpfHwoZXx8dm9pZCAwIT09bikmJighIU5uW3RdfHwib3BhY2l0eSI9PT10KX1mdW5jdGlvbiAkbih0LGUsbil7dmFyIHM7Y29uc3R7c3R5bGU6aX09dCxyPXt9O2Zvcihjb25zdCBvIGluIGkpKE4oaVtvXSl8fGUuc3R5bGUmJk4oZS5zdHlsZVtvXSl8fEtuKG8sdCl8fHZvaWQgMCE9PShudWxsPT09KHM9bnVsbD09bj92b2lkIDA6bi5nZXRWYWx1ZShvKSl8fHZvaWQgMD09PXM/dm9pZCAwOnMubGl2ZVN0eWxlKSkmJihyW29dPWlbb10pO3JldHVybiByfWNvbnN0IGpuPSJ1bmRlZmluZWQiIT10eXBlb2Ygd2luZG93LHpuPXtjdXJyZW50Om51bGx9LEhuPXtjdXJyZW50OiExfTtjb25zdCBVbj1bImluaXRpYWwiLCJhbmltYXRlIiwid2hpbGVJblZpZXciLCJ3aGlsZUZvY3VzIiwid2hpbGVIb3ZlciIsIndoaWxlVGFwIiwid2hpbGVEcmFnIiwiZXhpdCJdO2Z1bmN0aW9uIFluKHQpe3JldHVybiBudWxsIT09KGU9dC5hbmltYXRlKSYmIm9iamVjdCI9PXR5cGVvZiBlJiYiZnVuY3Rpb24iPT10eXBlb2YgZS5zdGFydHx8VW4uc29tZSgoZT0+ZnVuY3Rpb24odCl7cmV0dXJuInN0cmluZyI9PXR5cGVvZiB0fHxBcnJheS5pc0FycmF5KHQpfSh0W2VdKSkpO3ZhciBlfWNvbnN0IHFuPXthbmltYXRpb246WyJhbmltYXRlIiwidmFyaWFudHMiLCJ3aGlsZUhvdmVyIiwid2hpbGVUYXAiLCJleGl0Iiwid2hpbGVJblZpZXciLCJ3aGlsZUZvY3VzIiwid2hpbGVEcmFnIl0sZXhpdDpbImV4aXQiXSxkcmFnOlsiZHJhZyIsImRyYWdDb250cm9scyJdLGZvY3VzOlsid2hpbGVGb2N1cyJdLGhvdmVyOlsid2hpbGVIb3ZlciIsIm9uSG92ZXJTdGFydCIsIm9uSG92ZXJFbmQiXSx0YXA6WyJ3aGlsZVRhcCIsIm9uVGFwIiwib25UYXBTdGFydCIsIm9uVGFwQ2FuY2VsIl0scGFuOlsib25QYW4iLCJvblBhblN0YXJ0Iiwib25QYW5TZXNzaW9uU3RhcnQiLCJvblBhbkVuZCJdLGluVmlldzpbIndoaWxlSW5WaWV3Iiwib25WaWV3cG9ydEVudGVyIiwib25WaWV3cG9ydExlYXZlIl0sbGF5b3V0OlsibGF5b3V0IiwibGF5b3V0SWQiXX0sWG49e307Zm9yKGNvbnN0IHQgaW4gcW4pWG5bdF09e2lzRW5hYmxlZDplPT5xblt0XS5zb21lKCh0PT4hIWVbdF0pKX07Y29uc3QgR249Wy4uLlp0LHBlLHhlXSxabj0oKT0+KHt4OnttaW46MCxtYXg6MH0seTp7bWluOjAsbWF4OjB9fSksX249WyJBbmltYXRpb25TdGFydCIsIkFuaW1hdGlvbkNvbXBsZXRlIiwiVXBkYXRlIiwiQmVmb3JlTGF5b3V0TWVhc3VyZSIsIkxheW91dE1lYXN1cmUiLCJMYXlvdXRBbmltYXRpb25TdGFydCIsIkxheW91dEFuaW1hdGlvbkNvbXBsZXRlIl07Y2xhc3MgSm57c2NyYXBlTW90aW9uVmFsdWVzRnJvbVByb3BzKHQsZSxuKXtyZXR1cm57fX1jb25zdHJ1Y3Rvcih7cGFyZW50OnQscHJvcHM6ZSxwcmVzZW5jZUNvbnRleHQ6bixyZWR1Y2VkTW90aW9uQ29uZmlnOnMsYmxvY2tJbml0aWFsQW5pbWF0aW9uOmksdmlzdWFsU3RhdGU6cn0sYT17fSl7dGhpcy5jdXJyZW50PW51bGwsdGhpcy5jaGlsZHJlbj1uZXcgU2V0LHRoaXMuaXNWYXJpYW50Tm9kZT0hMSx0aGlzLmlzQ29udHJvbGxpbmdWYXJpYW50cz0hMSx0aGlzLnNob3VsZFJlZHVjZU1vdGlvbj1udWxsLHRoaXMudmFsdWVzPW5ldyBNYXAsdGhpcy5LZXlmcmFtZVJlc29sdmVyPXNlLHRoaXMuZmVhdHVyZXM9e30sdGhpcy52YWx1ZVN1YnNjcmlwdGlvbnM9bmV3IE1hcCx0aGlzLnByZXZNb3Rpb25WYWx1ZXM9e30sdGhpcy5ldmVudHM9e30sdGhpcy5wcm9wRXZlbnRTdWJzY3JpcHRpb25zPXt9LHRoaXMubm90aWZ5VXBkYXRlPSgpPT50aGlzLm5vdGlmeSgiVXBkYXRlIix0aGlzLmxhdGVzdFZhbHVlcyksdGhpcy5yZW5kZXI9KCk9Pnt0aGlzLmN1cnJlbnQmJih0aGlzLnRyaWdnZXJCdWlsZCgpLHRoaXMucmVuZGVySW5zdGFuY2UodGhpcy5jdXJyZW50LHRoaXMucmVuZGVyU3RhdGUsdGhpcy5wcm9wcy5zdHlsZSx0aGlzLnByb2plY3Rpb24pKX0sdGhpcy5yZW5kZXJTY2hlZHVsZWRBdD0wLHRoaXMuc2NoZWR1bGVSZW5kZXI9KCk9Pntjb25zdCB0PWQubm93KCk7dGhpcy5yZW5kZXJTY2hlZHVsZWRBdDx0JiYodGhpcy5yZW5kZXJTY2hlZHVsZWRBdD10LG8ucmVuZGVyKHRoaXMucmVuZGVyLCExLCEwKSl9O2NvbnN0e2xhdGVzdFZhbHVlczpsLHJlbmRlclN0YXRlOnV9PXI7dGhpcy5sYXRlc3RWYWx1ZXM9bCx0aGlzLmJhc2VUYXJnZXQ9ey4uLmx9LHRoaXMuaW5pdGlhbFZhbHVlcz1lLmluaXRpYWw/ey4uLmx9Ont9LHRoaXMucmVuZGVyU3RhdGU9dSx0aGlzLnBhcmVudD10LHRoaXMucHJvcHM9ZSx0aGlzLnByZXNlbmNlQ29udGV4dD1uLHRoaXMuZGVwdGg9dD90LmRlcHRoKzE6MCx0aGlzLnJlZHVjZWRNb3Rpb25Db25maWc9cyx0aGlzLm9wdGlvbnM9YSx0aGlzLmJsb2NrSW5pdGlhbEFuaW1hdGlvbj1Cb29sZWFuKGkpLHRoaXMuaXNDb250cm9sbGluZ1ZhcmlhbnRzPVluKGUpLHRoaXMuaXNWYXJpYW50Tm9kZT1mdW5jdGlvbih0KXtyZXR1cm4gQm9vbGVhbihZbih0KXx8dC52YXJpYW50cyl9KGUpLHRoaXMuaXNWYXJpYW50Tm9kZSYmKHRoaXMudmFyaWFudENoaWxkcmVuPW5ldyBTZXQpLHRoaXMubWFudWFsbHlBbmltYXRlT25Nb3VudD1Cb29sZWFuKHQmJnQuY3VycmVudCk7Y29uc3R7d2lsbENoYW5nZTpjLC4uLmh9PXRoaXMuc2NyYXBlTW90aW9uVmFsdWVzRnJvbVByb3BzKGUse30sdGhpcyk7Zm9yKGNvbnN0IHQgaW4gaCl7Y29uc3QgZT1oW3RdO3ZvaWQgMCE9PWxbdF0mJk4oZSkmJmUuc2V0KGxbdF0sITEpfX1tb3VudCh0KXt0aGlzLmN1cnJlbnQ9dCxudC5zZXQodCx0aGlzKSx0aGlzLnByb2plY3Rpb24mJiF0aGlzLnByb2plY3Rpb24uaW5zdGFuY2UmJnRoaXMucHJvamVjdGlvbi5tb3VudCh0KSx0aGlzLnBhcmVudCYmdGhpcy5pc1ZhcmlhbnROb2RlJiYhdGhpcy5pc0NvbnRyb2xsaW5nVmFyaWFudHMmJih0aGlzLnJlbW92ZUZyb21WYXJpYW50VHJlZT10aGlzLnBhcmVudC5hZGRWYXJpYW50Q2hpbGQodGhpcykpLHRoaXMudmFsdWVzLmZvckVhY2goKCh0LGUpPT50aGlzLmJpbmRUb01vdGlvblZhbHVlKGUsdCkpKSxIbi5jdXJyZW50fHxmdW5jdGlvbigpe2lmKEhuLmN1cnJlbnQ9ITAsam4paWYod2luZG93Lm1hdGNoTWVkaWEpe2NvbnN0IHQ9d2luZG93Lm1hdGNoTWVkaWEoIihwcmVmZXJzLXJlZHVjZWQtbW90aW9uKSIpLGU9KCk9PnpuLmN1cnJlbnQ9dC5tYXRjaGVzO3QuYWRkTGlzdGVuZXIoZSksZSgpfWVsc2Ugem4uY3VycmVudD0hMX0oKSx0aGlzLnNob3VsZFJlZHVjZU1vdGlvbj0ibmV2ZXIiIT09dGhpcy5yZWR1Y2VkTW90aW9uQ29uZmlnJiYoImFsd2F5cyI9PT10aGlzLnJlZHVjZWRNb3Rpb25Db25maWd8fHpuLmN1cnJlbnQpLHRoaXMucGFyZW50JiZ0aGlzLnBhcmVudC5jaGlsZHJlbi5hZGQodGhpcyksdGhpcy51cGRhdGUodGhpcy5wcm9wcyx0aGlzLnByZXNlbmNlQ29udGV4dCl9dW5tb3VudCgpe250LmRlbGV0ZSh0aGlzLmN1cnJlbnQpLHRoaXMucHJvamVjdGlvbiYmdGhpcy5wcm9qZWN0aW9uLnVubW91bnQoKSxhKHRoaXMubm90aWZ5VXBkYXRlKSxhKHRoaXMucmVuZGVyKSx0aGlzLnZhbHVlU3Vic2NyaXB0aW9ucy5mb3JFYWNoKCh0PT50KCkpKSx0aGlzLnZhbHVlU3Vic2NyaXB0aW9ucy5jbGVhcigpLHRoaXMucmVtb3ZlRnJvbVZhcmlhbnRUcmVlJiZ0aGlzLnJlbW92ZUZyb21WYXJpYW50VHJlZSgpLHRoaXMucGFyZW50JiZ0aGlzLnBhcmVudC5jaGlsZHJlbi5kZWxldGUodGhpcyk7Zm9yKGNvbnN0IHQgaW4gdGhpcy5ldmVudHMpdGhpcy5ldmVudHNbdF0uY2xlYXIoKTtmb3IoY29uc3QgdCBpbiB0aGlzLmZlYXR1cmVzKXtjb25zdCBlPXRoaXMuZmVhdHVyZXNbdF07ZSYmKGUudW5tb3VudCgpLGUuaXNNb3VudGVkPSExKX10aGlzLmN1cnJlbnQ9bnVsbH1iaW5kVG9Nb3Rpb25WYWx1ZSh0LGUpe3RoaXMudmFsdWVTdWJzY3JpcHRpb25zLmhhcyh0KSYmdGhpcy52YWx1ZVN1YnNjcmlwdGlvbnMuZ2V0KHQpKCk7Y29uc3Qgbj1pdC5oYXModCkscz1lLm9uKCJjaGFuZ2UiLChlPT57dGhpcy5sYXRlc3RWYWx1ZXNbdF09ZSx0aGlzLnByb3BzLm9uVXBkYXRlJiZvLnByZVJlbmRlcih0aGlzLm5vdGlmeVVwZGF0ZSksbiYmdGhpcy5wcm9qZWN0aW9uJiYodGhpcy5wcm9qZWN0aW9uLmlzVHJhbnNmb3JtRGlydHk9ITApfSkpLGk9ZS5vbigicmVuZGVyUmVxdWVzdCIsdGhpcy5zY2hlZHVsZVJlbmRlcik7bGV0IHI7d2luZG93Lk1vdGlvbkNoZWNrQXBwZWFyU3luYyYmKHI9d2luZG93Lk1vdGlvbkNoZWNrQXBwZWFyU3luYyh0aGlzLHQsZSkpLHRoaXMudmFsdWVTdWJzY3JpcHRpb25zLnNldCh0LCgoKT0+e3MoKSxpKCksciYmcigpLGUub3duZXImJmUuc3RvcCgpfSkpfXNvcnROb2RlUG9zaXRpb24odCl7cmV0dXJuIHRoaXMuY3VycmVudCYmdGhpcy5zb3J0SW5zdGFuY2VOb2RlUG9zaXRpb24mJnRoaXMudHlwZT09PXQudHlwZT90aGlzLnNvcnRJbnN0YW5jZU5vZGVQb3NpdGlvbih0aGlzLmN1cnJlbnQsdC5jdXJyZW50KTowfXVwZGF0ZUZlYXR1cmVzKCl7bGV0IHQ9ImFuaW1hdGlvbiI7Zm9yKHQgaW4gWG4pe2NvbnN0IGU9WG5bdF07aWYoIWUpY29udGludWU7Y29uc3R7aXNFbmFibGVkOm4sRmVhdHVyZTpzfT1lO2lmKCF0aGlzLmZlYXR1cmVzW3RdJiZzJiZuKHRoaXMucHJvcHMpJiYodGhpcy5mZWF0dXJlc1t0XT1uZXcgcyh0aGlzKSksdGhpcy5mZWF0dXJlc1t0XSl7Y29uc3QgZT10aGlzLmZlYXR1cmVzW3RdO2UuaXNNb3VudGVkP2UudXBkYXRlKCk6KGUubW91bnQoKSxlLmlzTW91bnRlZD0hMCl9fX10cmlnZ2VyQnVpbGQoKXt0aGlzLmJ1aWxkKHRoaXMucmVuZGVyU3RhdGUsdGhpcy5sYXRlc3RWYWx1ZXMsdGhpcy5wcm9wcyl9bWVhc3VyZVZpZXdwb3J0Qm94KCl7cmV0dXJuIHRoaXMuY3VycmVudD90aGlzLm1lYXN1cmVJbnN0YW5jZVZpZXdwb3J0Qm94KHRoaXMuY3VycmVudCx0aGlzLnByb3BzKTp7eDp7bWluOjAsbWF4OjB9LHk6e21pbjowLG1heDowfX19Z2V0U3RhdGljVmFsdWUodCl7cmV0dXJuIHRoaXMubGF0ZXN0VmFsdWVzW3RdfXNldFN0YXRpY1ZhbHVlKHQsZSl7dGhpcy5sYXRlc3RWYWx1ZXNbdF09ZX11cGRhdGUodCxlKXsodC50cmFuc2Zvcm1UZW1wbGF0ZXx8dGhpcy5wcm9wcy50cmFuc2Zvcm1UZW1wbGF0ZSkmJnRoaXMuc2NoZWR1bGVSZW5kZXIoKSx0aGlzLnByZXZQcm9wcz10aGlzLnByb3BzLHRoaXMucHJvcHM9dCx0aGlzLnByZXZQcmVzZW5jZUNvbnRleHQ9dGhpcy5wcmVzZW5jZUNvbnRleHQsdGhpcy5wcmVzZW5jZUNvbnRleHQ9ZTtmb3IobGV0IGU9MDtlPF9uLmxlbmd0aDtlKyspe2NvbnN0IG49X25bZV07dGhpcy5wcm9wRXZlbnRTdWJzY3JpcHRpb25zW25dJiYodGhpcy5wcm9wRXZlbnRTdWJzY3JpcHRpb25zW25dKCksZGVsZXRlIHRoaXMucHJvcEV2ZW50U3Vic2NyaXB0aW9uc1tuXSk7Y29uc3Qgcz10WyJvbiIrbl07cyYmKHRoaXMucHJvcEV2ZW50U3Vic2NyaXB0aW9uc1tuXT10aGlzLm9uKG4scykpfXRoaXMucHJldk1vdGlvblZhbHVlcz1mdW5jdGlvbih0LGUsbil7Zm9yKGNvbnN0IHMgaW4gZSl7Y29uc3QgaT1lW3NdLHI9bltzXTtpZihOKGkpKXQuYWRkVmFsdWUocyxpKTtlbHNlIGlmKE4ocikpdC5hZGRWYWx1ZShzLGYoaSx7b3duZXI6dH0pKTtlbHNlIGlmKHIhPT1pKWlmKHQuaGFzVmFsdWUocykpe2NvbnN0IGU9dC5nZXRWYWx1ZShzKTshMD09PWUubGl2ZVN0eWxlP2UuanVtcChpKTplLmhhc0FuaW1hdGVkfHxlLnNldChpKX1lbHNle2NvbnN0IGU9dC5nZXRTdGF0aWNWYWx1ZShzKTt0LmFkZFZhbHVlKHMsZih2b2lkIDAhPT1lP2U6aSx7b3duZXI6dH0pKX19Zm9yKGNvbnN0IHMgaW4gbil2b2lkIDA9PT1lW3NdJiZ0LnJlbW92ZVZhbHVlKHMpO3JldHVybiBlfSh0aGlzLHRoaXMuc2NyYXBlTW90aW9uVmFsdWVzRnJvbVByb3BzKHQsdGhpcy5wcmV2UHJvcHMsdGhpcyksdGhpcy5wcmV2TW90aW9uVmFsdWVzKSx0aGlzLmhhbmRsZUNoaWxkTW90aW9uVmFsdWUmJnRoaXMuaGFuZGxlQ2hpbGRNb3Rpb25WYWx1ZSgpfWdldFByb3BzKCl7cmV0dXJuIHRoaXMucHJvcHN9Z2V0VmFyaWFudCh0KXtyZXR1cm4gdGhpcy5wcm9wcy52YXJpYW50cz90aGlzLnByb3BzLnZhcmlhbnRzW3RdOnZvaWQgMH1nZXREZWZhdWx0VHJhbnNpdGlvbigpe3JldHVybiB0aGlzLnByb3BzLnRyYW5zaXRpb259Z2V0VHJhbnNmb3JtUGFnZVBvaW50KCl7cmV0dXJuIHRoaXMucHJvcHMudHJhbnNmb3JtUGFnZVBvaW50fWdldENsb3Nlc3RWYXJpYW50Tm9kZSgpe3JldHVybiB0aGlzLmlzVmFyaWFudE5vZGU/dGhpczp0aGlzLnBhcmVudD90aGlzLnBhcmVudC5nZXRDbG9zZXN0VmFyaWFudE5vZGUoKTp2b2lkIDB9YWRkVmFyaWFudENoaWxkKHQpe2NvbnN0IGU9dGhpcy5nZXRDbG9zZXN0VmFyaWFudE5vZGUoKTtpZihlKXJldHVybiBlLnZhcmlhbnRDaGlsZHJlbiYmZS52YXJpYW50Q2hpbGRyZW4uYWRkKHQpLCgpPT5lLnZhcmlhbnRDaGlsZHJlbi5kZWxldGUodCl9YWRkVmFsdWUodCxlKXtjb25zdCBuPXRoaXMudmFsdWVzLmdldCh0KTtlIT09biYmKG4mJnRoaXMucmVtb3ZlVmFsdWUodCksdGhpcy5iaW5kVG9Nb3Rpb25WYWx1ZSh0LGUpLHRoaXMudmFsdWVzLnNldCh0LGUpLHRoaXMubGF0ZXN0VmFsdWVzW3RdPWUuZ2V0KCkpfXJlbW92ZVZhbHVlKHQpe3RoaXMudmFsdWVzLmRlbGV0ZSh0KTtjb25zdCBlPXRoaXMudmFsdWVTdWJzY3JpcHRpb25zLmdldCh0KTtlJiYoZSgpLHRoaXMudmFsdWVTdWJzY3JpcHRpb25zLmRlbGV0ZSh0KSksZGVsZXRlIHRoaXMubGF0ZXN0VmFsdWVzW3RdLHRoaXMucmVtb3ZlVmFsdWVGcm9tUmVuZGVyU3RhdGUodCx0aGlzLnJlbmRlclN0YXRlKX1oYXNWYWx1ZSh0KXtyZXR1cm4gdGhpcy52YWx1ZXMuaGFzKHQpfWdldFZhbHVlKHQsZSl7aWYodGhpcy5wcm9wcy52YWx1ZXMmJnRoaXMucHJvcHMudmFsdWVzW3RdKXJldHVybiB0aGlzLnByb3BzLnZhbHVlc1t0XTtsZXQgbj10aGlzLnZhbHVlcy5nZXQodCk7cmV0dXJuIHZvaWQgMD09PW4mJnZvaWQgMCE9PWUmJihuPWYobnVsbD09PWU/dm9pZCAwOmUse293bmVyOnRoaXN9KSx0aGlzLmFkZFZhbHVlKHQsbikpLG59cmVhZFZhbHVlKHQsZSl7dmFyIG47bGV0IHM9dm9pZCAwPT09dGhpcy5sYXRlc3RWYWx1ZXNbdF0mJnRoaXMuY3VycmVudD9udWxsIT09KG49dGhpcy5nZXRCYXNlVGFyZ2V0RnJvbVByb3BzKHRoaXMucHJvcHMsdCkpJiZ2b2lkIDAhPT1uP246dGhpcy5yZWFkVmFsdWVGcm9tSW5zdGFuY2UodGhpcy5jdXJyZW50LHQsdGhpcy5vcHRpb25zKTp0aGlzLmxhdGVzdFZhbHVlc1t0XTt2YXIgaTtyZXR1cm4gbnVsbCE9cyYmKCJzdHJpbmciPT10eXBlb2YgcyYmKFZ0KHMpfHxTdChzKSk/cz1wYXJzZUZsb2F0KHMpOihpPXMsIUduLmZpbmQoR3QoaSkpJiZ4ZS50ZXN0KGUpJiYocz1SZSh0LGUpKSksdGhpcy5zZXRCYXNlVGFyZ2V0KHQsTihzKT9zLmdldCgpOnMpKSxOKHMpP3MuZ2V0KCk6c31zZXRCYXNlVGFyZ2V0KHQsZSl7dGhpcy5iYXNlVGFyZ2V0W3RdPWV9Z2V0QmFzZVRhcmdldCh0KXt2YXIgZTtjb25zdHtpbml0aWFsOm59PXRoaXMucHJvcHM7bGV0IHM7aWYoInN0cmluZyI9PXR5cGVvZiBufHwib2JqZWN0Ij09dHlwZW9mIG4pe2NvbnN0IGk9Q24odGhpcy5wcm9wcyxuLG51bGw9PT0oZT10aGlzLnByZXNlbmNlQ29udGV4dCl8fHZvaWQgMD09PWU/dm9pZCAwOmUuY3VzdG9tKTtpJiYocz1pW3RdKX1pZihuJiZ2b2lkIDAhPT1zKXJldHVybiBzO2NvbnN0IGk9dGhpcy5nZXRCYXNlVGFyZ2V0RnJvbVByb3BzKHRoaXMucHJvcHMsdCk7cmV0dXJuIHZvaWQgMD09PWl8fE4oaSk/dm9pZCAwIT09dGhpcy5pbml0aWFsVmFsdWVzW3RdJiZ2b2lkIDA9PT1zP3ZvaWQgMDp0aGlzLmJhc2VUYXJnZXRbdF06aX1vbih0LG4pe3JldHVybiB0aGlzLmV2ZW50c1t0XXx8KHRoaXMuZXZlbnRzW3RdPW5ldyBlKSx0aGlzLmV2ZW50c1t0XS5hZGQobil9bm90aWZ5KHQsLi4uZSl7dGhpcy5ldmVudHNbdF0mJnRoaXMuZXZlbnRzW3RdLm5vdGlmeSguLi5lKX19Y2xhc3MgUW4gZXh0ZW5kcyBKbntjb25zdHJ1Y3Rvcigpe3N1cGVyKC4uLmFyZ3VtZW50cyksdGhpcy5LZXlmcmFtZVJlc29sdmVyPUllfXNvcnRJbnN0YW5jZU5vZGVQb3NpdGlvbih0LGUpe3JldHVybiAyJnQuY29tcGFyZURvY3VtZW50UG9zaXRpb24oZSk/MTotMX1nZXRCYXNlVGFyZ2V0RnJvbVByb3BzKHQsZSl7cmV0dXJuIHQuc3R5bGU/dC5zdHlsZVtlXTp2b2lkIDB9cmVtb3ZlVmFsdWVGcm9tUmVuZGVyU3RhdGUodCx7dmFyczplLHN0eWxlOm59KXtkZWxldGUgZVt0XSxkZWxldGUgblt0XX19Y29uc3QgdHM9KHQsZSk9PmUmJiJudW1iZXIiPT10eXBlb2YgdD9lLnRyYW5zZm9ybSh0KTp0LGVzPXt4OiJ0cmFuc2xhdGVYIix5OiJ0cmFuc2xhdGVZIix6OiJ0cmFuc2xhdGVaIix0cmFuc2Zvcm1QZXJzcGVjdGl2ZToicGVyc3BlY3RpdmUifSxucz1zdC5sZW5ndGg7ZnVuY3Rpb24gc3ModCxlLG4pe2NvbnN0e3N0eWxlOnMsdmFyczppLHRyYW5zZm9ybU9yaWdpbjpyfT10O2xldCBvPSExLGE9ITE7Zm9yKGNvbnN0IHQgaW4gZSl7Y29uc3Qgbj1lW3RdO2lmKGl0Lmhhcyh0KSlvPSEwO2Vsc2UgaWYoTXQodCkpaVt0XT1uO2Vsc2V7Y29uc3QgZT10cyhuLENlW3RdKTt0LnN0YXJ0c1dpdGgoIm9yaWdpbiIpPyhhPSEwLHJbdF09ZSk6c1t0XT1lfX1pZihlLnRyYW5zZm9ybXx8KG98fG4/cy50cmFuc2Zvcm09ZnVuY3Rpb24odCxlLG4pe2xldCBzPSIiLGk9ITA7Zm9yKGxldCByPTA7cjxucztyKyspe2NvbnN0IG89c3Rbcl0sYT10W29dO2lmKHZvaWQgMD09PWEpY29udGludWU7bGV0IGw9ITA7aWYobD0ibnVtYmVyIj09dHlwZW9mIGE/YT09PShvLnN0YXJ0c1dpdGgoInNjYWxlIik/MTowKTowPT09cGFyc2VGbG9hdChhKSwhbHx8bil7Y29uc3QgdD10cyhhLENlW29dKTtsfHwoaT0hMSxzKz1gJHtlc1tvXXx8b30oJHt0fSkgYCksbiYmKGVbb109dCl9fXJldHVybiBzPXMudHJpbSgpLG4/cz1uKGUsaT8iIjpzKTppJiYocz0ibm9uZSIpLHN9KGUsdC50cmFuc2Zvcm0sbik6cy50cmFuc2Zvcm0mJihzLnRyYW5zZm9ybT0ibm9uZSIpKSxhKXtjb25zdHtvcmlnaW5YOnQ9IjUwJSIsb3JpZ2luWTplPSI1MCUiLG9yaWdpblo6bj0wfT1yO3MudHJhbnNmb3JtT3JpZ2luPWAke3R9ICR7ZX0gJHtufWB9fWZ1bmN0aW9uIGlzKHQsZSxuKXtyZXR1cm4ic3RyaW5nIj09dHlwZW9mIHQ/dDpEdC50cmFuc2Zvcm0oZStuKnQpfWNvbnN0IHJzPXtvZmZzZXQ6InN0cm9rZS1kYXNob2Zmc2V0IixhcnJheToic3Ryb2tlLWRhc2hhcnJheSJ9LG9zPXtvZmZzZXQ6InN0cm9rZURhc2hvZmZzZXQiLGFycmF5OiJzdHJva2VEYXNoYXJyYXkifTtmdW5jdGlvbiBhcyh0LHthdHRyWDplLGF0dHJZOm4sYXR0clNjYWxlOnMsb3JpZ2luWDppLG9yaWdpblk6cixwYXRoTGVuZ3RoOm8scGF0aFNwYWNpbmc6YT0xLHBhdGhPZmZzZXQ6bD0wLC4uLnV9LGMsaCl7aWYoc3ModCx1LGgpLGMpcmV0dXJuIHZvaWQodC5zdHlsZS52aWV3Qm94JiYodC5hdHRycy52aWV3Qm94PXQuc3R5bGUudmlld0JveCkpO3QuYXR0cnM9dC5zdHlsZSx0LnN0eWxlPXt9O2NvbnN0e2F0dHJzOmQsc3R5bGU6cCxkaW1lbnNpb25zOmZ9PXQ7ZC50cmFuc2Zvcm0mJihmJiYocC50cmFuc2Zvcm09ZC50cmFuc2Zvcm0pLGRlbGV0ZSBkLnRyYW5zZm9ybSksZiYmKHZvaWQgMCE9PWl8fHZvaWQgMCE9PXJ8fHAudHJhbnNmb3JtKSYmKHAudHJhbnNmb3JtT3JpZ2luPWZ1bmN0aW9uKHQsZSxuKXtyZXR1cm5gJHtpcyhlLHQueCx0LndpZHRoKX0gJHtpcyhuLHQueSx0LmhlaWdodCl9YH0oZix2b2lkIDAhPT1pP2k6LjUsdm9pZCAwIT09cj9yOi41KSksdm9pZCAwIT09ZSYmKGQueD1lKSx2b2lkIDAhPT1uJiYoZC55PW4pLHZvaWQgMCE9PXMmJihkLnNjYWxlPXMpLHZvaWQgMCE9PW8mJmZ1bmN0aW9uKHQsZSxuPTEscz0wLGk9ITApe3QucGF0aExlbmd0aD0xO2NvbnN0IHI9aT9yczpvczt0W3Iub2Zmc2V0XT1EdC50cmFuc2Zvcm0oLXMpO2NvbnN0IG89RHQudHJhbnNmb3JtKGUpLGE9RHQudHJhbnNmb3JtKG4pO3Rbci5hcnJheV09YCR7b30gJHthfWB9KGQsbyxhLGwsITEpfWNvbnN0IGxzPW5ldyBTZXQoWyJiYXNlRnJlcXVlbmN5IiwiZGlmZnVzZUNvbnN0YW50Iiwia2VybmVsTWF0cml4Iiwia2VybmVsVW5pdExlbmd0aCIsImtleVNwbGluZXMiLCJrZXlUaW1lcyIsImxpbWl0aW5nQ29uZUFuZ2xlIiwibWFya2VySGVpZ2h0IiwibWFya2VyV2lkdGgiLCJudW1PY3RhdmVzIiwidGFyZ2V0WCIsInRhcmdldFkiLCJzdXJmYWNlU2NhbGUiLCJzcGVjdWxhckNvbnN0YW50Iiwic3BlY3VsYXJFeHBvbmVudCIsInN0ZERldmlhdGlvbiIsInRhYmxlVmFsdWVzIiwidmlld0JveCIsImdyYWRpZW50VHJhbnNmb3JtIiwicGF0aExlbmd0aCIsInN0YXJ0T2Zmc2V0IiwidGV4dExlbmd0aCIsImxlbmd0aEFkanVzdCJdKTtmdW5jdGlvbiB1cyh0LHtzdHlsZTplLHZhcnM6bn0scyxpKXtPYmplY3QuYXNzaWduKHQuc3R5bGUsZSxpJiZpLmdldFByb2plY3Rpb25TdHlsZXMocykpO2Zvcihjb25zdCBlIGluIG4pdC5zdHlsZS5zZXRQcm9wZXJ0eShlLG5bZV0pfWNsYXNzIGNzIGV4dGVuZHMgUW57Y29uc3RydWN0b3IoKXtzdXBlciguLi5hcmd1bWVudHMpLHRoaXMudHlwZT0ic3ZnIix0aGlzLmlzU1ZHVGFnPSExLHRoaXMubWVhc3VyZUluc3RhbmNlVmlld3BvcnRCb3g9Wm59Z2V0QmFzZVRhcmdldEZyb21Qcm9wcyh0LGUpe3JldHVybiB0W2VdfXJlYWRWYWx1ZUZyb21JbnN0YW5jZSh0LGUpe2lmKGl0LmhhcyhlKSl7Y29uc3QgdD1PZShlKTtyZXR1cm4gdCYmdC5kZWZhdWx0fHwwfXJldHVybiBlPWxzLmhhcyhlKT9lOlJuKGUpLHQuZ2V0QXR0cmlidXRlKGUpfXNjcmFwZU1vdGlvblZhbHVlc0Zyb21Qcm9wcyh0LGUsbil7cmV0dXJuIGZ1bmN0aW9uKHQsZSxuKXtjb25zdCBzPSRuKHQsZSxuKTtmb3IoY29uc3QgbiBpbiB0KShOKHRbbl0pfHxOKGVbbl0pKSYmKHNbLTEhPT1zdC5pbmRleE9mKG4pPyJhdHRyIituLmNoYXJBdCgwKS50b1VwcGVyQ2FzZSgpK24uc3Vic3RyaW5nKDEpOm5dPXRbbl0pO3JldHVybiBzfSh0LGUsbil9YnVpbGQodCxlLG4pe2FzKHQsZSx0aGlzLmlzU1ZHVGFnLG4udHJhbnNmb3JtVGVtcGxhdGUpfXJlbmRlckluc3RhbmNlKHQsZSxuLHMpeyFmdW5jdGlvbih0LGUsbixzKXt1cyh0LGUsdm9pZCAwLHMpO2Zvcihjb25zdCBuIGluIGUuYXR0cnMpdC5zZXRBdHRyaWJ1dGUobHMuaGFzKG4pP246Um4obiksZS5hdHRyc1tuXSl9KHQsZSwwLHMpfW1vdW50KHQpe3ZhciBlO3RoaXMuaXNTVkdUYWc9InN0cmluZyI9PXR5cGVvZihlPXQudGFnTmFtZSkmJiJzdmciPT09ZS50b0xvd2VyQ2FzZSgpLHN1cGVyLm1vdW50KHQpfX1jbGFzcyBocyBleHRlbmRzIFFue2NvbnN0cnVjdG9yKCl7c3VwZXIoLi4uYXJndW1lbnRzKSx0aGlzLnR5cGU9Imh0bWwiLHRoaXMucmVuZGVySW5zdGFuY2U9dXN9cmVhZFZhbHVlRnJvbUluc3RhbmNlKHQsZSl7aWYoaXQuaGFzKGUpKXtjb25zdCB0PU9lKGUpO3JldHVybiB0JiZ0LmRlZmF1bHR8fDB9e2NvbnN0IHM9KG49dCx3aW5kb3cuZ2V0Q29tcHV0ZWRTdHlsZShuKSksaT0oTXQoZSk/cy5nZXRQcm9wZXJ0eVZhbHVlKGUpOnNbZV0pfHwwO3JldHVybiJzdHJpbmciPT10eXBlb2YgaT9pLnRyaW0oKTppfXZhciBufW1lYXN1cmVJbnN0YW5jZVZpZXdwb3J0Qm94KHQse3RyYW5zZm9ybVBhZ2VQb2ludDplfSl7cmV0dXJuIGZ1bmN0aW9uKHQsZSl7cmV0dXJuIGZ1bmN0aW9uKHt0b3A6dCxsZWZ0OmUscmlnaHQ6bixib3R0b206c30pe3JldHVybnt4OnttaW46ZSxtYXg6bn0seTp7bWluOnQsbWF4OnN9fX0oZnVuY3Rpb24odCxlKXtpZighZSlyZXR1cm4gdDtjb25zdCBuPWUoe3g6dC5sZWZ0LHk6dC50b3B9KSxzPWUoe3g6dC5yaWdodCx5OnQuYm90dG9tfSk7cmV0dXJue3RvcDpuLnksbGVmdDpuLngsYm90dG9tOnMueSxyaWdodDpzLnh9fSh0LmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpLGUpKX0odCxlKX1idWlsZCh0LGUsbil7c3ModCxlLG4udHJhbnNmb3JtVGVtcGxhdGUpfXNjcmFwZU1vdGlvblZhbHVlc0Zyb21Qcm9wcyh0LGUsbil7cmV0dXJuICRuKHQsZSxuKX1oYW5kbGVDaGlsZE1vdGlvblZhbHVlKCl7dGhpcy5jaGlsZFN1YnNjcmlwdGlvbiYmKHRoaXMuY2hpbGRTdWJzY3JpcHRpb24oKSxkZWxldGUgdGhpcy5jaGlsZFN1YnNjcmlwdGlvbik7Y29uc3R7Y2hpbGRyZW46dH09dGhpcy5wcm9wcztOKHQpJiYodGhpcy5jaGlsZFN1YnNjcmlwdGlvbj10Lm9uKCJjaGFuZ2UiLCh0PT57dGhpcy5jdXJyZW50JiYodGhpcy5jdXJyZW50LnRleHRDb250ZW50PWAke3R9YCl9KSkpfX1jbGFzcyBkcyBleHRlbmRzIEpue2NvbnN0cnVjdG9yKCl7c3VwZXIoLi4uYXJndW1lbnRzKSx0aGlzLnR5cGU9Im9iamVjdCJ9cmVhZFZhbHVlRnJvbUluc3RhbmNlKHQsZSl7aWYoZnVuY3Rpb24odCxlKXtyZXR1cm4gdCBpbiBlfShlLHQpKXtjb25zdCBuPXRbZV07aWYoInN0cmluZyI9PXR5cGVvZiBufHwibnVtYmVyIj09dHlwZW9mIG4pcmV0dXJuIG59fWdldEJhc2VUYXJnZXRGcm9tUHJvcHMoKXt9cmVtb3ZlVmFsdWVGcm9tUmVuZGVyU3RhdGUodCxlKXtkZWxldGUgZS5vdXRwdXRbdF19bWVhc3VyZUluc3RhbmNlVmlld3BvcnRCb3goKXtyZXR1cm57eDp7bWluOjAsbWF4OjB9LHk6e21pbjowLG1heDowfX19YnVpbGQodCxlKXtPYmplY3QuYXNzaWduKHQub3V0cHV0LGUpfXJlbmRlckluc3RhbmNlKHQse291dHB1dDplfSl7T2JqZWN0LmFzc2lnbih0LGUpfXNvcnRJbnN0YW5jZU5vZGVQb3NpdGlvbigpe3JldHVybiAwfX1mdW5jdGlvbiBwcyh0KXtjb25zdCBlPXtwcmVzZW5jZUNvbnRleHQ6bnVsbCxwcm9wczp7fSx2aXN1YWxTdGF0ZTp7cmVuZGVyU3RhdGU6e3RyYW5zZm9ybTp7fSx0cmFuc2Zvcm1PcmlnaW46e30sc3R5bGU6e30sdmFyczp7fSxhdHRyczp7fX0sbGF0ZXN0VmFsdWVzOnt9fX0sbj1mdW5jdGlvbih0KXtyZXR1cm4gdCBpbnN0YW5jZW9mIFNWR0VsZW1lbnQmJiJzdmciIT09dC50YWdOYW1lfSh0KT9uZXcgY3MoZSk6bmV3IGhzKGUpO24ubW91bnQodCksbnQuc2V0KHQsbil9ZnVuY3Rpb24gZnModCl7Y29uc3QgZT1uZXcgZHMoe3ByZXNlbmNlQ29udGV4dDpudWxsLHByb3BzOnt9LHZpc3VhbFN0YXRlOntyZW5kZXJTdGF0ZTp7b3V0cHV0Ont9fSxsYXRlc3RWYWx1ZXM6e319fSk7ZS5tb3VudCh0KSxudC5zZXQodCxlKX1mdW5jdGlvbiBtcyh0LGUsbixzKXtjb25zdCBpPVtdO2lmKGZ1bmN0aW9uKHQsZSl7cmV0dXJuIE4odCl8fCJudW1iZXIiPT10eXBlb2YgdHx8InN0cmluZyI9PXR5cGVvZiB0JiYhJChlKX0odCxlKSlpLnB1c2goZnVuY3Rpb24odCxlLG4pe2NvbnN0IHM9Tih0KT90OmYodCk7cmV0dXJuIHMuc3RhcnQoUG4oIiIscyxlLG4pKSxzLmFuaW1hdGlvbn0odCwkKGUpJiZlLmRlZmF1bHR8fGUsbiYmbi5kZWZhdWx0fHxuKSk7ZWxzZXtjb25zdCByPWoodCxlLHMpLG89ci5sZW5ndGg7Zm9yKGxldCB0PTA7dDxvO3QrKyl7Y29uc3Qgcz1yW3RdLGE9cyBpbnN0YW5jZW9mIEVsZW1lbnQ/cHM6ZnM7bnQuaGFzKHMpfHxhKHMpO2NvbnN0IGw9bnQuZ2V0KHMpLHU9ey4uLm59OyJkZWxheSJpbiB1JiYiZnVuY3Rpb24iPT10eXBlb2YgdS5kZWxheSYmKHUuZGVsYXk9dS5kZWxheSh0LG8pKSxpLnB1c2goLi4uRG4obCx7Li4uZSx0cmFuc2l0aW9uOnV9LHt9KSl9fXJldHVybiBpfWZ1bmN0aW9uIGdzKHQsZSxuKXtjb25zdCBzPVtdLGk9ZnVuY3Rpb24odCx7ZGVmYXVsdFRyYW5zaXRpb246ZT17fSwuLi5ufT17fSxzLGkpe2NvbnN0IHI9ZS5kdXJhdGlvbnx8LjMsbz1uZXcgTWFwLGE9bmV3IE1hcCxsPXt9LHU9bmV3IE1hcDtsZXQgYz0wLGg9MCxkPTA7Zm9yKGxldCBuPTA7bjx0Lmxlbmd0aDtuKyspe2NvbnN0IG89dFtuXTtpZigic3RyaW5nIj09dHlwZW9mIG8pe3Uuc2V0KG8saCk7Y29udGludWV9aWYoIUFycmF5LmlzQXJyYXkobykpe3Uuc2V0KG8ubmFtZSxIKGgsby5hdCxjLHUpKTtjb250aW51ZX1sZXRbcCxmLG09e31dPW87dm9pZCAwIT09bS5hdCYmKGg9SChoLG0uYXQsYyx1KSk7bGV0IGc9MDtjb25zdCB5PSh0LG4scyxvPTAsYT0wKT0+e2NvbnN0IGw9Sih0KSx7ZGVsYXk6dT0wLHRpbWVzOmM9RChsKSx0eXBlOnA9ImtleWZyYW1lcyIsLi4uZn09bjtsZXR7ZWFzZTptPWUuZWFzZXx8ImVhc2VPdXQiLGR1cmF0aW9uOnl9PW47Y29uc3Qgdz0iZnVuY3Rpb24iPT10eXBlb2YgdT91KG8sYSk6dSxiPWwubGVuZ3RoLFQ9eihwKT9wOm51bGw9PWk/dm9pZCAwOmlbcF07aWYoYjw9MiYmVCl7bGV0IHQ9MTAwO2lmKDI9PT1iJiZldChsKSl7Y29uc3QgZT1sWzFdLWxbMF07dD1NYXRoLmFicyhlKX1jb25zdCBlPXsuLi5mfTt2b2lkIDAhPT15JiYoZS5kdXJhdGlvbj12KHkpKTtjb25zdCBuPUIoZSx0LFQpO209bi5lYXNlLHk9bi5kdXJhdGlvbn1udWxsIT15fHwoeT1yKTtjb25zdCB4PWgrdyxTPXgreTsxPT09Yy5sZW5ndGgmJjA9PT1jWzBdJiYoY1sxXT0xKTtjb25zdCBWPWMubGVuZ3RoLWwubGVuZ3RoO1Y+MCYmVyhjLFYpLDE9PT1sLmxlbmd0aCYmbC51bnNoaWZ0KG51bGwpLFgocyxsLG0sYyx4LFMpLGc9TWF0aC5tYXgodyt5LGcpLGQ9TWF0aC5tYXgoUyxkKX07aWYoTihwKSl5KGYsbSxfKCJkZWZhdWx0IixaKHAsYSkpKTtlbHNle2NvbnN0IHQ9aihwLGYscyxsKSxlPXQubGVuZ3RoO2ZvcihsZXQgbj0wO248ZTtuKyspe2NvbnN0IHM9Wih0W25dLGEpO2Zvcihjb25zdCB0IGluIGYpeShmW3RdLFEobSx0KSxfKHQscyksbixlKX19Yz1oLGgrPWd9cmV0dXJuIGEuZm9yRWFjaCgoKHQscyk9Pntmb3IoY29uc3QgaSBpbiB0KXtjb25zdCByPXRbaV07ci5zb3J0KEcpO2NvbnN0IGE9W10sbD1bXSx1PVtdO2ZvcihsZXQgdD0wO3Q8ci5sZW5ndGg7dCsrKXtjb25zdHthdDplLHZhbHVlOm4sZWFzaW5nOnN9PXJbdF07YS5wdXNoKG4pLGwucHVzaChMKDAsZCxlKSksdS5wdXNoKHN8fCJlYXNlT3V0Iil9MCE9PWxbMF0mJihsLnVuc2hpZnQoMCksYS51bnNoaWZ0KGFbMF0pLHUudW5zaGlmdCgiZWFzZUluT3V0IikpLDEhPT1sW2wubGVuZ3RoLTFdJiYobC5wdXNoKDEpLGEucHVzaChudWxsKSksby5oYXMocyl8fG8uc2V0KHMse2tleWZyYW1lczp7fSx0cmFuc2l0aW9uOnt9fSk7Y29uc3QgYz1vLmdldChzKTtjLmtleWZyYW1lc1tpXT1hLGMudHJhbnNpdGlvbltpXT17Li4uZSxkdXJhdGlvbjpkLGVhc2U6dSx0aW1lczpsLC4uLm59fX0pKSxvfSh0LGUsbix7c3ByaW5nOkV9KTtyZXR1cm4gaS5mb3JFYWNoKCgoe2tleWZyYW1lczp0LHRyYW5zaXRpb246ZX0sbik9PntzLnB1c2goLi4ubXMobix0LGUpKX0pKSxzfWZ1bmN0aW9uIHlzKHQpe3JldHVybiBmdW5jdGlvbihlLG4scyl7bGV0IGk9W107dmFyIHI7cj1lLGk9QXJyYXkuaXNBcnJheShyKSYmQXJyYXkuaXNBcnJheShyWzBdKT9ncyhlLG4sdCk6bXMoZSxuLHMsdCk7Y29uc3Qgbz1uZXcgeShpKTtyZXR1cm4gdCYmdC5hbmltYXRpb25zLnB1c2gobyksb319Y29uc3QgdnM9eXMoKTtmdW5jdGlvbiB3cyh0LGUsbil7dC5zdHlsZS5zZXRQcm9wZXJ0eShgLS0ke2V9YCxuKX1mdW5jdGlvbiBicyh0LGUsbil7dC5zdHlsZVtlXT1ufWNvbnN0IFRzPW0oKCgpPT57dHJ5e2RvY3VtZW50LmNyZWF0ZUVsZW1lbnQoImRpdiIpLmFuaW1hdGUoe29wYWNpdHk6WzFdfSl9Y2F0Y2godCl7cmV0dXJuITF9cmV0dXJuITB9KSkseHM9bmV3IFdlYWtNYXA7Y29uc3QgU3M9ImVhc2VPdXQiO2Z1bmN0aW9uIFZzKHQpe2NvbnN0IGU9eHMuZ2V0KHQpfHxuZXcgTWFwO3JldHVybiB4cy5zZXQodCxlKSx4cy5nZXQodCl9Y2xhc3MgQXN7Y29uc3RydWN0b3IodCxlLG4scyl7Y29uc3QgaT1lLnN0YXJ0c1dpdGgoIi0tIik7dGhpcy5zZXRWYWx1ZT1pP3dzOmJzLHRoaXMub3B0aW9ucz1zLHRoaXMudXBkYXRlRmluaXNoZWRQcm9taXNlKCkseCgic3RyaW5nIiE9dHlwZW9mIHMudHlwZSk7Y29uc3Qgcj1Wcyh0KS5nZXQoZSk7ciYmci5zdG9wKCk7aWYoQXJyYXkuaXNBcnJheShuKXx8KG49W25dKSxmdW5jdGlvbih0LGUsbil7Zm9yKGxldCBzPTA7czxlLmxlbmd0aDtzKyspbnVsbD09PWVbc10mJihlW3NdPTA9PT1zP24oKTplW3MtMV0pLCJudW1iZXIiPT10eXBlb2YgZVtzXSYmUGVbdF0mJihlW3NdPVBlW3RdLnRyYW5zZm9ybShlW3NdKSk7IVRzKCkmJmUubGVuZ3RoPDImJmUudW5zaGlmdChuKCkpfShlLG4sKCgpPT5lLnN0YXJ0c1dpdGgoIi0tIik/dC5zdHlsZS5nZXRQcm9wZXJ0eVZhbHVlKGUpOndpbmRvdy5nZXRDb21wdXRlZFN0eWxlKHQpW2VdKSkseihzLnR5cGUpKXtjb25zdCB0PUIocywxMDAscy50eXBlKTtzLmVhc2U9eW4oKT90LmVhc2U6U3Mscy5kdXJhdGlvbj12KHQuZHVyYXRpb24pLHMudHlwZT0ia2V5ZnJhbWVzIn1lbHNlIHMuZWFzZT1zLmVhc2V8fFNzO3RoaXMucmVtb3ZlQW5pbWF0aW9uPSgpPT57dmFyIG47cmV0dXJuIG51bGw9PT0obj14cy5nZXQodCkpfHx2b2lkIDA9PT1uP3ZvaWQgMDpuLmRlbGV0ZShlKX07Y29uc3Qgbz0oKT0+e3RoaXMuc2V0VmFsdWUodCxlLGh0KG4sdGhpcy5vcHRpb25zKSksdGhpcy5jYW5jZWwoKSx0aGlzLnJlc29sdmVGaW5pc2hlZFByb21pc2UoKX07Vm4oKT8odGhpcy5hbmltYXRpb249eG4odCxlLG4scyksITE9PT1zLmF1dG9wbGF5JiZ0aGlzLmFuaW1hdGlvbi5wYXVzZSgpLHRoaXMuYW5pbWF0aW9uLm9uZmluaXNoPW8sdGhpcy5wZW5kaW5nVGltZWxpbmUmJlNuKHRoaXMuYW5pbWF0aW9uLHRoaXMucGVuZGluZ1RpbWVsaW5lKSxWcyh0KS5zZXQoZSx0aGlzKSk6bygpfWdldCBkdXJhdGlvbigpe3JldHVybiB3KHRoaXMub3B0aW9ucy5kdXJhdGlvbnx8MzAwKX1nZXQgdGltZSgpe3ZhciB0O3JldHVybiB0aGlzLmFuaW1hdGlvbj93KChudWxsPT09KHQ9dGhpcy5hbmltYXRpb24pfHx2b2lkIDA9PT10P3ZvaWQgMDp0LmN1cnJlbnRUaW1lKXx8MCk6MH1zZXQgdGltZSh0KXt0aGlzLmFuaW1hdGlvbiYmKHRoaXMuYW5pbWF0aW9uLmN1cnJlbnRUaW1lPXYodCkpfWdldCBzcGVlZCgpe3JldHVybiB0aGlzLmFuaW1hdGlvbj90aGlzLmFuaW1hdGlvbi5wbGF5YmFja1JhdGU6MX1zZXQgc3BlZWQodCl7dGhpcy5hbmltYXRpb24mJih0aGlzLmFuaW1hdGlvbi5wbGF5YmFja1JhdGU9dCl9Z2V0IHN0YXRlKCl7cmV0dXJuIHRoaXMuYW5pbWF0aW9uP3RoaXMuYW5pbWF0aW9uLnBsYXlTdGF0ZToiZmluaXNoZWQifWdldCBzdGFydFRpbWUoKXtyZXR1cm4gdGhpcy5hbmltYXRpb24/dGhpcy5hbmltYXRpb24uc3RhcnRUaW1lOm51bGx9ZmxhdHRlbigpe3ZhciB0O3RoaXMuYW5pbWF0aW9uJiYobnVsbD09PSh0PXRoaXMuYW5pbWF0aW9uLmVmZmVjdCl8fHZvaWQgMD09PXR8fHQudXBkYXRlVGltaW5nKHtlYXNpbmc6ImxpbmVhciJ9KSl9cGxheSgpeyJmaW5pc2hlZCI9PT10aGlzLnN0YXRlJiZ0aGlzLnVwZGF0ZUZpbmlzaGVkUHJvbWlzZSgpLHRoaXMuYW5pbWF0aW9uJiZ0aGlzLmFuaW1hdGlvbi5wbGF5KCl9cGF1c2UoKXt0aGlzLmFuaW1hdGlvbiYmdGhpcy5hbmltYXRpb24ucGF1c2UoKX1zdG9wKCl7dGhpcy5hbmltYXRpb24mJiJpZGxlIiE9PXRoaXMuc3RhdGUmJiJmaW5pc2hlZCIhPT10aGlzLnN0YXRlJiYodGhpcy5hbmltYXRpb24uY29tbWl0U3R5bGVzJiZ0aGlzLmFuaW1hdGlvbi5jb21taXRTdHlsZXMoKSx0aGlzLmNhbmNlbCgpKX1jb21wbGV0ZSgpe3RoaXMuYW5pbWF0aW9uJiZ0aGlzLmFuaW1hdGlvbi5maW5pc2goKX1jYW5jZWwoKXt0aGlzLnJlbW92ZUFuaW1hdGlvbigpO3RyeXt0aGlzLmFuaW1hdGlvbiYmdGhpcy5hbmltYXRpb24uY2FuY2VsKCl9Y2F0Y2godCl7fX10aGVuKHQsZSl7cmV0dXJuIHRoaXMuY3VycmVudEZpbmlzaGVkUHJvbWlzZS50aGVuKHQsZSl9dXBkYXRlRmluaXNoZWRQcm9taXNlKCl7dGhpcy5jdXJyZW50RmluaXNoZWRQcm9taXNlPW5ldyBQcm9taXNlKCh0PT57dGhpcy5yZXNvbHZlRmluaXNoZWRQcm9taXNlPXR9KSl9YXR0YWNoVGltZWxpbmUodCl7cmV0dXJuIHRoaXMuYW5pbWF0aW9uP1NuKHRoaXMuYW5pbWF0aW9uLHQpOnRoaXMucGVuZGluZ1RpbWVsaW5lPXQsaX19Y29uc3QgTXM9dD0+ZnVuY3Rpb24oZSxuLHMpe3JldHVybiBuZXcgeShmdW5jdGlvbih0LGUsbixzKXtjb25zdCBpPUsodCxzKSxyPWkubGVuZ3RoLG89W107Zm9yKGxldCB0PTA7dDxyO3QrKyl7Y29uc3Qgcz1pW3RdLGE9ey4uLm59OyJmdW5jdGlvbiI9PXR5cGVvZiBhLmRlbGF5JiYoYS5kZWxheT1hLmRlbGF5KHQscikpO2Zvcihjb25zdCB0IGluIGUpe2NvbnN0IG49ZVt0XSxpPXsuLi51dChhLHQpfTtpLmR1cmF0aW9uPWkuZHVyYXRpb24/dihpLmR1cmF0aW9uKTppLmR1cmF0aW9uLGkuZGVsYXk9dihpLmRlbGF5fHwwKSxvLnB1c2gobmV3IEFzKHMsdCxuLGkpKX19cmV0dXJuIG99KGUsbixzLHQpKX0sUHM9TXMoKSxrcz1uZXcgV2Vha01hcDtsZXQgRnM7ZnVuY3Rpb24gQ3Moe3RhcmdldDp0LGNvbnRlbnRSZWN0OmUsYm9yZGVyQm94U2l6ZTpufSl7dmFyIHM7bnVsbD09PShzPWtzLmdldCh0KSl8fHZvaWQgMD09PXN8fHMuZm9yRWFjaCgocz0+e3Moe3RhcmdldDp0LGNvbnRlbnRTaXplOmUsZ2V0IHNpemUoKXtyZXR1cm4gZnVuY3Rpb24odCxlKXtpZihlKXtjb25zdHtpbmxpbmVTaXplOnQsYmxvY2tTaXplOm59PWVbMF07cmV0dXJue3dpZHRoOnQsaGVpZ2h0Om59fXJldHVybiB0IGluc3RhbmNlb2YgU1ZHRWxlbWVudCYmImdldEJCb3giaW4gdD90LmdldEJCb3goKTp7d2lkdGg6dC5vZmZzZXRXaWR0aCxoZWlnaHQ6dC5vZmZzZXRIZWlnaHR9fSh0LG4pfX0pfSkpfWZ1bmN0aW9uIEVzKHQpe3QuZm9yRWFjaChDcyl9ZnVuY3Rpb24gT3ModCxlKXtGc3x8InVuZGVmaW5lZCIhPXR5cGVvZiBSZXNpemVPYnNlcnZlciYmKEZzPW5ldyBSZXNpemVPYnNlcnZlcihFcykpO2NvbnN0IG49Syh0KTtyZXR1cm4gbi5mb3JFYWNoKCh0PT57bGV0IG49a3MuZ2V0KHQpO258fChuPW5ldyBTZXQsa3Muc2V0KHQsbikpLG4uYWRkKGUpLG51bGw9PUZzfHxGcy5vYnNlcnZlKHQpfSkpLCgpPT57bi5mb3JFYWNoKCh0PT57Y29uc3Qgbj1rcy5nZXQodCk7bnVsbD09bnx8bi5kZWxldGUoZSksKG51bGw9PW4/dm9pZCAwOm4uc2l6ZSl8fG51bGw9PUZzfHxGcy51bm9ic2VydmUodCl9KSl9fWNvbnN0IFJzPW5ldyBTZXQ7bGV0IEJzO2Z1bmN0aW9uIElzKHQpe3JldHVybiBScy5hZGQodCksQnN8fChCcz0oKT0+e2NvbnN0IHQ9e3dpZHRoOndpbmRvdy5pbm5lcldpZHRoLGhlaWdodDp3aW5kb3cuaW5uZXJIZWlnaHR9LGU9e3RhcmdldDp3aW5kb3csc2l6ZTp0LGNvbnRlbnRTaXplOnR9O1JzLmZvckVhY2goKHQ9PnQoZSkpKX0sd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoInJlc2l6ZSIsQnMpKSwoKT0+e1JzLmRlbGV0ZSh0KSwhUnMuc2l6ZSYmQnMmJihCcz12b2lkIDApfX1jb25zdCBMcz17eDp7bGVuZ3RoOiJXaWR0aCIscG9zaXRpb246IkxlZnQifSx5OntsZW5ndGg6IkhlaWdodCIscG9zaXRpb246IlRvcCJ9fTtmdW5jdGlvbiBXcyh0LGUscyxpKXtjb25zdCByPXNbZV0se2xlbmd0aDpvLHBvc2l0aW9uOmF9PUxzW2VdLGw9ci5jdXJyZW50LHU9cy50aW1lO3IuY3VycmVudD10W2BzY3JvbGwke2F9YF0sci5zY3JvbGxMZW5ndGg9dFtgc2Nyb2xsJHtvfWBdLXRbYGNsaWVudCR7b31gXSxyLm9mZnNldC5sZW5ndGg9MCxyLm9mZnNldFswXT0wLHIub2Zmc2V0WzFdPXIuc2Nyb2xsTGVuZ3RoLHIucHJvZ3Jlc3M9TCgwLHIuc2Nyb2xsTGVuZ3RoLHIuY3VycmVudCk7Y29uc3QgYz1pLXU7ci52ZWxvY2l0eT1jPjUwPzA6bihyLmN1cnJlbnQtbCxjKX1jb25zdCBEcz17RW50ZXI6W1swLDFdLFsxLDFdXSxFeGl0OltbMCwwXSxbMSwwXV0sQW55OltbMSwwXSxbMCwxXV0sQWxsOltbMCwwXSxbMSwxXV19LE5zPXtzdGFydDowLGNlbnRlcjouNSxlbmQ6MX07ZnVuY3Rpb24gS3ModCxlLG49MCl7bGV0IHM9MDtpZih0IGluIE5zJiYodD1Oc1t0XSksInN0cmluZyI9PXR5cGVvZiB0KXtjb25zdCBlPXBhcnNlRmxvYXQodCk7dC5lbmRzV2l0aCgicHgiKT9zPWU6dC5lbmRzV2l0aCgiJSIpP3Q9ZS8xMDA6dC5lbmRzV2l0aCgidnciKT9zPWUvMTAwKmRvY3VtZW50LmRvY3VtZW50RWxlbWVudC5jbGllbnRXaWR0aDp0LmVuZHNXaXRoKCJ2aCIpP3M9ZS8xMDAqZG9jdW1lbnQuZG9jdW1lbnRFbGVtZW50LmNsaWVudEhlaWdodDp0PWV9cmV0dXJuIm51bWJlciI9PXR5cGVvZiB0JiYocz1lKnQpLG4rc31jb25zdCAkcz1bMCwwXTtmdW5jdGlvbiBqcyh0LGUsbixzKXtsZXQgaT1BcnJheS5pc0FycmF5KHQpP3Q6JHMscj0wLG89MDtyZXR1cm4ibnVtYmVyIj09dHlwZW9mIHQ/aT1bdCx0XToic3RyaW5nIj09dHlwZW9mIHQmJihpPSh0PXQudHJpbSgpKS5pbmNsdWRlcygiICIpP3Quc3BsaXQoIiAiKTpbdCxOc1t0XT90OiIwIl0pLHI9S3MoaVswXSxuLHMpLG89S3MoaVsxXSxlKSxyLW99Y29uc3QgenM9e3g6MCx5OjB9O2Z1bmN0aW9uIEhzKHQsZSxuKXtjb25zdHtvZmZzZXQ6cz1Ecy5BbGx9PW4se3RhcmdldDppPXQsYXhpczpyPSJ5In09bixvPSJ5Ij09PXI/ImhlaWdodCI6IndpZHRoIixhPWkhPT10P2Z1bmN0aW9uKHQsZSl7Y29uc3Qgbj17eDowLHk6MH07bGV0IHM9dDtmb3IoO3MmJnMhPT1lOylpZihzIGluc3RhbmNlb2YgSFRNTEVsZW1lbnQpbi54Kz1zLm9mZnNldExlZnQsbi55Kz1zLm9mZnNldFRvcCxzPXMub2Zmc2V0UGFyZW50O2Vsc2UgaWYoInN2ZyI9PT1zLnRhZ05hbWUpe2NvbnN0IHQ9cy5nZXRCb3VuZGluZ0NsaWVudFJlY3QoKTtzPXMucGFyZW50RWxlbWVudDtjb25zdCBlPXMuZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCk7bi54Kz10LmxlZnQtZS5sZWZ0LG4ueSs9dC50b3AtZS50b3B9ZWxzZXtpZighKHMgaW5zdGFuY2VvZiBTVkdHcmFwaGljc0VsZW1lbnQpKWJyZWFrO3tjb25zdHt4OnQseTplfT1zLmdldEJCb3goKTtuLngrPXQsbi55Kz1lO2xldCBpPW51bGwscj1zLnBhcmVudE5vZGU7Zm9yKDshaTspInN2ZyI9PT1yLnRhZ05hbWUmJihpPXIpLHI9cy5wYXJlbnROb2RlO3M9aX19cmV0dXJuIG59KGksdCk6enMsbD1pPT09dD97d2lkdGg6dC5zY3JvbGxXaWR0aCxoZWlnaHQ6dC5zY3JvbGxIZWlnaHR9OmZ1bmN0aW9uKHQpe3JldHVybiJnZXRCQm94ImluIHQmJiJzdmciIT09dC50YWdOYW1lP3QuZ2V0QkJveCgpOnt3aWR0aDp0LmNsaWVudFdpZHRoLGhlaWdodDp0LmNsaWVudEhlaWdodH19KGkpLHU9e3dpZHRoOnQuY2xpZW50V2lkdGgsaGVpZ2h0OnQuY2xpZW50SGVpZ2h0fTtlW3JdLm9mZnNldC5sZW5ndGg9MDtsZXQgYz0hZVtyXS5pbnRlcnBvbGF0ZTtjb25zdCBoPXMubGVuZ3RoO2ZvcihsZXQgdD0wO3Q8aDt0Kyspe2NvbnN0IG49anMoc1t0XSx1W29dLGxbb10sYVtyXSk7Y3x8bj09PWVbcl0uaW50ZXJwb2xhdG9yT2Zmc2V0c1t0XXx8KGM9ITApLGVbcl0ub2Zmc2V0W3RdPW59YyYmKGVbcl0uaW50ZXJwb2xhdGU9bG4oZVtyXS5vZmZzZXQsRChzKSksZVtyXS5pbnRlcnBvbGF0b3JPZmZzZXRzPVsuLi5lW3JdLm9mZnNldF0pLGVbcl0ucHJvZ3Jlc3M9ZVtyXS5pbnRlcnBvbGF0ZShlW3JdLmN1cnJlbnQpfWZ1bmN0aW9uIFVzKHQsZSxuLHM9e30pe3JldHVybnttZWFzdXJlOigpPT5mdW5jdGlvbih0LGU9dCxuKXtpZihuLngudGFyZ2V0T2Zmc2V0PTAsbi55LnRhcmdldE9mZnNldD0wLGUhPT10KXtsZXQgcz1lO2Zvcig7cyYmcyE9PXQ7KW4ueC50YXJnZXRPZmZzZXQrPXMub2Zmc2V0TGVmdCxuLnkudGFyZ2V0T2Zmc2V0Kz1zLm9mZnNldFRvcCxzPXMub2Zmc2V0UGFyZW50fW4ueC50YXJnZXRMZW5ndGg9ZT09PXQ/ZS5zY3JvbGxXaWR0aDplLmNsaWVudFdpZHRoLG4ueS50YXJnZXRMZW5ndGg9ZT09PXQ/ZS5zY3JvbGxIZWlnaHQ6ZS5jbGllbnRIZWlnaHQsbi54LmNvbnRhaW5lckxlbmd0aD10LmNsaWVudFdpZHRoLG4ueS5jb250YWluZXJMZW5ndGg9dC5jbGllbnRIZWlnaHR9KHQscy50YXJnZXQsbiksdXBkYXRlOmU9PnshZnVuY3Rpb24odCxlLG4pe1dzKHQsIngiLGUsbiksV3ModCwieSIsZSxuKSxlLnRpbWU9bn0odCxuLGUpLChzLm9mZnNldHx8cy50YXJnZXQpJiZIcyh0LG4scyl9LG5vdGlmeTooKT0+ZShuKX19Y29uc3QgWXM9bmV3IFdlYWtNYXAscXM9bmV3IFdlYWtNYXAsWHM9bmV3IFdlYWtNYXAsR3M9dD0+dD09PWRvY3VtZW50LmRvY3VtZW50RWxlbWVudD93aW5kb3c6dDtmdW5jdGlvbiBacyh0LHtjb250YWluZXI6ZT1kb2N1bWVudC5kb2N1bWVudEVsZW1lbnQsLi4ubn09e30pe2xldCBzPVhzLmdldChlKTtzfHwocz1uZXcgU2V0LFhzLnNldChlLHMpKTtjb25zdCBpPVVzKGUsdCx7dGltZTowLHg6e2N1cnJlbnQ6MCxvZmZzZXQ6W10scHJvZ3Jlc3M6MCxzY3JvbGxMZW5ndGg6MCx0YXJnZXRPZmZzZXQ6MCx0YXJnZXRMZW5ndGg6MCxjb250YWluZXJMZW5ndGg6MCx2ZWxvY2l0eTowfSx5OntjdXJyZW50OjAsb2Zmc2V0OltdLHByb2dyZXNzOjAsc2Nyb2xsTGVuZ3RoOjAsdGFyZ2V0T2Zmc2V0OjAsdGFyZ2V0TGVuZ3RoOjAsY29udGFpbmVyTGVuZ3RoOjAsdmVsb2NpdHk6MH19LG4pO2lmKHMuYWRkKGkpLCFZcy5oYXMoZSkpe2NvbnN0IHQ9KCk9Pntmb3IoY29uc3QgdCBvZiBzKXQubWVhc3VyZSgpfSxuPSgpPT57Zm9yKGNvbnN0IHQgb2Ygcyl0LnVwZGF0ZShsLnRpbWVzdGFtcCl9LGk9KCk9Pntmb3IoY29uc3QgdCBvZiBzKXQubm90aWZ5KCl9LGE9KCk9PntvLnJlYWQodCwhMSwhMCksby5yZWFkKG4sITEsITApLG8udXBkYXRlKGksITEsITApfTtZcy5zZXQoZSxhKTtjb25zdCBjPUdzKGUpO3dpbmRvdy5hZGRFdmVudExpc3RlbmVyKCJyZXNpemUiLGEse3Bhc3NpdmU6ITB9KSxlIT09ZG9jdW1lbnQuZG9jdW1lbnRFbGVtZW50JiZxcy5zZXQoZSwodT1hLCJmdW5jdGlvbiI9PXR5cGVvZihyPWUpP0lzKHIpOk9zKHIsdSkpKSxjLmFkZEV2ZW50TGlzdGVuZXIoInNjcm9sbCIsYSx7cGFzc2l2ZTohMH0pfXZhciByLHU7Y29uc3QgYz1Zcy5nZXQoZSk7cmV0dXJuIG8ucmVhZChjLCExLCEwKSwoKT0+e3ZhciB0O2EoYyk7Y29uc3Qgbj1Ycy5nZXQoZSk7aWYoIW4pcmV0dXJuO2lmKG4uZGVsZXRlKGkpLG4uc2l6ZSlyZXR1cm47Y29uc3Qgcz1Zcy5nZXQoZSk7WXMuZGVsZXRlKGUpLHMmJihHcyhlKS5yZW1vdmVFdmVudExpc3RlbmVyKCJzY3JvbGwiLHMpLG51bGw9PT0odD1xcy5nZXQoZSkpfHx2b2lkIDA9PT10fHx0KCksd2luZG93LnJlbW92ZUV2ZW50TGlzdGVuZXIoInJlc2l6ZSIscykpfX1mdW5jdGlvbiBfcyh0LGUpe2xldCBuO2NvbnN0IHM9KCk9Pntjb25zdHtjdXJyZW50VGltZTpzfT1lLGk9KG51bGw9PT1zPzA6cy52YWx1ZSkvMTAwO24hPT1pJiZ0KGkpLG49aX07cmV0dXJuIG8udXBkYXRlKHMsITApLCgpPT5hKHMpfWNvbnN0IEpzPW5ldyBNYXA7ZnVuY3Rpb24gUXMoe3NvdXJjZTp0LGNvbnRhaW5lcjplPWRvY3VtZW50LmRvY3VtZW50RWxlbWVudCxheGlzOm49InkifT17fSl7dCYmKGU9dCksSnMuaGFzKGUpfHxKcy5zZXQoZSx7fSk7Y29uc3Qgcz1Kcy5nZXQoZSk7cmV0dXJuIHNbbl18fChzW25dPWcoKT9uZXcgU2Nyb2xsVGltZWxpbmUoe3NvdXJjZTplLGF4aXM6bn0pOmZ1bmN0aW9uKHtzb3VyY2U6dCxjb250YWluZXI6ZSxheGlzOm49InkifSl7dCYmKGU9dCk7Y29uc3Qgcz17dmFsdWU6MH0saT1acygodD0+e3MudmFsdWU9MTAwKnRbbl0ucHJvZ3Jlc3N9KSx7Y29udGFpbmVyOmUsYXhpczpufSk7cmV0dXJue2N1cnJlbnRUaW1lOnMsY2FuY2VsOml9fSh7c291cmNlOmUsYXhpczpufSkpLHNbbl19ZnVuY3Rpb24gdGkodCl7cmV0dXJuIHQmJih0LnRhcmdldHx8dC5vZmZzZXQpfWZ1bmN0aW9uIGVpKHQse2F4aXM6ZT0ieSIsLi4ubn09e30pe2NvbnN0IHM9e2F4aXM6ZSwuLi5ufTtyZXR1cm4iZnVuY3Rpb24iPT10eXBlb2YgdD9mdW5jdGlvbih0LGUpe3JldHVybiBmdW5jdGlvbih0KXtyZXR1cm4gMj09PXQubGVuZ3RofSh0KXx8dGkoZSk/WnMoKG49Pnt0KG5bZS5heGlzXS5wcm9ncmVzcyxuKX0pLGUpOl9zKHQsUXMoZSkpfSh0LHMpOmZ1bmN0aW9uKHQsZSl7aWYodC5mbGF0dGVuKCksdGkoZSkpcmV0dXJuIHQucGF1c2UoKSxacygobj0+e3QudGltZT10LmR1cmF0aW9uKm5bZS5heGlzXS5wcm9ncmVzc30pLGUpO3tjb25zdCBuPVFzKGUpO3JldHVybiB0LmF0dGFjaFRpbWVsaW5lP3QuYXR0YWNoVGltZWxpbmUobiwodD0+KHQucGF1c2UoKSxfcygoZT0+e3QudGltZT10LmR1cmF0aW9uKmV9KSxuKSkpKTppfX0odCxzKX1jb25zdCBuaT17c29tZTowLGFsbDoxfTtmdW5jdGlvbiBzaSh0LGUse3Jvb3Q6bixtYXJnaW46cyxhbW91bnQ6aT0ic29tZSJ9PXt9KXtjb25zdCByPUsodCksbz1uZXcgV2Vha01hcCxhPW5ldyBJbnRlcnNlY3Rpb25PYnNlcnZlcigodD0+e3QuZm9yRWFjaCgodD0+e2NvbnN0IG49by5nZXQodC50YXJnZXQpO2lmKHQuaXNJbnRlcnNlY3RpbmchPT1Cb29sZWFuKG4pKWlmKHQuaXNJbnRlcnNlY3Rpbmcpe2NvbnN0IG49ZSh0KTsiZnVuY3Rpb24iPT10eXBlb2Ygbj9vLnNldCh0LnRhcmdldCxuKTphLnVub2JzZXJ2ZSh0LnRhcmdldCl9ZWxzZSBuJiYobih0KSxvLmRlbGV0ZSh0LnRhcmdldCkpfSkpfSkse3Jvb3Q6bixyb290TWFyZ2luOnMsdGhyZXNob2xkOiJudW1iZXIiPT10eXBlb2YgaT9pOm5pW2ldfSk7cmV0dXJuIHIuZm9yRWFjaCgodD0+YS5vYnNlcnZlKHQpKSksKCk9PmEuZGlzY29ubmVjdCgpfWZ1bmN0aW9uIGlpKHQsZT0iZW5kIil7cmV0dXJuIG49Pntjb25zdCBzPShuPSJlbmQiPT09ZT9NYXRoLm1pbihuLC45OTkpOk1hdGgubWF4KG4sLjAwMSkpKnQsaT0iZW5kIj09PWU/TWF0aC5mbG9vcihzKTpNYXRoLmNlaWwocyk7cmV0dXJuIFMoMCwxLGkvdCl9fWZ1bmN0aW9uIHJpKHQ9LjEse3N0YXJ0RGVsYXk6ZT0wLGZyb206bj0wLGVhc2U6c309e30pe3JldHVybihpLHIpPT57Y29uc3Qgbz0ibnVtYmVyIj09dHlwZW9mIG4/bjpmdW5jdGlvbih0LGUpe2lmKCJmaXJzdCI9PT10KXJldHVybiAwO3tjb25zdCBuPWUtMTtyZXR1cm4ibGFzdCI9PT10P246bi8yfX0obixyKSxhPU1hdGguYWJzKG8taSk7bGV0IGw9dCphO2lmKHMpe2NvbnN0IGU9cip0O2w9VWUocykobC9lKSplfXJldHVybiBlK2x9fWZ1bmN0aW9uIG9pKC4uLnQpe2NvbnN0IGU9IUFycmF5LmlzQXJyYXkodFswXSksbj1lPzA6LTEscz10WzArbl0saT10WzErbl0scj10WzIrbl0sbz10WzMrbl0sYT1sbihpLHIse21peGVyOihsPXJbMF0sKHQ9PnQmJiJvYmplY3QiPT10eXBlb2YgdCYmdC5taXgpKGwpP2wubWl4OnZvaWQgMCksLi4ub30pO3ZhciBsO3JldHVybiBlP2Eocyk6YX1mdW5jdGlvbiBhaSh0LGUpe3JldHVybiBmdW5jdGlvbih0LGUpe2NvbnN0IG49ZC5ub3coKSxzPSh7dGltZXN0YW1wOml9KT0+e2NvbnN0IHI9aS1uO3I+PWUmJihhKHMpLHQoci1lKSl9O3JldHVybiBvLnJlYWQocywhMCksKCk9PmEocyl9KHQsdihlKSl9Y29uc3QgbGk9KHQsZSk9Pk1hdGguYWJzKHQtZSk7ZnVuY3Rpb24gdWkodCxlKXtjb25zdCBuPWxpKHQueCxlLngpLHM9bGkodC55LGUueSk7cmV0dXJuIE1hdGguc3FydChuKioyK3MqKjIpfWNvbnN0IGNpPW8saGk9ci5yZWR1Y2UoKCh0LGUpPT4odFtlXT10PT5hKHQpLHQpKSx7fSk7ZXhwb3J0e3AgYXMgTW90aW9uVmFsdWUsdnMgYXMgYW5pbWF0ZSxQcyBhcyBhbmltYXRlTWluaSx3dCBhcyBhbnRpY2lwYXRlLHl0IGFzIGJhY2tJbix2dCBhcyBiYWNrSW5PdXQsZ3QgYXMgYmFja091dCxhIGFzIGNhbmNlbEZyYW1lLGhpIGFzIGNhbmNlbFN5bmMsYnQgYXMgY2lyY0luLHh0IGFzIGNpcmNJbk91dCxUdCBhcyBjaXJjT3V0LFMgYXMgY2xhbXAseXMgYXMgY3JlYXRlU2NvcGVkQW5pbWF0ZSxwdCBhcyBjdWJpY0JlemllcixhaSBhcyBkZWxheSxsaSBhcyBkaXN0YW5jZSx1aSBhcyBkaXN0YW5jZTJELEtlIGFzIGVhc2VJbixqZSBhcyBlYXNlSW5PdXQsJGUgYXMgZWFzZU91dCxvIGFzIGZyYW1lLGwgYXMgZnJhbWVEYXRhLHUgYXMgZnJhbWVTdGVwcyxzaSBhcyBpblZpZXcsTmUgYXMgaW5lcnRpYSxsbiBhcyBpbnRlcnBvbGF0ZSx4IGFzIGludmFyaWFudCx1biBhcyBrZXlmcmFtZXMsZnQgYXMgbWlycm9yRWFzaW5nLGFuIGFzIG1peCxmIGFzIG1vdGlvblZhbHVlLHFlIGFzIHBpcGUsTCBhcyBwcm9ncmVzcyxtdCBhcyByZXZlcnNlRWFzaW5nLGVpIGFzIHNjcm9sbCxacyBhcyBzY3JvbGxJbmZvLEUgYXMgc3ByaW5nLHJpIGFzIHN0YWdnZXIsaWkgYXMgc3RlcHMsY2kgYXMgc3luYyxvaSBhcyB0cmFuc2Zvcm0sVCBhcyB3YXJuaW5nLFUgYXMgd3JhcH07ZXhwb3J0IGRlZmF1bHQgbnVsbDsKLy8jIHNvdXJjZU1hcHBpbmdVUkw9L3NtL2Q1ZDRiZmE1YTNmMjkyZWRjNzRjZTJiODU2ZTI1ZjAzZWJiZmE0YzRjMjJhYTM3ZTNmNzVjYTFkYWJlMzc0YjAubWFw'), c => c.charCodeAt(0));
+  const __url = URL.createObjectURL(new Blob([__src], {type:'text/javascript'}));
+  motion = await import(__url);
+  URL.revokeObjectURL(__url);
 } catch(e1) {
   try {
     motion = await import('https://cdn.jsdelivr.net/npm/motion@11.11.17/+esm');
@@ -3788,6 +3848,7 @@ if(motion){
 
   playSlide(window.__currentSlideIndex || 0);
 }
+
 </script>
 
 <script>
@@ -3893,6 +3954,8 @@ if(motion){
   addEventListener('swiss-low-power-change', e=>{e.detail.on ? stop() : start();});
   start();
 })();
+
 </script>
+
 </body>
 </html>
