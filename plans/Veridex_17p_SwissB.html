@@ -932,35 +932,35 @@
   .sigma-src{margin-top:1.2vh;font-family:var(--sans),var(--sans-zh);font-size:max(9.5px,.62vw);line-height:1.5;color:var(--text-helper)}
 
   /* ===== P7 · 学习五阶段 + AI 贯穿 ===== */
-  .loop-wrap{display:flex;flex-direction:column;flex:1;min-height:0;margin-top:2.8vh}
-  .loop-agent{align-self:center;border:1.5px solid var(--accent);background:rgba(0,47,167,.06);padding:1.1vh 2.2vw;text-align:center;position:relative}
-  .loop-agent .lb{font-family:var(--mono);font-size:max(10px,.64vw);letter-spacing:.16em;color:var(--accent);margin-bottom:.4vh}
-  .loop-agent .tv{font-family:var(--sans),var(--sans-zh);font-weight:500;font-size:max(15px,1.24vw);line-height:1.2}
+  .loop-wrap{display:flex;flex-direction:column;flex:1;min-height:0;margin-top:3.4vh}
+  .loop-agent{align-self:center;border:1.5px solid var(--accent);background:rgba(0,47,167,.06);padding:1.5vh 2.4vw;text-align:center;position:relative}
+  .loop-agent .lb{font-family:var(--mono);font-size:max(11px,.72vw);letter-spacing:.16em;color:var(--accent);margin-bottom:.6vh}
+  .loop-agent .tv{font-family:var(--sans),var(--sans-zh);font-weight:500;font-size:max(17px,1.5vw);line-height:1.2}
   .loop-agent .td{font-family:var(--sans),var(--sans-zh);font-size:max(10px,.68vw);line-height:1.4;color:var(--text-secondary);margin-top:.4vh}
-  .loop-bus{position:relative;height:3.4vh;margin:0 10%}
-  .loop-bus::before{content:'';position:absolute;left:50%;top:0;width:1px;height:1.5vh;background:var(--accent);opacity:.45}
-  .loop-bus::after{content:'';position:absolute;left:0;right:0;top:1.5vh;height:1px;background:var(--accent);opacity:.45}
-  .loop-stages{display:grid;grid-template-columns:repeat(5,1fr);gap:0}
+  .loop-bus{position:relative;height:4.2vh;margin:0 10%}
+  .loop-bus::before{content:'';position:absolute;left:50%;top:0;width:1px;height:1.9vh;background:var(--accent);opacity:.45}
+  .loop-bus::after{content:'';position:absolute;left:0;right:0;top:1.9vh;height:1px;background:var(--accent);opacity:.45}
+  .loop-stages{display:grid;grid-template-columns:repeat(5,1fr);gap:0;flex:1 1 auto;min-height:0}
   .loop-stage{position:relative;padding:0 .8vw 0 0}
-  .loop-stage::before{content:'';position:absolute;left:50%;top:-1.9vh;width:1px;height:1.9vh;background:var(--accent);opacity:.45}
+  .loop-stage::before{content:'';position:absolute;left:50%;top:-2.3vh;width:1px;height:2.3vh;background:var(--accent);opacity:.45}
   .loop-stage:last-child{padding-right:0;padding-left:.8vw}
-  .loop-stage:not(:last-child)::after{content:'';position:absolute;right:-.35vw;top:1.15vh;width:.7vw;height:1px;background:var(--grey-3)}
+  .loop-stage:not(:last-child)::after{content:'';position:absolute;right:-.35vw;top:1.4vh;width:.7vw;height:1px;background:var(--grey-3)}
   .loop-stage:not(:last-child)::before{background:var(--accent)}
-  .loop-box{border-top:2px solid var(--ink);padding-top:1.2vh;height:100%}
-  .loop-box .nb{font-family:var(--mono);font-size:max(10px,.62vw);letter-spacing:.12em;color:var(--text-helper);margin-bottom:.5vh}
-  .loop-box .nt{font-family:var(--sans),var(--sans-zh);font-weight:500;font-size:max(13px,1.02vw);line-height:1.25}
-  .loop-box .nd{font-family:var(--sans),var(--sans-zh);font-size:max(10px,.72vw);line-height:1.45;color:var(--text-secondary);margin-top:.5vh}
-  .loop-box .who{display:inline-block;margin-top:.7vh;font-family:var(--mono);font-size:max(9px,.58vw);letter-spacing:.1em;padding:.25vh .5vw;border:1px solid var(--grey-2);color:var(--text-helper)}
+  .loop-box{border-top:2px solid var(--ink);padding-top:1.8vh;height:100%;display:flex;flex-direction:column;gap:0}
+  .loop-box .nb{font-family:var(--mono);font-size:max(11px,.72vw);letter-spacing:.12em;color:var(--text-helper);margin-bottom:.9vh}
+  .loop-box .nt{font-family:var(--sans),var(--sans-zh);font-weight:500;font-size:max(17px,1.42vw);line-height:1.25}
+  .loop-box .nd{font-family:var(--sans),var(--sans-zh);font-size:max(12.5px,.95vw);line-height:1.55;color:var(--text-secondary);margin-top:1vh}
+  .loop-box .who{display:inline-block;align-self:flex-start;margin-top:auto;font-family:var(--mono);font-size:max(11px,.76vw);letter-spacing:.1em;padding:.5vh .62vw;border:1px solid var(--grey-2);color:var(--text-helper)}
   .loop-box .who.a{border-color:var(--accent);color:var(--accent)}
-  .loop-back{margin-top:1.8vh;display:flex;align-items:center;gap:.8vw;font-family:var(--sans),var(--sans-zh);font-size:max(11px,.76vw);line-height:1.4;color:var(--text-secondary)}
-  .loop-back .ar{font-family:var(--mono);color:var(--accent);font-size:max(13px,.9vw);white-space:nowrap}
-  .load-split{display:grid;grid-template-columns:1fr 1fr;gap:3vw;margin-top:2.4vh}
-  .load-col{border-top:1px solid var(--border-subtle);padding-top:1.4vh}
-  .load-col .lt{font-family:var(--sans),var(--sans-zh);font-size:max(11px,.72vw);letter-spacing:.1em;color:var(--text-helper);margin-bottom:.7vh;font-family:var(--mono)}
-  .load-col .li{font-family:var(--sans),var(--sans-zh);font-size:max(12px,.84vw);line-height:1.6;color:var(--text-secondary)}
+  .loop-back{margin-top:2.4vh;display:flex;align-items:center;gap:.9vw;font-family:var(--sans),var(--sans-zh);font-size:max(13px,.92vw);line-height:1.45;color:var(--text-secondary)}
+  .loop-back .ar{font-family:var(--mono);color:var(--accent);font-size:max(15px,1.1vw);white-space:nowrap}
+  .load-split{display:grid;grid-template-columns:1fr 1fr;gap:3.4vw;margin-top:3vh}
+  .load-col{border-top:1px solid var(--border-subtle);padding-top:1.9vh}
+  .load-col .lt{font-size:max(13px,.88vw);letter-spacing:.1em;color:var(--text-helper);margin-bottom:1.1vh;font-family:var(--mono)}
+  .load-col .li{font-family:var(--sans),var(--sans-zh);font-size:max(15px,1.12vw);line-height:1.65;color:var(--text-secondary)}
   .load-col.key .lt{color:var(--accent)}
   .load-col.key .li{color:var(--text-primary)}
-  .load-kicker{font-family:var(--sans),var(--sans-zh);font-size:max(13px,1vw);font-weight:500;line-height:1.4;margin-top:1.6vh;padding-top:1.4vh;border-top:1px solid var(--border-subtle)}
+  .load-kicker{font-family:var(--sans),var(--sans-zh);font-size:max(15px,1.22vw);font-weight:500;line-height:1.4;margin-top:2.2vh;padding-top:1.9vh;border-top:1px solid var(--border-subtle)}
 
   .stack-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6vw;flex:1;margin-top:6vh;align-items:stretch}
   .stack-block{
@@ -1355,7 +1355,7 @@
 .vx-act-n{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--text-helper)}
 .vx-act--reuse .vx-act-n{color:var(--accent)}
 .vx-act-t{font-size:max(18px,1.28vw);font-weight:500;line-height:1.25;letter-spacing:-.01em}
-.vx-act-d{font-size:max(12.5px,.8vw);line-height:1.5;color:var(--text-secondary);min-height:5.6vh}
+.vx-act-d{font-size:max(12.5px,.8vw);line-height:1.5;color:var(--text-secondary);min-height:8.4vh}
 .vx-act-tag{font-family:var(--mono);font-size:max(11px,.7vw);color:var(--text-helper);
   border:1px solid var(--border-subtle);padding:.5vh .7vw;align-self:flex-start;white-space:nowrap}
 .vx-act-tag--good{color:var(--accent);border-color:rgba(0,47,167,.35);background:rgba(0,47,167,.05)}
@@ -1702,12 +1702,12 @@
       <div data-anim="head" style="display:flex;align-items:flex-end;justify-content:space-between;gap:3vw">
         <div style="display:flex;flex-direction:column;gap:1.1vh">
           <div class="t-cat accent">PRODUCT · ONE FULL CYCLE</div>
-          <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(2.9vw,5vh);line-height:1.05;letter-spacing:-.03em">一个完整的学习循环，<br/>Agent 贯穿每一个环节</h2>
+          <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(3.4vw,5.9vh);line-height:1.05;letter-spacing:-.03em">一个完整的学习循环，<br/>Agent 贯穿每一个环节</h2>
         </div>
-        <p class="lead" style="font-weight:300;max-width:34ch">下面五个环节里，有两件事学生不必自己做。</p>
+        <p class="lead" style="font-weight:300;max-width:26ch;align-self:center">降低用户的认知负荷，保证学习的时间真正花在学习上。</p>
       </div>
 
-      <div data-anim="agent" class="loop-agent">
+      <div data-anim="agent" class="loop-agent" style="margin-top:2.4vh">
         <div class="lb">AI AGENT</div>
         <div class="tv">汇集材料 · 生成路径与课程 · 配题 · 标出该测的点</div>
       </div>
@@ -1775,7 +1775,7 @@
 
       <div class="load-kicker">
         同样一小时，更多时间落在<b style="font-weight:500;color:var(--ink)">相关且做对</b>的任务上，而不是耗在准备上。
-        <span style="font-family:var(--sans),var(--sans-zh);font-size:max(9.5px,.64vw);line-height:1.5;color:var(--text-helper);display:block;margin-top:.6vh">工作记忆一次只能处理几个新信息单元（Sweller 1988；Cowan 2001 修订为约 4±1）。检索练习与间隔练习是唯二被评为「高效用」的学习技术（Dunlosky et al. 2013）；重复阅读与划重点被评为低效用。</span>
+        <span style="font-family:var(--sans),var(--sans-zh);font-size:max(11px,.78vw);line-height:1.5;color:var(--text-helper);display:block;margin-top:1vh">工作记忆一次只能处理几个新信息单元（Sweller 1988；Cowan 2001 修订为约 4±1）。检索练习与间隔练习是唯二被评为「高效用」的学习技术（Dunlosky et al. 2013）；重复阅读与划重点被评为低效用。</span>
       </div>
     </div>
   </div>
@@ -1960,7 +1960,7 @@
     <div class="vx-act vx-act--share">
       <div class="vx-act-n">D</div>
       <div class="vx-act-t">课程共享</div>
-      <p class="vx-act-d">学生可以把自己做好的课程发布出来，别的学生直接去上。<b>一门课生成一次，很多人分摊。</b></p>
+      <p class="vx-act-d">学生可以把自己做好的课程发布出来，别的学生直接去上。<b>一门课生成一次，很多人分摊。</b><br/>积分照样扣，著作权归发布者。</p>
       <div class="vx-act-tag vx-act-tag--good">生成一次 · 多人复用</div>
       <div class="vx-act-f">随用户数增长？<b>不</b></div>
     </div>
@@ -2322,12 +2322,12 @@ const SPEAKER_NOTES = [
   {'id': 'p4', 'title': '多模态课堂体验', 'section': '问题一 · 定制化课程', 'minutes': 0.7, 'purpose': '说明课堂内的互动形态，并把「追问免费」这个计价前提先讲出来。讲者：黄羿捷', 'talk': ['一节课有完成态——这是整份计划书最有价值的设计参数', '三条陈述各一句，黑色通栏是重点：可随时打断、追问、换一种讲法，追问照常扣积分', '口头说明：追问不中断原课节奏，问完回到原来那一节', '禁词提醒：这一页不要说「答错」「判断」「反馈」，用「追问」「调整」'], 'transition': '第一个问题讲完，换第二个：有效的检验', 'cue': '交接给黄浩然'},
   {'id': 'p6b', 'title': '检验的四个动作', 'section': '问题二 · 有效的检验', 'minutes': 0.8, 'purpose': '把我们的检验设计拆成四个动作，说明第 4 步是多数产品没有的。讲者：黄浩然', 'talk': ['测什么、追溯、给什么、测多久', '重点讲第 4 步：间隔重复。学会的判断标准是：一个月后还对', '口头补充最优间隔约 20–40%，出处是 Cepeda 2008', 'Q&A 弹药：若被问追溯深度——不设深度上限，改变的是「深度」的计价单位'], 'transition': '这四步具体怎么做，我们和别人差在哪，下一页', 'cue': '逐条念四个动作，第 4 步停一下'},
   {'id': 'p7cmp', 'title': '他们的检测 vs 我们的检测', 'section': '问题二 · 有效的检验', 'minutes': 0.9, 'purpose': '把三个共享问题讲成结构差异，不是优劣。讲者：HJ', 'talk': ['开场句先念：检测建在课里，跟着人走', '左栏三条逐条念，每条都挂出处：Module 2 零作业是 DLAI 官网课程页，17.4% 是 Class Central 2026', '题型那条要补一句：选择题容易自动评分，所以被大量采用', '难度那条落在「开课前定好」——题目和量表都是老师事先定的，同一门课能力不同的人做同一张卷', '右栏三条对应讲：密度由产品保证、题型覆盖说清楚、难度跟着人走', 'Q&A 弹药：若被问我们有什么证据说自己能做到——产品原型未完成，这三行是设计，会在第 3 个月用真实课堂记录验证'], 'transition': '检验讲到这。那一整节课从头到尾是怎么走的', 'cue': '先念左栏，再念右栏'},
-  {'id': 'p7', 'title': '一个完整的学习循环，Agent 贯穿每一个环节', 'section': '产品 · 一次完整的学习', 'minutes': 1.2, 'purpose': '用流程图说明 AI Agent 贯穿学习五阶段，并讲清「学习之外的事我们包办」。讲者：HS', 'talk': ['先念最上面那个节点：AI Agent 做四件事——汇集材料、生成路径与课程、配题、标出该测的点', '五个环节从左到右：上传材料、生成课程、开始上课、课后检验、反馈与重做', '指每个格子下面的小标签：01 和 02 是 AI 做，04 也是 AI 配题。学生做的是 03 上课和 05 修正', '回环那条要说清：检验不过就回到第五步，只补真正不会的那一层——学习之内的事我们不插手', '下半部分：左边是学习之外的事，检索资料、编排顺序、想该练什么、划重点假装复习', '右边是学习本身：阅读、回忆、作答、根据错误修正', '落点句：同样一小时，更多时间落在相关且做对的任务上，而不是耗在准备上', 'Q&A 弹药：若被问划重点为什么不行——重复阅读与划重点在 Dunlosky 2013 被评为低效用，检索练习与间隔练习是唯二的高效用技术'], 'transition': '回到那句话：定制和检验，现在没有别人同时做得出来', 'cue': '指回环箭头'},
+  {'id': 'p7', 'title': '一个完整的学习循环，Agent 贯穿每一个环节', 'section': '产品 · 一次完整的学习', 'minutes': 1.2, 'purpose': '用流程图说明 AI Agent 贯穿学习五阶段，并讲清「学习之外的事我们包办」。讲者：HS', 'talk': ['先念最上面那个节点：AI Agent 做四件事——汇集材料、生成路径与课程、配题、标出该测的点', '点右上那句导语：Agent 把学习之外的准备工作接了下来，降低认知负荷，保证学习时间真正花在学习上', '五个环节从左到右：上传材料、生成课程、开始上课、课后检验、反馈与重做', '指每个格子下面的小标签：01 和 02 是 AI 做，04 也是 AI 配题。学生做的是 03 上课和 05 修正', '回环那条要说清：检验不过就回到第五步，只补真正不会的那一层——学习之内的事我们不插手', '下半部分：左边是学习之外的事，检索资料、编排顺序、想该练什么、划重点假装复习', '右边是学习本身：阅读、回忆、作答、根据错误修正', '落点句：同样一小时，更多时间落在相关且做对的任务上，而不是耗在准备上', 'Q&A 弹药：若被问划重点为什么不行——重复阅读与划重点在 Dunlosky 2013 被评为低效用，检索练习与间隔练习是唯二的高效用技术'], 'transition': '回到那句话：定制和检验，现在没有别人同时做得出来', 'cue': '指回环箭头'},
   {'id': 'p10', 'title': '定制和检验，现在没有别人同时做得出来', 'section': '定位 · 收束', 'minutes': 0.5, 'purpose': '章节收束。硬性要求：全页零数字（金额、百分比、期限一律不说）。讲者：两人', 'talk': ['一句话讲完，不解释', '重点在「同时」两个字——单独做定制或单独做检验都有人做过，同时做没人做', '右半页过渡：接下来是这门课怎么变成一笔生意', '禁词提醒：这页一个数字都不要说，说了诗意立刻塌掉'], 'transition': '进入第三段：生意。下一页起交回黄浩然', 'cue': '停顿 2 秒'},
   {'title': '三类人，都从一门课开始', 'section': '商业模式 · 卖给谁', 'minutes': 0.8, 'purpose': '能力是泛的，三类用户都能用；窗口要讲有截止日期的人。讲者：HS', 'talk': ['先念标题那句话：任何有学习需求的人都是我们的用户', '三张卡各一句，重点在：差别全在你要学什么', '两个数只念不解释：58,487 是 DSE 2026 报名人数，2,340 是经 DSE 收生计划升读内地的人数', '补一句：这两个数说明要考试的人是有期限的需求，付费意愿最强', '下一页讲这个品类还有多大空间'], 'transition': '先看同一条价格带上，别人卖的是什么单位', 'cue': '停顿', 'id': 'p11'},
   {'title': '竞品定价 · 同价位买到不同东西', 'section': '商业模式 · 竞品定价', 'minutes': 0.9, 'purpose': '用同价位带说明价钱一样，买到的单位不同。讲者：HS', 'talk': ['四行依次念，美元已全部换算成港币，同单位计价', '重点念这三个数：ChatGPT Plus HK$156、Hyperknow HK$140、我们 HK$148——三个人在同一条价格带上', '计费单位那一列要念：他们卖能力和使用量，我们卖完成学习与验收', 'ChatGPT 的 Pro $200／$500 高强度档不列主页面，会分散评委注意力', 'Q&A 弹药：换算汇率 US$1 = HK$7.8，抓取日 2026-10-03'], 'transition': '那我们自己的怎么定', 'cue': '停顿', 'id': 'p12'},
   {'title': '我们的定价 · 积分是唯一单位', 'section': '商业模式 · 我们的定价', 'minutes': 0.9, 'purpose': '讲清三档权益与计费单位。讲者：HS', 'talk': ['先念计费单位：积分。积分背后挂 token，而一个积分吃多少 token、token 单价多少都会变', '所以我们把积分交给你——底层价格怎么变，你每月付的数不变', '三档权益从上到下念一遍，重点是课内追问要额外扣积分、额度每日发放累积七天', '页脚那行要念：同价位 Hyperknow Pro US$18 ≈ HK$140，但它额度窗口期重置、过期作废、不累积', '口径提醒：积分与 token 的换算只在内部算成本，不对外披露'], 'transition': '那这一笔账到底算不算得过来', 'cue': '停顿', 'id': 'p13'},
-  {'title': '成本结构 · 四个动作', 'section': '商业模式 · 成本结构', 'minutes': 1.1, 'purpose': '把「成本」从每档金额表换成结构性论证——这是整份简报里最容易被追问的一页', 'talk': ['先念标题：成本拆成四个动作，各付多少', '四栏从左到右讲：A 预设课程库是发布前一次性做好的，之后复用；D 课程共享是学生把自己做好的课发布出来给别人上，一门课生成一次很多人分摊；B 上传教材每人的内容都不一样，只能即时生成；C 自定义提问答案要现场生成', '重点是那行「随用户数增长？」——只有 A 和 D 回答「不」，B 和 C 都是「是」', '课程共享这条要讲透：它让「生成新内容」这个最贵的动作，可以由一个学生付费、很多人受益', '收在那句结论：每多一个学生额外要花的钱不随上课次数增长，只随生成新内容的次数增长，而后者是最低频的动作', '要主动说的：四个动作的实际比例目前完全没数据，等真实课堂记录。这里不猜，也不给单档成本数字'], 'transition': '那这 95% 不付钱的人，结构上长什么样', 'cue': '若被追问单档成本：说明旧模型错在把一次性投入当成每次都付的边际成本，新模型还没有足够数据算单档数。Q&A 弹药：若被问共享课程质量怎么管——共享的是已生成并通过我们三道内容闸门的课，发布者不能绕过来源标注；课的内容归属于发布者', 'id': 'p14'},
+  {'title': '成本结构 · 四个动作', 'section': '商业模式 · 成本结构', 'minutes': 1.1, 'purpose': '把「成本」从每档金额表换成结构性论证——这是整份简报里最容易被追问的一页', 'talk': ['先念标题：成本拆成四个动作，各付多少', '四栏从左到右讲：A 预设课程库是发布前一次性做好的，之后复用；D 课程共享是学生把自己做好的课发布出来给别人上，一门课生成一次很多人分摊；B 上传教材每人的内容都不一样，只能即时生成；C 自定义提问答案要现场生成', '重点是那行「随用户数增长？」——只有 A 和 D 回答「不」，B 和 C 都是「是」', '课程共享这条要讲透：它让「生成新内容」这个最贵的动作，可以由一个学生付费、很多人受益', '收在那句结论：每多一个学生额外要花的钱不随上课次数增长，只随生成新内容的次数增长，而后者是最低频的动作', '要主动说的：四个动作的实际比例目前完全没数据，等真实课堂记录。这里不猜，也不给单档成本数字'], 'transition': '那这 95% 不付钱的人，结构上长什么样', 'cue': '若被追问单档成本：说明旧模型错在把一次性投入当成每次都付的边际成本，新模型还没有足够数据算单档数。Q&A 弹药（2026-10-06 已定案）：积分——上任何课程都照样扣，包括别人的共享课，没有例外；著作权——归发布者，他是该课程的创造者。不要主动延伸出共享课的折扣或审核机制', 'id': 'p14'},
   {'id': 'p15', 'title': '客户结构 · 95% 不付钱', 'section': '商业模式', 'minutes': 0.9, 'purpose': '用真实比例的横条让评委自己看到 1:19 的落差，并指出真正的杠杆是付费率不是用户数', 'talk': ['先念标题：95% 的人不付钱，收入来自那十九分之一', '横条要指出来：Pro 与 Max 加起来只有 5%，条形就是这么细——这个落差本身就是结论，不要加宽度美化', '念 1:19 这个比例，再说总用户 17,894 是 M12 目标结构；右栏三段：收入只来自 Pro 与 Max；成本只有上传教材和自定义提问随规模增长，上课本身不产生新成本', '落到那句：关键变量是把付费比例从 5% 推上去——前者收入涨，后者只涨成本', 'Q&A 弹药：本页是 M12 目标结构与推算，付费转化率外部可查区间 2.18%–9%，首月校准后才承诺'], 'transition': '这个结构要跑得起来，得有一个还没定型的赛道', 'cue': '若被追问月度盈利额：说明三个假设都无实测锚点，任何盈利数字都不可审核，首月账单后再给'},
   {'id': 'p11b', 'title': '这个品类，还没有人跑出来', 'section': '市场规模', 'minutes': 1.2, 'purpose': '用竞品的真实规模说明品类尚未成形，再接回我们做什么。讲者：黄羿捷', 'talk': ['先念标题：这个品类还没有人跑出来', '三张卡依次念：Hyperknow 刚拿到种子轮，规模是学生团队的公司；LearnVector 是吴恩达创办、Coursera 投了一亿美元，产品仍在开发中；ChatGPT Study mode 免费档就有，功能通用、没有课程结构', '左边那个数要念：全国每年 1,290 万人考公开试——这是赛道量级，我们的可及市场在香港', '落点句：品类没定型，两年内的先发是真实的', '接回构成：所以我们把两样东西做深——团队开发的 AI Agent，加上完整的课程功能'], 'transition': '赛道还没定型，那第一批人从哪来', 'cue': '不要把 1,290 万说成我们的市场'},
   {'id': 'p15b', 'title': '每一节课，都能追回到原始资料', 'section': '产品运营', 'minutes': 1.2, 'purpose': '回答 AI 幻觉与产品可靠性，说明质量机制与实时监控。讲者：两人', 'talk': ['先念标题：每一节课都能追回到原始资料', '左卡：每个知识点都标出参考信息出处，学生随时能追回去看出自哪一段', '补一句机制：没有来源的内容不发声，这条写进了生成流程', '右卡：学生在课程页点一下就能反馈这节讲得不对；Agent 全天候盯产品运行，生成失败、题目出错、积分算错，系统自己发现并通知我们', '底部要念：我们判断一个人真的在学，看的是完成一节课并通过一个知识点验收，上线后用这个口径追踪留存', 'Q&A 弹药：若被问自己的幻觉率——机制是这样，数字上线后才有'], 'transition': '人找回来之后，第一节课就要开出去——靠什么保证它是对的', 'cue': '这一页同时回答必问的幻觉题，不要跳过'},
