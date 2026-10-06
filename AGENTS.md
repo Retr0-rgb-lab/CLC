@@ -73,6 +73,7 @@ docs/             課程教材（不可修改）
 1. `class="slide"` 仍是 **17 個**（用 grep 數）。
 2. **`SPEAKER_NOTES` 陣列跟頁面內容一致** —— 這是最容易壞掉的地方。頁面改了就必須同步改講稿，否則照稿念會講錯。已發生過：P5 講稿寫「四步學習模型／Merrill 2002」，頁面卻是「學生自評缺陷橫條 + HEPI」。
 3. 講稿 `minutes` 加總（現在 14.1 分鐘）。目標是 **17–18 分鐘**（課程允許 20–30 分鐘連答問）。
+4. **P3／P4／P6 已放入產品原型截圖**。截圖來源是 `plans/prototype/_deck/` 下的**已裁版**（原圖 3200×1800 空白太多，縮小後看不清字）。改動版面時：圖框比例寫在 `style="aspect-ratio:…"` 上，對應那張裁版的實際比例；**不要直接引用 `plans/prototype/` 下的原圖**。
 
 ⚠️ **本專案不用 open-slide。** `package.json`、`tsconfig.json`、`node_modules/`、`slides/` 全部移除。**若看到任何 `pnpm dev`、`create-slide` skill、1920×1080 canvas 的說法，那是舊版殘留——一律忽略。**
 
