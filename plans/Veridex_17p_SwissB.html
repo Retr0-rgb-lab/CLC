@@ -1347,20 +1347,23 @@
 .vx-track .vx-warn{border-left-color:var(--grey-2);background:var(--grey-1)}
 .vx-warn p{font-size:max(12.5px,.85vw);line-height:1.55;color:var(--text-secondary);margin:0}
 
-/* ---- p14 成本结构三段 ---- */
-.vx-acts{display:grid;grid-template-columns:repeat(3,1fr);gap:2.2vw;margin-top:3vh;flex:1 1 auto;min-height:0}
-.vx-act{border-top:2px solid var(--ink);padding:2.2vh 0 0;display:flex;flex-direction:column;gap:1.4vh;min-width:0}
+/* ---- p14 成本结构四段（A 预设课程库 / D 课程共享 / B 上传教材 / C 自定义提问）---- */
+.vx-acts{display:grid;grid-template-columns:repeat(4,1fr);gap:1.7vw;margin-top:2.6vh;flex:0 0 auto;min-height:0}
+.vx-act{border-top:2px solid var(--ink);padding:1.9vh 0 0;display:flex;flex-direction:column;gap:1.1vh;min-width:0}
 .vx-act--reuse{border-top-color:var(--accent)}
+.vx-act--share{border-top-color:var(--accent);border-top-style:double;border-top-width:4px}
 .vx-act-n{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--text-helper)}
 .vx-act--reuse .vx-act-n{color:var(--accent)}
-.vx-act-t{font-size:max(19px,1.45vw);font-weight:500;line-height:1.25;letter-spacing:-.01em}
-.vx-act-d{font-size:max(13px,.88vw);line-height:1.55;color:var(--text-secondary)}
-.vx-act-tag{font-family:var(--mono);font-size:max(11.5px,.78vw);color:var(--text-helper);
+.vx-act-t{font-size:max(18px,1.28vw);font-weight:500;line-height:1.25;letter-spacing:-.01em}
+.vx-act-d{font-size:max(12.5px,.8vw);line-height:1.5;color:var(--text-secondary);min-height:5.6vh}
+.vx-act-tag{font-family:var(--mono);font-size:max(11px,.7vw);color:var(--text-helper);
   border:1px solid var(--border-subtle);padding:.5vh .7vw;align-self:flex-start;white-space:nowrap}
 .vx-act-tag--good{color:var(--accent);border-color:rgba(0,47,167,.35);background:rgba(0,47,167,.05)}
-.vx-act-f{font-size:max(13px,.9vw);color:var(--text-secondary);border-top:1px solid var(--border-subtle);padding-top:2.6vh;margin-top:auto}
-.vx-act-f b{font-family:var(--sans),var(--sans-zh);font-weight:600;font-size:max(15px,1.05vw)}
+.vx-act-f{font-size:max(12.5px,.82vw);color:var(--text-secondary);border-top:1px solid var(--border-subtle);padding-top:1.5vh;margin-top:auto}
+.vx-act-f b{font-family:var(--sans),var(--sans-zh);font-weight:600;font-size:max(14px,.96vw)}
 .vx-act--reuse .vx-act-f b{color:var(--accent)}
+.vx-act--share .vx-act-f b{color:var(--accent)}
+.vx-act--share .vx-act-n{color:var(--accent)}
 .vx-thesis{margin-top:3.6vh;margin-bottom:2.8vh;padding:2.8vh 0 0;border-top:2px solid var(--ink)}
 .vx-thesis p{font-size:max(16px,1.3vw);line-height:1.55;color:var(--text-secondary);font-weight:300}
 
@@ -1941,8 +1944,8 @@
   <div class="vx-fill">
   <div style="margin-top:2vh">
     <div class="vx-cat">Business · What we actually pay for</div>
-    <h2 class="vx-h" style="font-size:min(3.5vw,6vh);margin-top:1vh">成本要拆成三个动作分开看。</h2>
-    <p class="vx-lead" style="font-size:max(12px,.88vw);margin-top:2vh">是<b style="font-weight:500">三个动作各付多少</b>。而其中只有一个会随用户数量增长。</p>
+    <h2 class="vx-h" style="font-size:min(3.5vw,6vh);margin-top:1vh">成本要拆成四个动作分开看。</h2>
+    <p class="vx-lead" style="font-size:max(12px,.88vw);margin-top:2vh">是<b style="font-weight:500">四个动作各付多少</b>。而其中只有一个会随用户数量增长。</p>
   </div>
 
   <div class="vx-acts">
@@ -1951,6 +1954,14 @@
       <div class="vx-act-t">预设课程库</div>
       <p class="vx-act-d">发布前把各学科的课程一次性做好——内容、语音、文字都已经生成完毕。</p>
       <div class="vx-act-tag vx-act-tag--good">一次性投入 · 之后复用</div>
+      <div class="vx-act-f">随用户数增长？<b>不</b></div>
+    </div>
+
+    <div class="vx-act vx-act--share">
+      <div class="vx-act-n">D</div>
+      <div class="vx-act-t">课程共享</div>
+      <p class="vx-act-d">学生可以把自己做好的课程发布出来，别的学生直接去上。<b>一门课生成一次，很多人分摊。</b></p>
+      <div class="vx-act-tag vx-act-tag--good">生成一次 · 多人复用</div>
       <div class="vx-act-f">随用户数增长？<b>不</b></div>
     </div>
 
@@ -1965,21 +1976,21 @@
     <div class="vx-act">
       <div class="vx-act-n">C</div>
       <div class="vx-act-t">自定义提问</div>
-      <p class="vx-act-d">打断、追问、要求换一种讲法——答案要现场生成。</p>
+      <p class="vx-act-d">打断、追问、要求换一种讲法——答案要现场生成，不能事先預先做好。</p>
       <div class="vx-act-tag">每次提问 · 实时计费</div>
       <div class="vx-act-f">随用户数增长？<b>是</b></div>
     </div>
   </div>
 
   <div class="vx-thesis">
-    <p>因为「上课」这个最高频的动作，大部分落在<b style="font-weight:500">可以复用的预设课程</b>上——<br/>
+    <p>因为「上课」这个最高频的动作，大部分落在<b style="font-weight:500">可以复用的课程</b>上——不管是团队预先做好的，还是别的学生做出来共享的。<br/>
     每多一个学生，我们额外要花的钱<b style="font-weight:500">不随上课次数增长，只随「生成新内容」的次数增长</b>，而后者是最低频的动作。</p>
   </div>
   </div>
 
   <div class="vx-foot">
-    <div>A／B／C 的实际比例<b>目前完全无数据</b>——预设课程覆盖了多少需求、用户多常上传与提问，要等真实课堂记录。<b>这里不猜，也不给单档成本数字。</b></div>
-    <div>课程库要随教材换版持续更新，是一条<b>要一直养着的成本</b>，只是速率远低于重建全库。<br/>第一门课的分摊最重，之后逐门递减。</div>
+    <div>A／B／C／D 的实际比例<b>目前完全无数据</b>——预设课程覆盖了多少需求、共享課程有多少人願意用、用戶多常上傳與提問，要等真實課堂記錄。<b>這裡不猜，也不給單檔成本數字。</b></div>
+    <div>課程庫要隨教材換版持續更新，是一條<b>要一直養着的成本</b>，只是速率遠低於重建全庫。<br/>第一門課的分攤最重，之後逐門遞減。課程共享的上限，取決於有多少人願意把自己的課放出來。</div>
   </div>
 </div>
 </section>
@@ -2316,7 +2327,7 @@ const SPEAKER_NOTES = [
   {'title': '三类人，都从一门课开始', 'section': '商业模式 · 卖给谁', 'minutes': 0.8, 'purpose': '能力是泛的，三类用户都能用；窗口要讲有截止日期的人。讲者：HS', 'talk': ['先念标题那句话：任何有学习需求的人都是我们的用户', '三张卡各一句，重点在：差别全在你要学什么', '两个数只念不解释：58,487 是 DSE 2026 报名人数，2,340 是经 DSE 收生计划升读内地的人数', '补一句：这两个数说明要考试的人是有期限的需求，付费意愿最强', '下一页讲这个品类还有多大空间'], 'transition': '先看同一条价格带上，别人卖的是什么单位', 'cue': '停顿', 'id': 'p11'},
   {'title': '竞品定价 · 同价位买到不同东西', 'section': '商业模式 · 竞品定价', 'minutes': 0.9, 'purpose': '用同价位带说明价钱一样，买到的单位不同。讲者：HS', 'talk': ['四行依次念，美元已全部换算成港币，同单位计价', '重点念这三个数：ChatGPT Plus HK$156、Hyperknow HK$140、我们 HK$148——三个人在同一条价格带上', '计费单位那一列要念：他们卖能力和使用量，我们卖完成学习与验收', 'ChatGPT 的 Pro $200／$500 高强度档不列主页面，会分散评委注意力', 'Q&A 弹药：换算汇率 US$1 = HK$7.8，抓取日 2026-10-03'], 'transition': '那我们自己的怎么定', 'cue': '停顿', 'id': 'p12'},
   {'title': '我们的定价 · 积分是唯一单位', 'section': '商业模式 · 我们的定价', 'minutes': 0.9, 'purpose': '讲清三档权益与计费单位。讲者：HS', 'talk': ['先念计费单位：积分。积分背后挂 token，而一个积分吃多少 token、token 单价多少都会变', '所以我们把积分交给你——底层价格怎么变，你每月付的数不变', '三档权益从上到下念一遍，重点是课内追问要额外扣积分、额度每日发放累积七天', '页脚那行要念：同价位 Hyperknow Pro US$18 ≈ HK$140，但它额度窗口期重置、过期作废、不累积', '口径提醒：积分与 token 的换算只在内部算成本，不对外披露'], 'transition': '那这一笔账到底算不算得过来', 'cue': '停顿', 'id': 'p13'},
-  {'title': '成本结构 · 三个动作', 'section': '商业模式 · 成本结构', 'minutes': 0.9, 'purpose': '把「成本」从每档金额表换成结构性论证——这是整份简报里最容易被追问的一页', 'talk': ['先念标题：成本拆成三个动作，各付多少', '三栏从左到右讲：A 预设课程库是发布前一次性做好的，之后复用；B 上传教材每人的内容都不一样，只能即时生成；C 自定义提问答案要现场生成', '重点是那行「随用户数增长？」——只有 A 回答「不」，B 和 C 都是「是」', '收在那句结论：每多一个学生额外要花的钱不随上课次数增长，只随生成新内容的次数增长，而后者是最低频的动作', '要主动说的：这三个动作的实际比例目前完全没数据，等真实课堂记录。这里不猜，也不给单档成本数字'], 'transition': '那这 95% 不付钱的人，结构上长什么样', 'cue': '若被追问单档成本：说明旧模型错在把一次性投入当成每次都付的边际成本，新模型还没有足够数据算单档数', 'id': 'p14'},
+  {'title': '成本结构 · 四个动作', 'section': '商业模式 · 成本结构', 'minutes': 1.1, 'purpose': '把「成本」从每档金额表换成结构性论证——这是整份简报里最容易被追问的一页', 'talk': ['先念标题：成本拆成四个动作，各付多少', '四栏从左到右讲：A 预设课程库是发布前一次性做好的，之后复用；D 课程共享是学生把自己做好的课发布出来给别人上，一门课生成一次很多人分摊；B 上传教材每人的内容都不一样，只能即时生成；C 自定义提问答案要现场生成', '重点是那行「随用户数增长？」——只有 A 和 D 回答「不」，B 和 C 都是「是」', '课程共享这条要讲透：它让「生成新内容」这个最贵的动作，可以由一个学生付费、很多人受益', '收在那句结论：每多一个学生额外要花的钱不随上课次数增长，只随生成新内容的次数增长，而后者是最低频的动作', '要主动说的：四个动作的实际比例目前完全没数据，等真实课堂记录。这里不猜，也不给单档成本数字'], 'transition': '那这 95% 不付钱的人，结构上长什么样', 'cue': '若被追问单档成本：说明旧模型错在把一次性投入当成每次都付的边际成本，新模型还没有足够数据算单档数。Q&A 弹药：若被问共享课程质量怎么管——共享的是已生成并通过我们三道内容闸门的课，发布者不能绕过来源标注；课的内容归属于发布者', 'id': 'p14'},
   {'id': 'p15', 'title': '客户结构 · 95% 不付钱', 'section': '商业模式', 'minutes': 0.9, 'purpose': '用真实比例的横条让评委自己看到 1:19 的落差，并指出真正的杠杆是付费率不是用户数', 'talk': ['先念标题：95% 的人不付钱，收入来自那十九分之一', '横条要指出来：Pro 与 Max 加起来只有 5%，条形就是这么细——这个落差本身就是结论，不要加宽度美化', '念 1:19 这个比例，再说总用户 17,894 是 M12 目标结构；右栏三段：收入只来自 Pro 与 Max；成本只有上传教材和自定义提问随规模增长，上课本身不产生新成本', '落到那句：关键变量是把付费比例从 5% 推上去——前者收入涨，后者只涨成本', 'Q&A 弹药：本页是 M12 目标结构与推算，付费转化率外部可查区间 2.18%–9%，首月校准后才承诺'], 'transition': '这个结构要跑得起来，得有一个还没定型的赛道', 'cue': '若被追问月度盈利额：说明三个假设都无实测锚点，任何盈利数字都不可审核，首月账单后再给'},
   {'id': 'p11b', 'title': '这个品类，还没有人跑出来', 'section': '市场规模', 'minutes': 1.2, 'purpose': '用竞品的真实规模说明品类尚未成形，再接回我们做什么。讲者：黄羿捷', 'talk': ['先念标题：这个品类还没有人跑出来', '三张卡依次念：Hyperknow 刚拿到种子轮，规模是学生团队的公司；LearnVector 是吴恩达创办、Coursera 投了一亿美元，产品仍在开发中；ChatGPT Study mode 免费档就有，功能通用、没有课程结构', '左边那个数要念：全国每年 1,290 万人考公开试——这是赛道量级，我们的可及市场在香港', '落点句：品类没定型，两年内的先发是真实的', '接回构成：所以我们把两样东西做深——团队开发的 AI Agent，加上完整的课程功能'], 'transition': '赛道还没定型，那第一批人从哪来', 'cue': '不要把 1,290 万说成我们的市场'},
   {'id': 'p15b', 'title': '每一节课，都能追回到原始资料', 'section': '产品运营', 'minutes': 1.2, 'purpose': '回答 AI 幻觉与产品可靠性，说明质量机制与实时监控。讲者：两人', 'talk': ['先念标题：每一节课都能追回到原始资料', '左卡：每个知识点都标出参考信息出处，学生随时能追回去看出自哪一段', '补一句机制：没有来源的内容不发声，这条写进了生成流程', '右卡：学生在课程页点一下就能反馈这节讲得不对；Agent 全天候盯产品运行，生成失败、题目出错、积分算错，系统自己发现并通知我们', '底部要念：我们判断一个人真的在学，看的是完成一节课并通过一个知识点验收，上线后用这个口径追踪留存', 'Q&A 弹药：若被问自己的幻觉率——机制是这样，数字上线后才有'], 'transition': '人找回来之后，第一节课就要开出去——靠什么保证它是对的', 'cue': '这一页同时回答必问的幻觉题，不要跳过'},
