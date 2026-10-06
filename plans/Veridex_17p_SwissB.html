@@ -906,6 +906,31 @@
   .p4-banner .t{font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(1.95vw,3.5vh);line-height:1.2;letter-spacing:-.02em;white-space:nowrap}
   .p4-banner .s{font-family:var(--sans),var(--sans-zh);font-size:max(11px,.8vw);line-height:1.4;opacity:.72}
 
+  /* ===== P2 · Bloom 2 sigma ===== */
+  .sigma-bars{display:flex;flex-direction:column;gap:2.1vh;margin-top:3vh}
+  .sigma-row{display:grid;grid-template-columns:11em 1fr 7.5em;gap:1.6vw;align-items:center}
+  .sigma-lbl{font-family:var(--sans),var(--sans-zh);font-size:max(13px,1.02vw);line-height:1.2;color:var(--text-secondary)}
+  .sigma-lbl .sub{display:block;margin-top:.25vh;font-size:max(10px,.68vw);color:var(--text-helper)}
+  .sigma-track{height:3.1vh;background:var(--grey-1);position:relative}
+  .sigma-fill{position:absolute;left:0;top:0;bottom:0;background:var(--grey-3)}
+  .sigma-row.is-key .sigma-lbl{color:var(--text-primary);font-weight:500}
+  .sigma-row.is-key .sigma-fill{background:var(--accent)}
+  .sigma-val{font-family:var(--sans);font-weight:300;font-size:max(22px,2.1vw);line-height:1;text-align:right;letter-spacing:-.02em}
+  .sigma-val span{font-family:var(--sans),var(--sans-zh);font-size:max(10px,.66vw);margin-left:.3em;opacity:.6;font-weight:400}
+  .sigma-row.is-key .sigma-val{color:var(--accent)}
+  .sigma-why{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6vw;margin-top:2.8vh}
+  .sigma-why .w{border-top:1px solid var(--border-subtle);padding-top:1.4vh}
+  .sigma-why .w b{display:block;font-family:var(--sans),var(--sans-zh);font-weight:500;font-size:max(13px,1vw);line-height:1.25}
+  .sigma-why .w p{margin-top:.5vh;font-family:var(--sans),var(--sans-zh);font-size:max(11px,.78vw);line-height:1.5;color:var(--text-secondary)}
+  .sigma-notes{display:grid;grid-template-columns:1fr 1fr;gap:3.4vw;margin-top:auto;padding-top:2.6vh;border-top:1px solid var(--border-subtle)}
+  .sigma-ttl{font-family:var(--sans),var(--sans-zh);font-size:max(14px,1.14vw);font-weight:500;margin-bottom:.7vh}
+  .sigma-notes p{font-family:var(--sans),var(--sans-zh);font-size:max(12px,.88vw);line-height:1.6;color:var(--text-secondary)}
+  .sigma-grid{padding-bottom:10.4vh}
+  .sigma-banner{margin:0 -5vw;padding:2vh 5vw 2.2vh;background:var(--ink);color:var(--paper);display:flex;align-items:baseline;gap:2.2vw}
+  .sigma-banner .t{font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(1.8vw,3.2vh);line-height:1.2;letter-spacing:-.02em;white-space:nowrap}
+  .sigma-banner .s{font-family:var(--sans),var(--sans-zh);font-size:max(11px,.78vw);line-height:1.4;opacity:.72}
+  .sigma-src{margin-top:1.2vh;font-family:var(--sans),var(--sans-zh);font-size:max(9.5px,.62vw);line-height:1.5;color:var(--text-helper)}
+
   .stack-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6vw;flex:1;margin-top:6vh;align-items:stretch}
   .stack-block{
     display:flex;flex-direction:column;
@@ -1379,43 +1404,69 @@
 
 </section>
 
-<section class="slide" data-layout="S08" data-animate="duo-compare" data-slide-id="p2">
+<section class="slide" data-layout="S22" data-animate="sigma" data-slide-id="p2">
   <div class="canvas-card">
     <div class="chrome-min"><div class="l">问题一 · 定制化课程</div><div class="r">02 / 20 · HS</div></div>
-    <div data-anim="head" style="display:flex;flex-direction:column;gap:1.4vh;margin-top:5.4vh">
-      <div class="t-cat accent">PROBLEM 01 · CUSTOMISATION</div>
-      <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(5.4vw,9.4vh);line-height:1;letter-spacing:-.03em">传统课堂 VS AI课堂</h2>
-      <p class="lead" style="font-weight:300;max-width:46ch">面向大众，还是只为你打造？</p>
-    </div>
-    <div class="duo-compare" data-anim="cols" style="margin-top:4.4vh">
-      <div class="col">
-        <div class="col-tag"><span class="num">A</span> 传统课堂</div>
-        <div class="col-ttl">老师按一份<br/>大纲讲给所有人</div>
-        <div class="col-desc">讲义发给全体学生，课对所有人是同一份。你坐在哪个程度，课都从第一章开始。</div>
-        <ul class="col-list">
-          <li>课程怎么来：老师备好的那一门</li>
-          <li>进度：全班同一个速度</li>
-          <li>你不会时：等下次上课</li>
-          <li>学得怎么样：期末一张卷</li>
-        </ul>
+    <div style="flex:1;display:flex;flex-direction:column;margin-top:4.2vh;min-height:0" class="sigma-grid">
+      <div data-anim="head" style="display:flex;align-items:flex-end;justify-content:space-between;gap:3vw">
+        <div style="display:flex;flex-direction:column;gap:1.2vh">
+          <div class="t-cat accent">WHY CUSTOMISATION</div>
+          <h2 style="font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(3.5vw,6vh);line-height:1.04;letter-spacing:-.03em">一对一的教学效果，<br/>胜过大班课 2 个标准差</h2>
+        </div>
+        <p class="lead" style="font-weight:300;max-width:36ch">教育心理学里最老、也最硬的一个结论。</p>
       </div>
-      <div class="vrule"></div>
-      <div class="col accent">
-        <div class="col-tag"><span class="num">B</span> AI native 课堂</div>
-        <div class="col-ttl">Agent 按你的需求<br/>出一门课</div>
-        <div class="col-desc">课在你开口之后才存在。Agent 读懂你的需求，决定这门课教什么、从哪开始。</div>
-        <ul class="col-list">
-          <li>课程怎么来：Agent 按你的需求生成</li>
-          <li>进度：你的程度决定从哪开始</li>
-          <li>你不会时：当场追问，弄懂为止</li>
-          <li>学得怎么样：每段讲完就检测，不过就追溯回去</li>
-        </ul>
+
+      <div data-anim="bars" class="sigma-bars">
+        <div class="sigma-row">
+          <div class="sigma-lbl">传统大班课<div class="sub">按一份大纲讲给所有人</div></div>
+          <div class="sigma-track"><div class="sigma-fill" style="width:51%"></div></div>
+          <div class="sigma-val">50<span>百分位</span></div>
+        </div>
+        <div class="sigma-row">
+          <div class="sigma-lbl">加入掌握学习<div class="sub">不掌握就不往下走</div></div>
+          <div class="sigma-track"><div class="sigma-fill" style="width:84%"></div></div>
+          <div class="sigma-val">84<span>百分位</span></div>
+        </div>
+        <div class="sigma-row is-key">
+          <div class="sigma-lbl">一对一 + 掌握学习<div class="sub">Bloom 1984</div></div>
+          <div class="sigma-track"><div class="sigma-fill" style="width:98%"></div></div>
+          <div class="sigma-val">98<span>百分位</span></div>
+        </div>
+      </div>
+
+      <div data-anim="why" class="sigma-why">
+        <div class="w">
+          <b>即时反馈</b>
+          <p>做错当场知道，错在哪一步也看得见。</p>
+        </div>
+        <div class="w">
+          <b>按个人情况调整</b>
+          <p>难度、内容顺序、上课节奏，跟着这个人的程度走。</p>
+        </div>
+        <div class="w">
+          <b>掌握才前进</b>
+          <p>没掌握不往下走，掌握了才解锁下一段。</p>
+        </div>
+      </div>
+
+      <div data-anim="cols" class="sigma-notes">
+        <div>
+          <div class="sigma-ttl">一对多的现实</div>
+          <p>一位老师的精力分给三四十个学生。课按一份大纲讲，讲义发给全体学生——你坐在哪个程度，课都从第一章开始。</p>
+        </div>
+        <div>
+          <div class="sigma-ttl">Bloom 当时的结论</div>
+          <p>一对一「对大多数社会来说成本太高」，没法大规模提供。他因此提了一个题目：<b style="font-weight:500;color:var(--ink)">能不能找到和一对一一样有效的集体教学？</b></p>
+        </div>
       </div>
     </div>
+
+    <div data-anim="banner" class="sigma-banner">
+      <div class="t">AI 让一对一第一次可以规模化</div>
+      <div class="s">VanLehn 2011：智能辅导系统的教学效果 d=0.76，人类一对一辅导 d=0.79——两者几乎持平。</div>
+    </div>
+    <div class="sigma-src">Bloom, B. S. (1984). The 2 Sigma Problem. <i>Educational Researcher</i> 13(6):4–16, doi:10.3102/0013189X013006004 · VanLehn, K. R. (2011). <i>Educational Psychologist</i> 46(4):197–221</div>
   </div>
-
-
-
 </section>
 
 <section class="slide" data-layout="S05" data-animate="stack-row" data-slide-id="p3">
@@ -2252,7 +2303,7 @@
 <script>
 const SPEAKER_NOTES = [
   {'id': 'cover', 'title': 'Veridex 维学 · 定制化的课程学习平台', 'section': '开场', 'minutes': 0.7, 'purpose': '一句话定位，并先讲清现在的状态（原型未完成、零用户），避免评审误以为是上线产品', 'talk': ['先讲状态：产品原型未完成、零用户，这份计划书讲的是我们怎么把产品做出来', '定位句：我们是一个定制化的课程学习平台', '循环单位：一节课 = 10–15 分钟实时语音教学', '不展开细节，只预告三段：问题、定位、生意'], 'transition': '从定位进入第一个问题：定制化课程', 'cue': '停顿 2 秒，确认观众屏已同步'},
-  {'id': 'p2', 'title': '传统课堂 VS AI课堂', 'section': '问题一 · 定制化课程', 'minutes': 0.7, 'purpose': '建立第一个问题的对照结构。讲者：黄浩然', 'talk': ['本页只讲定制，检验留到下一段', '两栏念同一件事：课程怎么来、进度、你不会时怎么办、怎么知道学会了', '左边讲老师按大纲讲给所有人，右边讲 Agent 按你的需求出一门课', '落点句重复一次：差别在于讲义是发给所有人，还是只给你', 'Q&A 弹药：若被问「传统课堂能不能用 AI 改」——能改产出速度，改不了产出之前的那个假设'], 'transition': '同一个问题，往下问：这样的课要怎么造得出来', 'cue': '翻页前重念落点句'},
+  {'id': 'p2', 'title': '一对一的教学效果，胜过大班课 2 个标准差', 'section': '问题一 · 定制化课程', 'minutes': 1.1, 'purpose': '用 Bloom 1984 的一对一证据说明为什么定制值得做，再交代一对一为什么普及不了。讲者：HS', 'talk': ['先念标题：一对一的教学效果，胜过大班课 2 个标准差', '中间三条横条从上往下念：传统大班课 50 百分位；加入掌握学习 84 百分位；一对一加掌握学习 98 百分位', '停一下，让委员看第三条，这条是重点', '出处照念：Bloom 1984，Educational Researcher；下面还有一条 VanLehn 2011', '左下那条：一对多的现实。一位老师的精力分给三四十个学生，课按一份大纲讲', '右下那条：Bloom 当时的结论——一对一成本太高，普及不了。他提了一个题目：能不能找到和一对一一样有效的集体教学', '落点句：AI 让一对一第一次可以规模化', 'Q&A 弹药：若被问这是不是只针对数学——那三项条件的排序我们在检验那一页会逐条对应：给反馈、纠错、按个人情况调整'], 'transition': '题目摆在这里了。那我们怎么让 Agent 出一门专属于你的课', 'cue': '念到 98 百分位停一秒'},
   {'id': 'p3', 'title': 'Agent 怎么出这门课', 'section': '问题一 · 定制化课程', 'minutes': 0.8, 'purpose': '交代造课流程，指出第 2 步是传统永远不做的那一步。讲者：黄羿捷', 'talk': ['三步：上传资料 → 了解现状摸清程度 → 生成课程带有检验', '重点讲第 2 步：摸清程度本身就是这个产品最贵的一段，传统课堂永远不会做', '口头补充：需求可以是一个文件，也可以是一句话', 'Q&A 弹药：若被问成本——我们的成本主要压在这一步'], 'transition': '课造得出来了，那上课时到底发生什么', 'cue': '提醒自己：截图那格还是空的，台上不要假装有画面'},
   {'id': 'p4', 'title': '多模态课堂体验', 'section': '问题一 · 定制化课程', 'minutes': 0.7, 'purpose': '说明课堂内的互动形态，并把「追问免费」这个计价前提先讲出来。讲者：黄羿捷', 'talk': ['一节课有完成态——这是整份计划书最有价值的设计参数', '三条陈述各一句，黑色通栏是重点：可随时打断、追问、换一种讲法，追问照常扣积分', '口头说明：追问不中断原课节奏，问完回到原来那一节', '禁词提醒：这一页不要说「答错」「判断」「反馈」，用「追问」「调整」'], 'transition': '第一个问题讲完，换第二个：有效的检验', 'cue': '交接给黄浩然'},
   {'id': 'p5', 'title': '学生不知道自己哪里不会', 'section': '问题二 · 有效的检验', 'minutes': 0.9, 'purpose': '用四步学习模型定位各家平台的强弱分布，落点在「应用与整合」。讲者：黄浩然', 'talk': ['先念这八条：这些是学生自评学不会的原因，从 42% 往下排', '关键那一句：六个能力里，能真正解决的只有两个', '右边三个数：46% 的香港中学生用过 AI 答题，35.5% 答过不对的题目，46% 里超过一半相信答案是对的', '出处：HEPI 2026（n=975，14–18 岁）、Knof et al. 2024（n=165）', 'Q&A 弹药：若被问怎么量化——我们还没有实测，所以这一页刻意不给数字，等第一批真实课堂记录'], 'transition': '那问题到底出在哪一层？下一页', 'cue': '停顿，让观众看第四列'},
