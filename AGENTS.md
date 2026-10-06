@@ -45,7 +45,7 @@ specs/            內容規格（唯一的事實來源）
     └── archive-2026-10-02-*.md            ⛔ 已作廢，不可引用任何數字
 
 plans/            交付物
-├── Veridex_17p_SwissB.html     ⭐ **17 頁定稿簡報（HTML）。目前唯一在用的版本**
+├── Veridex_17p_SwissB.html     ⭐ **18 頁定稿簡報（HTML）。目前唯一在用的版本**（檔名是歷史遺留）
 │                                含內建講稿（SPEAKER_NOTES 陣列）+ presenter 模式
 ├── swissb_pages_1_9.py         該簡報的產生腳本（第 1–9 頁）
 ├── swissb_pages_10_17.py       第 10–17 頁
@@ -70,10 +70,12 @@ docs/             課程教材（不可修改）
 
 改完後必查三件事：
 
-1. `class="slide"` 仍是 **17 個**（用 grep 數）。
-2. **`SPEAKER_NOTES` 陣列跟頁面內容一致** —— 這是最容易壞掉的地方。頁面改了就必須同步改講稿，否則照稿念會講錯。已發生過：P5 講稿寫「四步學習模型／Merrill 2002」，頁面卻是「學生自評缺陷橫條 + HEPI」。
-3. 講稿 `minutes` 加總（現在 14.1 分鐘）。目標是 **17–18 分鐘**（課程允許 20–30 分鐘連答問）。
-4. **P3／P4／P6 已放入產品原型截圖**。截圖來源是 `plans/prototype/_deck/` 下的**已裁版**（原圖 3200×1800 空白太多，縮小後看不清字）。改動版面時：圖框比例寫在 `style="aspect-ratio:…"` 上，對應那張裁版的實際比例；**不要直接引用 `plans/prototype/` 下的原圖**。
+1. `class="slide"` 仍是 **18 個**（用 grep 數）。⚠️ 檔名還是 `Veridex_17p_...`，但實際已是 **18 頁**——不要拿檔名當頁數依據。
+2. **`SPEAKER_NOTES` 陣列跟頁面內容一致** —— 這是最容易壞掉的地方。頁面改了就必須同步改講稿，否則照稿念會講錯。已發生過：P5 講稿寫「四步學習模型／Merrill 2002」，頁面卻是「學生自評缺陷橫條 + HEPI」。**轉場語（`transition`）也會錯位**——增刪頁面後要逐條重讀一遍相鄰頁的轉場語，確認「下一頁」指的就是實際的下一頁。
+3. 講稿 `minutes` 加總（現在 **16.3 分鐘**）。目標是 **17–18 分鐘**（課程允許 20–30 分鐘連答問）。
+4. **P3／P4／P5 已放入產品原型截圖**（頁序變動後，檢測頁由 P6 移到 P5）。截圖來源是 `plans/prototype/_deck/` 下的**已裁版**（原圖 3200×1800 空白太多，縮小後看不清字）。改動版面時：圖框比例寫在 `style="aspect-ratio:…"` 上，對應那張裁版的實際比例；**不要直接引用 `plans/prototype/` 下的原圖**。
+
+⚠️ **改完 script 要驗語法**：`<script>` 區塊若含**頂層 `await`**（如 `await import(...)`），在普通 `<script>` 裡是解析期 SyntaxError，**整塊不執行**且不會報錯到 console 之外。已發生過：`motion` 動效塊因此靜默失效，`window.__playSlide` 從未定義。修法是包進 `(async () => { … })();`（保持普通 script，不要改成 `type="module"`，那會改變執行時序）。驗證方式：`node --check` 抽出來的區塊——**必須用 `.cjs` 副檔名**，因為 Node 24 會把含頂層 await 的檔案自動當 ESM 解析，`--check` 會假通過。
 
 ⚠️ **本專案不用 open-slide。** `package.json`、`tsconfig.json`、`node_modules/`、`slides/` 全部移除。**若看到任何 `pnpm dev`、`create-slide` skill、1920×1080 canvas 的說法，那是舊版殘留——一律忽略。**
 
@@ -87,7 +89,7 @@ docs/             課程教材（不可修改）
 |---|---|
 | 版面 | 16:9，瀏覽器全屏（10000vw × 100vh 滾動） |
 | 配色 | 墨藍 × 琥珀：`INK #17233B`、`ACCENT #B4531A`、`MUTED #5B6675`（WCAG AA 實測值） |
-| 頁數 | 17 頁 |
+| 頁數 | 18 頁（檔名 `Veridex_17p_` 是歷史遺留，別當頁數） |
 | 每頁結構 | `<section class="slide" data-layout="..." data-slide-id="...">` |
 
 **每頁右上角必須有講者姓名**（題目指引明文要求導師辨識）。現為 `· HS`／`· HJ`／`· 兩人`。
