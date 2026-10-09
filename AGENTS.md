@@ -45,7 +45,7 @@ specs/            內容規格（唯一的事實來源）
     └── archive-2026-10-02-*.md            ⛔ 已作廢，不可引用任何數字
 
 plans/            交付物
-├── Veridex_17p_SwissB.html     ⭐ **18 頁定稿簡報（HTML）。目前唯一在用的版本**（檔名是歷史遺留）
+├── Veridex_17p_SwissB.html     ⭐ **21 頁定稿簡報（HTML）。目前唯一在用的版本**（檔名是歷史遺留）
 │                                含內建講稿（SPEAKER_NOTES 陣列）+ presenter 模式
 ├── swissb_pages_1_9.py         該簡報的產生腳本（第 1–9 頁）
 ├── swissb_pages_10_17.py       第 10–17 頁
@@ -70,12 +70,20 @@ docs/             課程教材（不可修改）
 
 改完後必查三件事：
 
-1. `class="slide"` 仍是 **18 個**（用 grep 數）。⚠️ 檔名還是 `Veridex_17p_...`，但實際已是 **18 頁**——不要拿檔名當頁數依據。
-2. **`SPEAKER_NOTES` 陣列跟頁面內容一致** —— 這是最容易壞掉的地方。頁面改了就必須同步改講稿，否則照稿念會講錯。已發生過：P5 講稿寫「四步學習模型／Merrill 2002」，頁面卻是「學生自評缺陷橫條 + HEPI」。**轉場語（`transition`）也會錯位**——增刪頁面後要逐條重讀一遍相鄰頁的轉場語，確認「下一頁」指的就是實際的下一頁。
-3. 講稿 `minutes` 加總（現在 **16.3 分鐘**）。目標是 **17–18 分鐘**（課程允許 20–30 分鐘連答問）。
-4. **P3／P4／P5 已放入產品原型截圖**（頁序變動後，檢測頁由 P6 移到 P5）。截圖來源是 `plans/prototype/_deck/` 下的**已裁版**（原圖 3200×1800 空白太多，縮小後看不清字）。改動版面時：圖框比例寫在 `style="aspect-ratio:…"` 上，對應那張裁版的實際比例；**不要直接引用 `plans/prototype/` 下的原圖**。
+1. **頁數以 `data-slide-id=` 為準**（用 grep 數）。⚠️ 檔名是 `Veridex_17p_...`，`class="slide"` 也不準——封面是 `slide accent`、封底是 `slide split`，只 grep `class="slide"` 會少數兩頁。**不要拿檔名或 class 當頁數依據。**
+2. **`window.__SPEAKER_NOTES__` 陣列跟頁面內容一致** —— 這是最容易壞掉的地方。頁面改了就必須同步改講稿，否則照稿念會講錯。已發生過：P5 講稿寫「四步學習模型／Merrill 2002」，頁面卻是「學生自評缺陷橫條 + HEPI」。**轉場語（`transition`）也會錯位**——增刪頁面後要逐條重讀一遍相鄰頁的轉場語，確認「下一頁」指的就是實際的下一頁。
+3. 講稿 `minutes` 加總（現在 **19.3 分鐘**，已超出 17–18 目標；課程允許 20–30 分鐘連答問，仍在範圍）。
+4. **P3／P4／P5 已放入產品原型截圖**（頁序變動後，檢測頁移到 P7）。截圖來源是 `plans/prototype/_deck/` 下的**已裁版**（原圖 3200×1800 空白太多，縮小後看不清字）。改動版面時：圖框比例寫在 `style="aspect-ratio:…"` 上，對應那張裁版的實際比例；**不要直接引用 `plans/prototype/` 下的原圖**。
+
+⚠️ **⛔ 絕對不要用正則重排或重編這份 HTML 的 section。** 已踩坑兩次，兩次都把檔案改壞：
+- 正則 `re.sub(r'<div class="r">\s*(\d+)\s*/\s*21', ...)` **把 `<div class="r">` 標籤本身一起吃掉了**，導致整頁版面塌陷（實測 P2 溢出到 2016×1458，鍵盤翻頁直接卡死）。
+- 正則只匹配 `\d\d`（兩位數），**單數字的頁碼被跳過**，造成 9 頁沒編號。
+
+**正確做法**：用 `re.split` 或 `finditer` **把 section 切塊取出**，逐塊處理後再拼回，**只替換塊內的數字字串，永遠不碰 `<` `>` 之間的標籤結構**。範本見下方驗證腳本。同理，`/ 20` 這種分母也要用「字串完全匹配」而非寬鬆正則。
 
 ⚠️ **改完 script 要驗語法**：`<script>` 區塊若含**頂層 `await`**（如 `await import(...)`），在普通 `<script>` 裡是解析期 SyntaxError，**整塊不執行**且不會報錯到 console 之外。已發生過：`motion` 動效塊因此靜默失效，`window.__playSlide` 從未定義。修法是包進 `(async () => { … })();`（保持普通 script，不要改成 `type="module"`，那會改變執行時序）。驗證方式：`node --check` 抽出來的區塊——**必須用 `.cjs` 副檔名**，因為 Node 24 會把含頂層 await 的檔案自動當 ESM 解析，`--check` 會假通過。
+
+⚠️ **本專案沒有 LibreOffice，無法轉 PDF 驗證視覺。** 驗收一律用本機 Chrome + playwright-core（已裝在 `%TEMP%\veridex-verify\`）實測，逐頁量 `scrollWidth/clientWidth`、`scrollHeight/clientHeight`。⚠️ **翻頁按鍵間隔必須 ≥950 毫秒**——`go()` 有 700ms 導航鎖，間隔不足會丟鍵停在錯的頁。
 
 ⚠️ **本專案不用 open-slide。** `package.json`、`tsconfig.json`、`node_modules/`、`slides/` 全部移除。**若看到任何 `pnpm dev`、`create-slide` skill、1920×1080 canvas 的說法，那是舊版殘留——一律忽略。**
 
@@ -89,7 +97,7 @@ docs/             課程教材（不可修改）
 |---|---|
 | 版面 | 16:9，瀏覽器全屏（10000vw × 100vh 滾動） |
 | 配色 | 墨藍 × 琥珀：`INK #17233B`、`ACCENT #B4531A`、`MUTED #5B6675`（WCAG AA 實測值） |
-| 頁數 | 18 頁（檔名 `Veridex_17p_` 是歷史遺留，別當頁數） |
+| 頁數 | 21 頁（檔名 `Veridex_17p_` 是歷史遺留，別當頁數；`class="slide"` 也會少數兩頁） |
 | 每頁結構 | `<section class="slide" data-layout="..." data-slide-id="...">` |
 
 **每頁右上角必須有講者姓名**（題目指引明文要求導師辨識）。現為 `· HS`／`· HJ`／`· 兩人`。
