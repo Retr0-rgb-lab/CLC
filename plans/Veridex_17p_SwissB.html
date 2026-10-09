@@ -1418,6 +1418,12 @@
 .vision-band{margin-top:3.4vh;padding:2.2vh 2.4vw;background:rgba(0,47,167,.05);border-left:3px solid var(--accent);display:flex;flex-direction:column;gap:.9vh}
 .vision-band .vb-lb{font-family:var(--mono);font-size:15px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
 .vision-band .vb-tv{font-family:var(--sans),var(--sans-zh);font-size:max(17px,1.34vw);font-weight:400;line-height:1.4;color:var(--ink);letter-spacing:-.01em}
+
+/* ---- pq 生成前质量把控 ---- */
+.vx-card.qa{border-top:2px solid var(--accent);padding-top:1.6vh;margin-top:0}
+.qa-n{font-family:var(--mono);font-size:max(14px,.82vw);letter-spacing:.14em;color:var(--accent);margin-bottom:.8vh}
+.vx-card.qa b{font-size:max(17px,1.3vw);font-weight:500;line-height:1.25;display:block}
+.vx-card.qa p{font-size:max(15px,1.02vw);line-height:1.55;color:var(--text-secondary);margin-top:.9vh}
 </style>
 </head>
 <body class="canvas-mode">
@@ -1437,7 +1443,7 @@
     <canvas class="ascii-bg" aria-hidden="true"></canvas>
     <div class="chrome-min" style="color:rgba(255,255,255,.9);padding:2.6vh 5vw 0">
       <div class="l">Veridex 维学 · 青年创业基金委员会</div>
-      <div class="r">2026.10.16 · 01 / 20</div>
+      <div class="r">2026.10.16 · 01 / 21</div>
     </div>
     <div style="flex:1;padding:0 5vw 6.8vh;display:grid;grid-template-rows:auto 1fr auto;gap:2.6vh;position:relative;z-index:1;min-width:0">
       <div data-anim="kicker" class="t-meta" style="color:rgba(255,255,255,.78);letter-spacing:.22em">SECTION 00 · 封面</div>
@@ -1458,7 +1464,7 @@
 
 <section class="slide" data-layout="S22" data-animate="sigma" data-slide-id="p2">
   <div class="canvas-card">
-    <div class="chrome-min"><div class="l">问题一 · 定制化课程</div><div class="r">02 / 20 · HS</div></div>
+    <div class="chrome-min"><div class="l">问题一 · 定制化课程</div><div class="r">02 / 21 · HS</div></div>
     <div style="flex:1;display:flex;flex-direction:column;margin-top:4.2vh;min-height:0" class="sigma-grid">
       <div data-anim="head" style="display:flex;align-items:flex-end;justify-content:space-between;gap:3vw">
         <div style="display:flex;flex-direction:column;gap:1.2vh">
@@ -1523,7 +1529,7 @@
 
 <section class="slide" data-layout="S16" data-animate="grid-reveal" data-slide-id="p11">
 <div class="canvas-card">
-<div class="vx-chrome"><span>面向对象 · 谁会先用起来</span><span>03 / 20 · HS</span></div>
+<div class="vx-chrome"><span>面向对象 · 谁会先用起来</span><span>03 / 21 · HS</span></div>
   <div class="vx-fill">
   <div style="margin-top:2.2vh">
     <div class="vx-cat">Who we serve · Students first</div>
@@ -1558,7 +1564,7 @@
 
 <section class="slide" data-layout="S16" data-animate="grid-reveal" data-slide-id="p3sum">
 <div class="canvas-card">
-<div class="vx-chrome"><span>产品 · 我们做了什么</span><span>04 / 20 · 两人</span></div>
+<div class="vx-chrome"><span>产品 · 我们做了什么</span><span>04 / 21 · 两人</span></div>
   <div class="vx-fill">
   <div style="margin-top:2vh">
     <div class="vx-cat">Product · What it does</div>
@@ -1589,7 +1595,7 @@
 
 <section class="slide" data-layout="S05" data-animate="stack-row" data-slide-id="p3">
   <div class="canvas-card">
-    <div class="chrome-min"><div class="l">问题一 · 定制化课程</div><div class="r">05 / 20 · HJ</div></div>
+    <div class="chrome-min"><div class="l">问题一 · 定制化课程</div><div class="r">05 / 21 · HJ</div></div>
     <div class="shot-grid">
       <div class="shot-side">
         <div data-anim="head" style="display:flex;flex-direction:column;gap:1.1vh">
@@ -1628,9 +1634,34 @@
   </div>
 </section>
 
+<section class="slide" data-layout="S16" data-animate="grid-reveal" data-slide-id="pq">
+<div class="canvas-card">
+<div class="vx-chrome"><span>产品 · 生成前怎么把控</span><span>06 / 21 · HS</span></div>
+  <div class="vx-fill">
+  <div style="margin-top:2.2vh">
+    <div class="vx-cat">Quality · Before we generate</div>
+    <h2 class="vx-h" style="font-size:min(3.6vw,6.2vh);margin-top:1.2vh">输入可以很粗，<br/>课不能很粗。</h2>
+    <p class="vx-lead" style="font-size:max(16px,1.1vw);margin-top:1.4vh">进来的人差别很大：有人丢一整份讲义，有人只打五个字。<b style="font-weight:500;color:var(--text-primary)">同一个模型，吃进去的差这么多，出来的课一定差很多。</b></p>
+  </div>
+
+  <div class="vx-cols4" style="margin-top:2.6vh;flex:0 0 auto">
+    <div class="vx-card qa"><div class="qa-n">GATE 01</div><b>统一承诺</b><p>学生不用选模型。内部怎么路由由我们负责，对外只承诺同一件事：生成出来的课要靠谱。</p></div>
+    <div class="vx-card qa"><div class="qa-n">GATE 02</div><b>先问再生成</b><p>Agent 反过来问你：学到什么程度、卡在哪一步、什么时候要考。问完才开始排课。</p></div>
+    <div class="vx-card qa"><div class="qa-n">GATE 03</div><b>主动补齐</b><p>你没给够的背景，它自己去找齐，再排出路径。一句话的需求也能撑起一整门课。</p></div>
+    <div class="vx-card qa"><div class="qa-n">GATE 04</div><b>独立复核</b><p>课生成之后，另一次独立调用重新过一遍。来源对不上就不发。</p></div>
+  </div>
+  </div>
+
+  <div class="vx-foot">
+    <div><b>质量的责任在系统，不在学生会不会写 prompt。</b>这一页讲的是生成之前；生成之后的监控在第 17 页。</div>
+    <div>现有大模型识别得出需求模糊，但几乎不会主动追问<br/>产品原型未完成 · 页面写的是流程，不是效果</div>
+  </div>
+</div>
+</section>
+
 <section class="slide" data-layout="S12" data-animate="split-statement" data-slide-id="p4">
   <div class="canvas-card" style="padding-bottom:6.8vh">
-    <div class="chrome-min"><div class="l">问题一 · 定制化课程</div><div class="r">06 / 20 · HJ</div></div>
+    <div class="chrome-min"><div class="l">问题一 · 定制化课程</div><div class="r">07 / 21 · HJ</div></div>
     <div class="shot-grid p4-grid">
       <div class="shot-side">
         <div data-anim="head" style="display:flex;flex-direction:column;gap:1.1vh">
@@ -1675,7 +1706,7 @@
 
 <section class="slide" data-layout="S19" data-animate="four-cards" data-slide-id="p6b">
   <div class="canvas-card">
-    <div class="chrome-min"><div class="l">问题二 · 有效的检验</div><div class="r">07 / 20 · HS</div></div>
+    <div class="chrome-min"><div class="l">问题二 · 有效的检验</div><div class="r">08 / 21 · HS</div></div>
     <div class="shot-grid">
       <div class="shot-side">
         <div data-anim="head" style="display:flex;flex-direction:column;gap:1.1vh">
@@ -1723,7 +1754,7 @@
   <div class="canvas-card" style="padding:0">
     <div class="chrome-min" style="padding:5.4vh 5vw 1.4vh">
       <div class="l">问题二 · 有效的检验</div>
-      <div class="r">08 / 20 · HJ</div>
+      <div class="r">09 / 21 · HJ</div>
     </div>
     <div style="flex:1;display:grid;grid-template-rows:minmax(0,1fr) auto;min-height:0">
       <div style="display:grid;grid-template-columns:1fr 1fr;min-height:0">
@@ -1781,7 +1812,7 @@
 
 <section class="slide" data-layout="S23" data-animate="loop" data-slide-id="p7">
   <div class="canvas-card">
-    <div class="chrome-min"><div class="l">产品 · 一次完整的学习</div><div class="r">09 / 20 · HS</div></div>
+    <div class="chrome-min"><div class="l">产品 · 一次完整的学习</div><div class="r">10 / 21 · HS</div></div>
     <div class="loop-wrap">
       <div data-anim="head" style="display:flex;align-items:flex-end;justify-content:space-between;gap:3vw">
         <div style="display:flex;flex-direction:column;gap:1.1vh">
@@ -1871,7 +1902,7 @@
       <div class="half" style="padding:5.6vh 3.4vw 6.8vh;justify-content:space-between">
         <div class="chrome-min">
           <div class="l">定位 · 收束</div>
-          <div class="r">10 / 20 · 两人</div>
+          <div class="r">11 / 21 · 两人</div>
         </div>
         <div data-anim="manifesto" style="display:flex;flex-direction:column;gap:2vh">
           <div class="t-meta" style="letter-spacing:.22em;color:var(--text-helper)">SECTION 01 CLOSE</div>
@@ -1901,7 +1932,7 @@
 
 <section class="slide" data-layout="S21" data-animate="grid-reveal" data-slide-id="p12">
 <div class="canvas-card">
-<div class="vx-chrome"><span>商业模式 · 竞品定价</span><span>11 / 20 · HS</span></div>
+<div class="vx-chrome"><span>商业模式 · 竞品定价</span><span>12 / 21 · HS</span></div>
   <div class="vx-fill">
   <div style="margin-top:2.2vh">
     <div class="vx-cat">Business · What they charge today</div>
@@ -1956,7 +1987,7 @@
 
 <section class="slide" data-layout="S20" data-animate="grid-reveal" data-slide-id="p13">
 <div class="canvas-card">
-<div class="vx-chrome"><span>商业模式 · 我们的定价</span><span>12 / 20 · HS</span></div>
+<div class="vx-chrome"><span>商业模式 · 我们的定价</span><span>13 / 21 · HS</span></div>
   <div style="margin-top:2.2vh">
     <div class="vx-cat">Business · Our three tiers</div>
     <h2 class="vx-h" style="font-size:min(4vw,6.8vh);margin-top:1.2vh">计费单位是积分。</h2>
@@ -1989,7 +2020,7 @@
 
 <section class="slide" data-layout="S16" data-animate="grid-reveal" data-slide-id="p14">
 <div class="canvas-card">
-<div class="vx-chrome"><span>商业模式 · 成本结构</span><span>13 / 20 · HS</span></div>
+<div class="vx-chrome"><span>商业模式 · 成本结构</span><span>14 / 21 · HS</span></div>
   <div class="vx-fill">
   <div style="margin-top:2vh">
     <div class="vx-cat">Business · What we actually pay for</div>
@@ -2046,7 +2077,7 @@
 
 <section class="slide" data-layout="S07" data-animate="h-bar-chart" data-slide-id="p15">
 <div class="canvas-card">
-<div class="vx-chrome"><span>商业模式 · 客户结构与收入</span><span>14 / 20 · HS</span></div>
+<div class="vx-chrome"><span>商业模式 · 客户结构与收入</span><span>15 / 21 · HS</span></div>
   <div class="vx-fill">
   <div style="margin-top:2vh">
     <div class="vx-cat">Business · Who pays, and how much</div>
@@ -2115,7 +2146,7 @@
 
 <section class="slide" data-layout="S16" data-animate="grid-reveal" data-slide-id="p11b">
   <div class="canvas-card">
-    <div class="vx-chrome"><span>市场规模 · 还没跑出赢家</span><span>15 / 20 · HJ</span></div>
+    <div class="vx-chrome"><span>市场规模 · 还没跑出赢家</span><span>16 / 21 · HJ</span></div>
   <div class="vx-fill">
   <div style="margin-top:2.2vh">
     <div class="vx-cat">Market · Still open</div>
@@ -2150,7 +2181,7 @@
 
 <section class="slide" data-layout="S16" data-animate="grid-reveal" data-slide-id="p15b">
   <div class="canvas-card">
-    <div class="vx-chrome"><span>产品运营 · 质量与监控</span><span>16 / 20 · 两人</span></div>
+    <div class="vx-chrome"><span>产品运营 · 质量与监控</span><span>17 / 21 · 两人</span></div>
   <div class="vx-fill">
   <div style="margin-top:2.2vh">
     <div class="vx-cat">Operations · Quality &amp; uptime</div>
@@ -2185,7 +2216,7 @@
 
 <section class="slide" data-layout="S08" data-animate="grid-reveal" data-slide-id="p16">
 <div class="canvas-card">
-<div class="vx-chrome"><span>商业模式 · 双轨并行</span><span>17 / 20 · 两人</span></div>
+<div class="vx-chrome"><span>商业模式 · 双轨并行</span><span>18 / 21 · 两人</span></div>
   <div style="margin-top:2.2vh">
     <div class="vx-cat">Business · Two tracks, running together</div>
     <h2 class="vx-h" style="font-size:min(3.6vw,6.2vh);margin-top:1.2vh">社媒投放的同时，<br/>先请第一批人来内测。</h2>
@@ -2229,7 +2260,7 @@
 
 <section class="slide" data-layout="S16" data-animate="grid-reveal" data-slide-id="team">
   <div class="canvas-card">
-    <div class="vx-chrome"><span>团队 · 我们两个人</span><span>18 / 20 · 两人</span></div>
+    <div class="vx-chrome"><span>团队 · 我们两个人</span><span>19 / 21 · 两人</span></div>
   <div class="vx-fill">
   <div style="margin-top:2.2vh">
     <div class="vx-cat">Team · Two of us</div>
@@ -2269,7 +2300,7 @@
 
 <section class="slide" data-layout="S16" data-animate="grid-reveal" data-slide-id="prisk">
 <div class="canvas-card">
-<div class="vx-chrome"><span>风险 · 我们自己找出来的</span><span>19 / 20 · 两人</span></div>
+<div class="vx-chrome"><span>风险 · 我们自己找出来的</span><span>20 / 21 · 两人</span></div>
   <div class="vx-fill">
   <div style="margin-top:2vh">
     <div class="vx-cat">Risk · What we have not solved</div>
@@ -2319,7 +2350,7 @@
       <div class="half b-accent" style="padding:5.4vh 3.4vw 6.8vh;justify-content:space-between;position:relative;overflow:hidden">
         <canvas class="ascii-bg" aria-hidden="true"></canvas>
         <div class="chrome-min" style="margin-bottom:0;position:relative;z-index:1">
-          <div class="l">20 / 20</div>
+          <div class="l">21 / 21</div>
           <div class="r">THE ASK</div>
         </div>
         <div data-anim="manifesto" style="display:flex;flex-direction:column;gap:1.4vh;position:relative;z-index:1">
@@ -2414,7 +2445,8 @@ window.__SPEAKER_NOTES__ = [
   {'id': 'p2', 'title': '一对一的教学效果，胜过大班课 2 个标准差', 'section': '问题一 · 定制化课程', 'minutes': 1.1, 'purpose': '用 Bloom 1984 的一对一证据说明为什么定制值得做，再交代一对一为什么普及不了。讲者：HS', 'talk': ['先念标题：一对一的教学效果，胜过大班课 2 个标准差', '中间三条横条从上往下念：传统大班课 50 百分位；加入掌握学习 84 百分位；一对一加掌握学习 98 百分位', '停一下，让委员看第三条，这条是重点', '出处照念：Bloom 1984，Educational Researcher；下面还有一条 VanLehn 2011', '左下那条：一对多的现实。一位老师的精力分给三四十个学生，课按一份大纲讲', '右下那条：Bloom 当时的结论——一对一成本太高，普及不了。他提了一个题目：能不能找到和一对一一样有效的集体教学', '落点句：AI 让一对一首次具备规模化的可能', 'Q&A 弹药：若被问这是不是只针对数学——那三项条件的排序我们在检验那一页会逐条对应：给反馈、纠错、按个人情况调整'], 'transition': '一对一这件事要成立，得先知道卖给谁', 'cue': '念到 98 百分位停一秒'},
   {'id': 'p11', 'title': '面向对象 · 学生群体', 'section': '面向对象 · 谁会先用起来', 'minutes': 0.8, 'purpose': '讲清服务对象是学生群体，三类学习场景。讲者：HS', 'talk': ['先念标题：我们服务学生群体，三类学习场景', '三张卡各一句：正在备考的学生——有明确日期和统一评核标准；想转行的学生——付费意愿来自结果；想多学一点的学生——学到想学的地方为止', '两个数只念不解释：58,487 是 DSE 2026 报名人数，2,340 是经 DSE 收生计划升读内地的人数', '补一句：这三个场景的差别全在你要学什么，产品本身是一样的。要考试的那一类是有期限的需求，付费意愿最强'], 'transition': '知道给谁做了，下面看这个产品到底做了什么', 'cue': '停顿'},
   {'id': 'p3sum', 'title': '产品总述 · 四件事', 'section': '产品 · 我们做了什么', 'minutes': 0.8, 'purpose': '在进入细节页之前建立整体印象——让委员知道后面每一页是这四件事里的一段。讲者：两人', 'talk': ['先念标题：一个定制化的课程学习平台，四件事，一节一节做', '念中间那条产品愿景，语速放慢：为用户生成一对一的定制化课堂，适配用户的学习节奏，提高用户的学习效率', '四栏从左到右快速念，每栏半句：备课——上传讲义或一句话讲明需求，Agent 排出学习路径生成每一节课；上课——一节 10 到 15 分钟实时语音教学，可随时打断追问；检验——答错时追溯到真正不会的那一层，只补那一块；分享——做好的课可以发布给别人上，积分照样扣，著作权归发布者', '主动交代现状：产品原型未完成，零用户。页面里的截图是设计稿，数据是示例数据', '⚠️ 明确要求：这一页不能念成功能清单，每个模块最多半句，节奏要快'], 'transition': '接下来把第一件事拆开看：Agent 怎么把课造出来', 'cue': '两人同台，不要交接'},
-  {'id': 'p3', 'title': 'Agent 怎么出这门课', 'section': '问题一 · 定制化课程', 'minutes': 0.8, 'purpose': '交代造课流程，指出第 2 步是传统永远不做的那一步。讲者：黄羿捷', 'talk': ['三步：上传资料 → 了解现状摸清程度 → 生成课程带有检验', '重点讲第 2 步：摸清程度本身就是这个产品最贵的一段，传统课堂极少做', '口头补充：需求可以是一个文件，也可以是一句话', 'Q&A 弹药：若被问成本——我们的成本主要压在这一步'], 'transition': '课造得出来了，那上课时到底发生什么', 'cue': '提醒自己：截图那格还是空的，台上不要假装有画面'},
+  {'id': 'p3', 'title': 'Agent 怎么出这门课', 'section': '问题一 · 定制化课程', 'minutes': 0.8, 'purpose': '交代造课流程，指出第 2 步是传统永远不做的那一步。讲者：黄羿捷', 'talk': ['三步：上传资料 → 了解现状摸清程度 → 生成课程带有检验', '重点讲第 2 步：摸清程度本身就是这个产品最贵的一段，传统课堂极少做', '口头补充：需求可以是一个文件，也可以是一句话', 'Q&A 弹药：若被问成本——我们的成本主要压在这一步'], 'transition': '课造得出来了。但还有个问题：不同学生丢进来的差那么多，怎么保证课一样靠谱', 'cue': '提醒自己：截图那格还是空的，台上不要假装有画面'},
+  {'id': 'pq', 'title': '生成前质量把控 · 四道闸门', 'section': '产品 · 生成前怎么把控', 'minutes': 1.0, 'purpose': '回答「学生输入参差不齐怎么办」——评审一定会问，且现有 20 页没有正面回答。讲者：HS', 'talk': ['先说一个很具体的问题：进来的人差别很大，有人丢一整份讲义，有人只打五个字——教我微积分', '同一个模型，吃进去的差这么多，出来的课一定差很多', '所以我们在生成之前加四道闸门。第一，学生不用选模型，我们只对外承诺一件事：出来的课要靠谱', '第二，先问再生成：Agent 反过来问你，学到什么程度、卡在哪一步、什么时候要考，问完才开始排课', '第三，你没给够的背景，它自己去找齐。第四，课生成之后另一次独立调用重新过一遍，来源对不上不发', '落点句：质量的责任在系统，不在学生会不会写 prompt', '⚠️ 边界要说清：这一页讲生成之前，生成之后的监控在第 17 页，两件事不要混'], 'transition': '闸门装好了，进去上课看看发生什么', 'cue': '⚠️ Q&A 弹药：若被问为什么不让用户选模型——内部路由由我们负责，对外承诺一致。⛔ 不要说「我们用多 Agent 辩论保证质量」，该说法 2025 年已被系统性评测推翻'}, 
   {'id': 'p4', 'title': '多模态课堂体验', 'section': '问题一 · 定制化课程', 'minutes': 0.7, 'purpose': '说明课堂内的互动形态，并把「追问要扣积分」这个计价前提先讲出来。讲者：黄羿捷', 'talk': ['一节课有完成态——这是整份计划书最有价值的设计参数', '三条陈述各一句，黑色通栏是重点：可随时打断、追问、换一种讲法，追问照常扣积分', '口头说明：追问不中断原课节奏，问完回到原来那一节', '禁词提醒：这一页不要说「答错」「判断」「反馈」，用「追问」「调整」'], 'transition': '第一个问题讲完，换第二个：有效的检验', 'cue': '交接给黄浩然'},
   {'id': 'p6b', 'title': '检验的四个动作', 'section': '问题二 · 有效的检验', 'minutes': 0.8, 'purpose': '把我们的检验设计拆成四个动作，说明第 4 步是多数产品没有的。讲者：黄浩然', 'talk': ['测什么、追溯、给什么、测多久', '重点讲第 4 步：间隔重复。学会的判断标准是：一个月后还对', '口头补充最优间隔约 20–40%，出处是 Cepeda 2008', 'Q&A 弹药：若被问追溯深度——不设深度上限，改变的是「深度」的计价单位'], 'transition': '这四步具体怎么做，我们和别人差在哪，下一页', 'cue': '逐条念四个动作，第 4 步停一下'},
   {'id': 'p7cmp', 'title': '他们的检测 vs 我们的检测', 'section': '问题二 · 有效的检验', 'minutes': 0.9, 'purpose': '把三个共享问题讲成结构差异，不评优劣。讲者：HJ', 'talk': ['开场句先念：检测嵌在课程里，跟着人走', '左栏三条逐条念，每条都挂出处：Module 2 零作业是 DLAI 官网课程页，17.4% 是 Class Central 2026', '题型那条要补一句：选择题容易自动评分，所以被大量采用', '难度那条落在「开课前定好」——题目和量表都是老师事先定的，同一门课能力不同的人做同一张卷', '右栏三条对应讲：密度由产品保证、题型覆盖说清楚、难度跟着人走', 'Q&A 弹药：若被问我们有什么证据说自己能做到——产品原型未完成，这三行是设计，会在第 3 个月用真实课堂记录验证'], 'transition': '检验讲到这。那一整节课从头到尾是怎么走的', 'cue': '先念左栏，再念右栏'},
