@@ -1424,6 +1424,14 @@
 .qa-n{font-family:var(--mono);font-size:max(14px,.82vw);letter-spacing:.14em;color:var(--accent);margin-bottom:.8vh}
 .vx-card.qa b{font-size:max(17px,1.3vw);font-weight:500;line-height:1.25;display:block}
 .vx-card.qa p{font-size:max(15px,1.02vw);line-height:1.55;color:var(--text-secondary);margin-top:.9vh}
+
+/* ---- P14 成本数字条 ---- */
+.cost-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2vw;margin-top:2.2vh;padding-top:1.8vh;border-top:1px solid var(--border-subtle)}
+.cost-strip .cs-n{font-family:var(--sans);font-weight:300;font-size:min(2.4vw,4vh);font-variant-numeric:tabular-nums;letter-spacing:-.03em;line-height:1;color:var(--ink)}
+.cost-strip .cs-l{font-size:max(12px,.78vw);line-height:1.42;color:var(--text-secondary);margin-top:.7vh}
+.cost-strip .cs-s{font-family:var(--mono);font-size:max(11px,.7vw);color:var(--text-helper);margin-top:.4vh}
+/* 该页内容较多，收紧卡片描述高度 */
+.vx-act-d{font-size:max(12.5px,.8vw);line-height:1.45;min-height:8vh}
 </style>
 </head>
 <body class="canvas-mode">
@@ -2066,11 +2074,29 @@
     <p>因为「上课」这个最高频的动作，大部分落在<b style="font-weight:500">可以复用的课程</b>上——不管是团队预先做好的，还是别的学生做出来共享的。<br/>
     每多一个学生，我们额外要花的钱<b style="font-weight:500">不随上课次数增长，只随「生成新内容」的次数增长</b>，而后者是最低频的动作。</p>
   </div>
+  <div class="cost-strip" data-anim="foot">
+    <div>
+      <div class="cs-n">HK$766</div>
+      <div class="cs-l">云端与工具的月成本。已删掉两项重复采购。</div>
+      <div class="cs-s">各服务官方定价页 · 2026-10 实抓</div>
+    </div>
+    <div>
+      <div class="cs-n">HK$0</div>
+      <div class="cs-l">18 个月内的创始团队人力成本。钱全部投在产品、获客和合规上。</div>
+      <div class="cs-s">两位创办人不支薪</div>
+    </div>
+    <div>
+      <div class="cs-n">HK$2.3 万</div>
+      <div class="cs-l">18 个月基础支出合计（云端 + 公司注册与周年申报）。模型 API 随用户数另计，是唯一的大变量。</div>
+      <div class="cs-s">会计·律师·保险尚未计入</div>
+    </div>
+  </div>
+
   </div>
 
   <div class="vx-foot">
-    <div>A／B／C／D 的实际比例<b>目前完全无数据</b>——预设课程覆盖了多少需求、共享课程有多少人愿意用、用户多常上传与提问，要等真实课堂记录。<b>这里不猜，也不给单档成本数字。</b></div>
-    <div>课程库要随教材换版持续更新，是一条<b>要持续维护的成本</b>，只是速率远低于重建全库。<br/>第一门课的分摊最重，之后逐门递减。课程共享的上限，取决于有多少人愿意把自己的课放出来。</div>
+    <div>A／B／C／D 的实际比例<b>目前完全无数据</b>，要等真实课堂记录。<b>我们给量级与推导方式，不给单档精确数。</b></div>
+    <div>课程库随教材换版需持续维护，是一条<b>要一直养着的成本</b>，只是速率远低于重建全库。</div>
   </div>
 </div>
 </section>
